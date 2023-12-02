@@ -184,9 +184,9 @@
   - naravno da Vim ima svoj skriptni jezik: [learnvimscriptthehardway](https://learnvimscriptthehardway.stevelosh.com/)
   - to je najočitije korisno u organizaciji *.vimrc*-a
   - postoje tri vrste varijabli:
-    - obične
+    - obične (*options*)
       - `set var=30 | echo &var`
-    - key-bindings
-      - kratice na tipkovnici (`nnoremap <kombinacija-tipki> <kombinacija-komandi>`)
-    - kratice
+    - key-bindings (*mappings*)
+      - kratice na tipkovnici (npr. `nnoremap <kombinacija-tipki> <kombinacija-komandi>`)
+    - kratice (*abbreviations*)
       - kratice u tekstu (`iabbrev <kratica> <tekst-za-ispisati>`)
