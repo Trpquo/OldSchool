@@ -243,3 +243,7 @@ set nobackup
 set nowb
 set noswapfile
 
+" " Load all Plugins for Org Mode
+packloadall
+silent! helptags ALL
+

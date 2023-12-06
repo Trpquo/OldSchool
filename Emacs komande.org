@@ -1,0 +1,78 @@
+#+TITLE: Bilješke za Org Mode u Emacsu
+
+Iako postoji broj aplikacija za uređivanje Org datoteka (prvenstveno Logseq),
+sve ove bilješke ću pisati za rad u Emacs-u jer je tamo Org Mode najbolje
+implementiran i to ću još ograničeno samo na /evil mode/ kakav je prisutan u Spacemacsu ili Doom Emacsu.
+
+* Korisničko sučelje
+- navigacija s dokumentima
+      + =<Space>.== otvara /dired/ iliti Explorer
+      + =<Space>fP== otvara popis konfiguracijskih datoteka
+      + =<Space>fr== otvara popis nedavno otvorenih datoteka
+      + =<Space><Return>= je za Bookmarke (otvaranje i spremanje)
+- baratanje prozorima i panelima
+      + =<Space>b{}= je za /buffere/ (prozore, tabove...)
+            + =b= je za dobiti popis otvorenih dokumenata (=B= je za vidjeti i neke sistemske buffere, =<Space>= za vidjeti i skrivene)
+                  + =<Space>,= je kratica za =<Space>bb=
+            + =n= je za otvaranje novog buffera
+            + =<= i =>= su za otvaranje idućeg/prethodnog
+            + =k= je za gašenje aktivnog buffera
+      + =<Space>w{}= je za panele (/panes/) - uglavnom su svi u Doom-u
+      preslika Vimovih (=<C-w>{}= komandi)
+            + =s= i =v= su za otvaranje novih panela
+            + =w= je za selektiranje idućeg panela
+            + =c= ili =q= je za zatvaranje panela
+** Dired i neotree
+Emacs u startu nudi dva file explorera
+
+* Org Mode
+Za sve upute o /Org Modu/ može se unutar Emacsa lupiti komanda =M-x org-info=
+Ostale upute se mogu potražiti preko prečca =<Space>ds= (documentation search)
+
+Uobičajena sintaksa je slična, ali ipak drukčija od markdowna
+
+#+START_SRC python
+      * Naslov prvog stupnja
+      ** Naslov drugog stupnja
+      *** Naslov trećleg stupnja
+      *masno*
+      /kurziv/
+      _potcrtano_
+      +precrtano+
+      =code=
+      ~verbatim~
+      [[https://webstranica][Poveznica]]
+      - stavka
+      + stavka s brojačem podstavki [0/2] [%]
+            - [ ] stavka s kućicom
+            - [ ] =<Return>= bi trebao biti za vrtnju stanja
+      1. stavka
+      b) stavka
+      + TODO stavka za obaviti se gasi/pali s =<S-Left>= i =<S-Right>= 
+      + TODO stavka za obaviti se preuređuje s =<Space>mt=
+#+END_SRC
+** Tablice
+      + tablice rabe uobičajenu sintaksu (kao i markdown), ali momogućuju
+      da se 
+            + s =<C-Return>= stvaraju novi retci i da se s =<Tab>= skače iz čelije u čeliju
+            + =<S-Return>= je za kopiranje vrijednosti čelije u novi redak
+            + =<space>mb-= pretvara redak u thead
+            + =<M-(hjkl)>= su za izmjene (pomicanja) redaka i stupaca
+** Kod
+      + osnovna sintaksa je =#+START_SRC= i =#+END_SRC=, a prečac =<s<Tab>=
+      + jednom kada je kod ispisan, =<Enter>= u normalnom kodu izvršava blok
+      koda
+
+** Kretnje
++ Pored uobičajenih Vim kretnji, Org Mode omogućava još nekoliko
+specifično korisnih:
+      + =<Tab>= je komanda za otvaranje i zatvaranje naslovnih cjelina
+            + =<S-Tab>= je za otvaranje/zatvaranje svih odjednom
+      + =gj= i =gk= su za skakanje od naslova do naslova istog stupnja
+      + =<C-Return>= daje novi naslov istog stupnja u kojem se nalazimo (nakon cjeline)
+      + =<M-h>= i =<M-l>= su za mijenjanje stupnja naslova
+      + =<M-k>= i =<M-j>= su za zamjene položaja cijelih naslovljenih
+      blokova
+
+* Suradnja s Vimom
+Plugin [[https://github.com/jceb/vim-orgmode/blob/master/doc/orgguide.txt][Vim Org-Mode]] za Vim

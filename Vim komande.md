@@ -73,6 +73,7 @@
       - ==<C-u>== je backspace, ali za cijeli red
       - ==<C-r><ime-registra>== će biti za pasteanje iz registra (v. dolje)
       - ==<C-c>==, ==<C-x>== i  ==<C-v>== će vjerojatno u svim Vimovima raditi kako i očekivano kada u insert modu
+  - kada god poželimo, uvijek možemo dok smo u insert modu lupiti `<C-o>` i nakon toga unijeti koju god komandu iz normal moda želimo (bez da zapravo izađemo iz insert moda)
 
 ## Za domara (vizualni mod)
 
@@ -82,6 +83,7 @@
   - ==<C-v>== je za ulazak u mod *blok selekcije*, a taj je pak pogodan za multi-cursor mod ili sl.
 
 ### (v,) d, c, y, =, g~ (gu, gU), p (aka. operateri)
+
   - operatori su posebne komande koje zahtijevaju daljnje upute. Najjednostavniji (i ne potpuno primjeren) primjer je komanda ==v== koja nas ubacuje u vizualni mod, a zbog naravi vizualnog moda funkcionira kao operater. Komanda `vw`, npr., selektira tekst do kraja riječi.
     1) uobičajeni oblik unošenja komandi s operaterima u normalnom modu je `<operater><broj><kretnja>`
       - npr. `d5w` briše pet riječi, a `y2k` kopira aktivni i prethodna dva retka
