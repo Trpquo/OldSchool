@@ -66,6 +66,11 @@ nnoremap <leader>w :w!<cr>
 nnoremap <C-s> :w!<cr>
 inoremap <C-s> :w!<cr>
 vnoremap <C-s> :w!<cr>
+" " Fast editing of .vimrc
+nnoremap <leader>rc :vsplit $VIMRC<cr>
+nnoremap <leader>rr :source $VIMRC<CR>
+nnoremap <M-s> :source $VIMRC<cr>
+" 
 " " Fast closing
 nnoremap <C-q> :q<cr>
 inoremap <C-q> :q<cr>
@@ -76,11 +81,17 @@ nnoremap <C-l> <C-w>l
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
-"
+
 " " Managing tabs
 nnoremap <leader>tt :tabnew<cr>
 nnoremap <leader>tn :tabn<cr>
 nnoremap <leader>tp :tabp<cr>
+
+" " Fast splitting of windows
+nnoremap <right> :vertical resize +2<CR>
+nnoremap <left> :vertical resize -2<CR>
+" " Disable Q mode (???)
+nnoremap Q <nop>
 
 " " :W sudo saves the file
 " " (useful for handling the permission-denied error)
@@ -96,6 +107,10 @@ let $LANG='en'
 set langmenu=en
 " source $VIMRUNTIME/delmenu.vim
 " source $VIMRUNTIME/menu.vim
+"
+" " Configure spellcheck
+set spell
+set spelllang=en_us,hr
 "
 " " Turn on the Wild menu
 set wildmenu
@@ -177,21 +192,18 @@ set sidescrolloff=7 " number of columns to keep to the left and right of cursor
 
 " " Fast editing
 nnoremap <BS> dd " delete whole line with backspace
-nnoremap <space> viw " select a word with the spacebar
+" nnoremap <space> viw " select a word with the spacebar
  
 " Brutala (za odvikavanje od strjelica)
-nnoremap <down> ddp
 nnoremap <up> ddkP
-" vnoremap <up> dkP
-" vnoremap <down> dp
+nnoremap <down> ddp
+xnoremap <up> :move '<-2<CR>gv-gv
+xnoremap <down> :move '>+1<CR>gv-gv
 
-" shift+arrow selection (not working)
-set keymodel=startsel,stopsel
+" " shift+arrow selection (not working)
+" set keymodel=startsel,stopsel
 
-" " Fast editing of .vimrc
-nnoremap <leader>rc :vsplit $VIMRC<cr>
-nnoremap <leader>sc :source $VIMRC<cr>
-
+"
 " """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Colors and Fonts
 " """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
