@@ -92,6 +92,7 @@
     - `-x` je za *extract*, dakle `tar -xf arhiva.tar -C dir/` je za otpakiravanje arhive u neki direktorij
     - s oznakom `-tf` je kao `ls`, ali za .tar datoteke
     - `-z` je za dodavanje kompresije, dakle `tar -czf arhiva.tar.gz dir/*` će sve datoteke iz direktorija *dir* zapakirati u komprimiranu tar arhivu
+    - za dodatne informacije i funkcije za raspakiravanje različitih arhiva pogledati [xvoland/Extract](https://github.com/xvoland/Extract)
 
 ## Za vratara
 
