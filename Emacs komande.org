@@ -1,8 +1,6 @@
 #+TITLE: Bilješke za Org Mode u Emacsu
 
-Iako postoji broj aplikacija za uređivanje Org datoteka (prvenstveno Logseq),
-sve ove bilješke ću pisati za rad u Emacs-u jer je tamo Org Mode najbolje
-implementiran i to ću još ograničeno samo na /evil mode/ kakav je prisutan u Spacemacsu ili Doom Emacsu.
+Iako postoji broj aplikacija za uređivanje Org datoteka (prvenstveno Logseq), sve ove bilješke ću pisati za rad u Emacs-u jer je tamo Org Mode izvorno (?) i najbolje implementiran i to ću još ograničeno samo na /evil mode/ kakav je prisutan u Spacemacsu ili Doom Emacsu.
 
 * Korisničko sučelje
 - navigacija s dokumentima
@@ -19,7 +17,7 @@ implementiran i to ću još ograničeno samo na /evil mode/ kakav je prisutan u 
             + =k= je za gašenje aktivnog buffera
       + =<Space>w{}= je za panele (/panes/) - uglavnom su svi u Doom-u
       preslika Vimovih (=<C-w>{}= komandi)
-            + =s= i =v= su za otvaranje novih panela
+            + =s= i =v= su za otvaranje novih panela (horizontalna ili vertikalna podjela prozora.
             + =w= je za selektiranje idućeg panela
             + =c= ili =q= je za zatvaranje panela
 ** Dired i neotree
@@ -31,7 +29,7 @@ Ostale upute se mogu potražiti preko prečca =<Space>ds= (documentation search)
 
 Uobičajena sintaksa je slična, ali ipak drukčija od markdowna
 
-#+START_SRC python
+#+START_SRC 
       * Naslov prvog stupnja
       ** Naslov drugog stupnja
       *** Naslov trećleg stupnja
@@ -51,8 +49,12 @@ Uobičajena sintaksa je slična, ali ipak drukčija od markdowna
       + TODO stavka za obaviti se gasi/pali s =<S-Left>= i =<S-Right>= 
       + TODO stavka za obaviti se preuređuje s =<Space>mt=
 #+END_SRC
+** Uređivanje teksta
+    + komanda =<M-t>= premeće riječi lijevo-desno, ovisno o tome gdje je smješten kursor. Ako je kursor smješten na početak riječi, onda će riječ zamijeniti mjesto s riječi prije, a ako je smješten usred riječi ili potkraj, onda joj zamijenjuje mjesto s riječi iza.
+      + u Vimu se to postiže s /transwrd/ pluginom.
+      + naprednija verzija ovog u Emacsu je [[https://github.com/rejeep/drag-stuff.el][rejeep/drag-stuff.el]]-ov plugin koji sve pomiće pomoću =<M-strjelica>= prečca.
 ** Tablice
-      + tablice rabe uobičajenu sintaksu (kao i markdown), ali momogućuju
+      + tablice rabe uobičajenu sintaksu (kao i markdown), ali omogućuju
       da se 
             + s =<C-Return>= stvaraju novi retci i da se s =<Tab>= skače iz čelije u čeliju
             + =<S-Return>= je za kopiranje vrijednosti čelije u novi redak
