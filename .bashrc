@@ -16,7 +16,7 @@ alias cpv="cp rsync -avh --info=progress2" # kopira uz progress-bar
 
 grepin() {
   grep -Rnw "." -e "$1"
-} # traži određenu riječ (string) u svim datotekama unutar određenog direktorija
+} # traži određenu riječ (string) u svim datotekama unutar aktivnog direktorija
 alias vi=vim
 
 alias bashrc="vim ~/.bashrc && sbrc"
@@ -25,5 +25,12 @@ alias vimrc="vim ~/.config/vim/.vimrc"
 alias tmuxrc="vim ~/.config/tmux/tmux.conf"
 
 PATH="~/.local/bin${PATH:+:${PATH}}"
+
+# Za ubaciti fontove s Windows mašine!!!
+# ln -s /mnt/c/Windows/Fonts ~/.fonts
+# fc-cache -fv
+
+# Za linkati OneDrive
+# ln -s /mnt/d/cloud... ~/OneDrive
 
 tmux new

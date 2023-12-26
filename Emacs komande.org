@@ -53,6 +53,7 @@ Emacs u startu nudi nekoliko file explorera
 + =m= je za selekciju stavke
 + =d= je za selekciju stavke za brisnje
 + =x= je za ksekuciju selekcije (bilo otvaranje, bilo brisanje)
++ postoji i poseban ~peep-dired~ plugin za pretpregled (/preview/) multimedialnih datoteka. (ref. Church of Emacs, v. 8, 12:30)
 
 **** Treemacs
 + osnovni prečac za otvaranje zatvaranje je =<Leader>op=
@@ -98,10 +99,12 @@ Uobičajena sintaksa je slična, ali ipak drukčija od markdowna
       - TODO stavka za obaviti se gasi/pali s =<S-Left>= i =<S-Right>=
       - TODO stavka za obaviti se preuređuje s =<Leader>mt=
 #+END_SRC
+
 ** Uređivanje teksta
     + komanda =<M-t>= premeće riječi lijevo-desno, ovisno o tome gdje je smješten kursor. Ako je kursor smješten na početak riječi, onda će riječ zamijeniti mjesto s riječi prije, a ako je smješten usred riječi ili potkraj, onda joj zamijenjuje mjesto s riječi iza.
       + u Vimu se to postiže s /transwrd/ pluginom.
       + naprednija verzija ovog u Emacsu je [[https://github.com/rejeep/drag-stuff.el][rejeep/drag-stuff.el]]-ov plugin koji sve pomiće pomoću =<M-strjelica>= prečca.
+
 ** Tablice
 + tablice rabe uobičajenu sintaksu (kao i markdown), ali momogućuju
  da se
@@ -122,12 +125,36 @@ Uobičajena sintaksa je slična, ali ipak drukčija od markdowna
 
 ** Org Babel
 + osnovna sintaksa za pisanje koda je =#+START_SRC= i =#+END_SRC=, a prečac =<s<Tab>=
-+ jednom kada je kod ispisan, =<Enter>= u normalnom modu izvršava blok koda
++ jednom kada je kod ispisan, =<Enter>= u normalnom modu ili =<C-c><C-c>= općenito izvršava blok koda
++ a može se namjestitit i automatska konverzija datoteka u /.org/,(v. [[https://martibosch.github.io/jupyter-emacs-universe/][martibosch/jupiter-emacs-universe]]) npr.:
+  #+START_SRC emacs-lisp
+  (setq code-cells-convert-ipynb-style '(
+    ("pandoc" "--to" "ipynb" "--from" "org")
+      ("pandoc" "--to" "org" "--from" "ipynb")
+      org-mode))
+  #+END_SRC
 
 *** Tangle
 + /Org Bable Tangle/ je mehanizam za prikupljanje koda iz ~.org~ dokumenata i izvoz u druge datoteke
 + osnovni prečac je =<C-c><C-v>t=
 
+* Izgled
+Ovo se više tiče postavki nego ičega, ak eto:
++ dodavanje tema: =(add-to-list 'custom-theme-load-path "~/.config/emacs/themes ili štoveć")=
+  + za učitavanje određene: (load-theme '<ime-teme> t)
++ prozirnost: =(add-to-list 'default-frame-alist '(alpha-background . 90)) ; za prozirnost svi prozora nadalje /dodano s Emacs v.29/=
+
+* Terminali
+Emacs ima četiri defaultna terminala:
++ ~shell~ - zvan /Inferior Shell/ kao wrapper oko sistemkog shella
++ ~eshell~ - shell pisan u emacs-lispu, pa je ujedno i REPL za elisp (nešto kao što je xonsh za python)
++ ~term~ i ~ansi-term~
++ ~vterm~ - kao najbolji emulator terminala
+
+Postavke za terminale se unose u ~config.el~: =(setq shell-file-name  "/bin/fish")= ili =(setq eshell-aliases-file "~/.config/emacs/.eshellrc")=
+
+* Magit
+Za sada najbolji Git klijent koji sam našao (usporediv s lazygit-om)
 
 * Suradnja s Vimom
 Plugini [[https://github.com/jceb/vim-orgmode/blob/master/doc/orgguide.txt][Vim Org-Mode]] ili [[https://github.com/nvim-neorg/neorg][Neorg]] omogućuju otvaranje ~.org~ datoteka u *Vim*-u i simulaciju *Emacs*-ovih mogućnosti, ali nisam siguran koliko su međusobno kompatibilni i zahtijevaju li ubacivanje nekakvih posebnih headera ili metapodataka unutar datoteke
