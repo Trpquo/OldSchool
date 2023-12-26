@@ -8,9 +8,13 @@
   - [[#baratanje-prozorima-i-panelima][Baratanje prozorima i panelima]]
 - [[#org-mode][Org Mode]]
   - [[#osnovna-sintaksa][Osnovna sintaksa]]
+  - [[#uređivanje-teksta][Uređivanje teksta]]
   - [[#tablice][Tablice]]
   - [[#kretnje][Kretnje]]
   - [[#org-babel][Org Babel]]
+- [[#izgled][Izgled]]
+- [[#terminali][Terminali]]
+- [[#magit][Magit]]
 - [[#suradnja-s-vimom][Suradnja s Vimom]]
 
 * Reference
@@ -42,7 +46,7 @@ Nakon toga se pažnja može posvetiti tutorialima. Većinu sam ih pronašao prek
 Emacs u startu nudi nekoliko file explorera
 
 **** Osnovni file explorer (bezimen (?), ugrađen)
-+ u načelu funkvionira kao ~fzf~
++ u načelu funkcionira kao ~fzf~
 + otvara ga =<Leader>.=
 
 **** Dired (Directory Editor, ugrađen)
