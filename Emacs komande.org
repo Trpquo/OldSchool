@@ -19,10 +19,13 @@
 
 * Reference
 Najprvo treba pregledati github [[https://github.com/doomemacs/doomemacs/blob/master/docs/index.org][dokumentaciju]] i [[https://discourse.doomemacs.org/c/guides/5][službenu dokumentaciju]] za Doom Emcas.
+Može se pogledati i [[https://www.emacswiki.org][dokumentaciju]] za Emacs.
 
 Nakon toga se pažnja može posvetiti tutorialima. Većinu sam ih pronašao preko Doomove dokumentacije.
     + DistroTube
     + Zaiste Programming
+
+NOTE =M-x describe-key= (=C-h k=) i =M-x describe-bindings=
 
 * Sažetak
 ==Emacs== dijeli posao baratanja sa dokumentima i prozorima kroz nekoliko boljki:
@@ -72,7 +75,8 @@ Emacs u startu nudi nekoliko file explorera
     + =s= i =v= su za otvaranje novih panela
     + =w= je za selektiranje idućeg panela
     + =c= ili =q= je za zatvaranje panela
-  + =<Leader>qr= je za restartanje Emacsa, ali meni ne radi jer pokrećem Emacs kroz =doom run=
+  + ~Cancel/quit~: =C-g= ili ponekad =ESC=
+  + =<Leader>qr= je za ~restart~-anje Emacsa, ali meni ne radi jer pokrećem Emacs kroz =doom run=
 
 * Org Mode
 Iako postoji broj aplikacija za uređivanje Org datoteka (prvenstveno Logseq), sve ove bilješke ću pisati za rad u Emacs-u jer je tamo Org Mode najbolje implementiran i to ću još ograničeno samo na /evil mode/ kakav je prisutan u Spacemacsu ili Doom Emacsu.
@@ -105,9 +109,22 @@ Uobičajena sintaksa je slična, ali ipak drukčija od markdowna
 #+END_SRC
 
 ** Uređivanje teksta
-    + komanda =<M-t>= premeće riječi lijevo-desno, ovisno o tome gdje je smješten kursor. Ako je kursor smješten na početak riječi, onda će riječ zamijeniti mjesto s riječi prije, a ako je smješten usred riječi ili potkraj, onda joj zamijenjuje mjesto s riječi iza.
-      + u Vimu se to postiže s /transwrd/ pluginom.
-      + naprednija verzija ovog u Emacsu je [[https://github.com/rejeep/drag-stuff.el][rejeep/drag-stuff.el]]-ov plugin koji sve pomiće pomoću =<M-strjelica>= prečca.
+Postoje neki defaultni prečci, ali doom emacs donosi svoje
++ Otvori datoteku: ~find-file~, =C-x C-d= ili =SPC f f=, =SPC .= ili =SPC SPC=
++ Prikaži datoteku: ~switch-buffer~, =C-x b= ili =SPC b b=, =SPC ,=
++ Prikaži prozor: ~ibuffer~, =C-x C-b= ili =SPC b B=, =SPC b i=
++ Prikaži prethodni prozor: ~previous-buffer~ ili ~next-buffer~, =C-x <left>= ili =C-x <right>=, =SPC b [= ili =SPC b ]=
++ Spremi datoteku: ~save-buffer~, =C-x C-s= ili =SPC f s=, =:w<CR>=
++ Spremi datoteku kao: ~write-file~, =C-x C-w= ili =SPC f S=, =:w <ime><CR>=
++ Selektiraj tekst: =C-SPC <kretnje>= ili =v <kretnje>= ili =S-v <kretnje>=
++ Copy/pastaenje: =C-w= (~kill~, tj. /cut/) i =C-y= (~yank~, tj. /paste/)
++ =<C-Return>= daje novi redak istog stupnja u kojem se nalazimo
+  - to može biti nova stavka u popisu ili novi naslov istog stupnja nakon cjeline
++ =<M-h>= i =<M-l>= ili =M-<left>= i =M-<right>= su za mijenjanje stupnja naslova
++ =<M-k>= i =<M-j>= ili =M-<up>= i =M-<down>= su za zamjene položaja cijelih naslovljenih blokova
++ komanda =<M-t>= premeće riječi lijevo-desno, ovisno o tome gdje je smješten kursor. Ako je kursor smješten na početak riječi, onda će riječ zamijeniti mjesto s riječi prije, a ako je smješten usred riječi ili potkraj, onda joj zamijenjuje mjesto s riječi iza.
+  - u Vimu se to postiže s /transwrd/ pluginom.
+  - naprednija verzija ovog u Emacsu je [[https://github.com/rejeep/drag-stuff.el][rejeep/drag-stuff.el]]-ov plugin koji sve pomiće pomoću =<M-strjelica>= prečca.
 
 ** Tablice
 + tablice rabe uobičajenu sintaksu (kao i markdown), ali momogućuju
@@ -118,14 +135,22 @@ Uobičajena sintaksa je slična, ali ipak drukčija od markdowna
        + =<M-(hjkl)>= su za izmjene/pomicanja redaka i stupaca
 
 ** Kretnje
++ =<C-b>=, =<C-f>=, =<C-p>= i =<C-n>= ili =h=, =l=, =k= i =j= su za ~backward~, ~forward~, ~previous~ i ~next~
++ =<M-b>= i =<M-f>= tj. =w=, =e=, =b= i =W=, =E=, =B= za kretanje po riječima
++ =<C-a>= i =<C-e>= (pogotovo praktični u insert modu) tj. =0= i =$= su za skakanje na početak i kraj retka
++ =<M-a>= i =<M-e>= su za skakanje naprijed/nazad po rečenicama (traži interpunkcijske znakove)
++ =}= i ={= su za skakanje naprijed/nazad po odlomcima
++ =<C-<>= i =<C->>= tj. =gg= i =G= za skakanje na počtak ili kraj dokumenta
++ =<C-l>=, =zz= su za skrolnje prozora srdina-vrh-dno (još mi fali za Vim)
+  - =<C-M-l>= pokušava optimizirati položaj ekrana za gledanje aktivnog bloka
++ =<C-s>= i =<C-r>= (? je u evilu za /undo/) tj. =/=, =f= i =t= pokreću pretragu za pojmom/znakom, a ponavljanje =<C-s/r>= dok j search buffer otvoren tj. =n= i =N= te =;= i =,= u nomalnom modu skaču do idućeg/prethodnog pretraživanog pojma/znaka
++ =<C-o>= i =<C-i>= skaču nazad/naprijed na nedavo uređivana mjesta (čak i između datoteka)
 + Pored uobičajenih Vim kretnji, Org Mode omogućava još nekoliko specifično korisnih:
   + =<Tab>= je komanda za otvaranje i zatvaranje naslovnih cjelina
     + =<S-Tab>= je za otvaranje/zatvaranje svih odjednom
-  + =gj= i =gk= su za skakanje od naslova do naslova istog stupnja
-  + =<C-Return>= daje novi redak istog stupnja u kojem se nalazimo
-    + to može biti nova stavka u popisu ili novi naslov istog stupnja nakon cjeline
-  + =<M-h>= i =<M-l>= su za mijenjanje stupnja naslova
-  + =<M-k>= i =<M-j>= su za zamjene položaja cijelih naslovljenih blokova
+  + =<M-}>= i =<M-{>= tj. =gj= i =gk= su za skakanje od naslova do naslova istog stupnja
+  + =<M-@>= je za označivanje riječi kako bi se onda kasnije moglo skočiti do nje s
+  + =<M-g><M-g><broj>= skače na određeni redak , a =<M-g><Tab><broj>= na određenu kolumnu
 
 ** Org Babel
 + osnovna sintaksa za pisanje koda je =#+START_SRC= i =#+END_SRC=, a prečac =<s<Tab>=
