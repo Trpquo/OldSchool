@@ -25,7 +25,7 @@ Nakon toga se pažnja može posvetiti tutorialima. Većinu sam ih pronašao prek
     + DistroTube
     + Zaiste Programming
 
-NOTE =M-x describe-key= (=C-h k=) i =M-x describe-bindings=
+NOTE =<M-x>describe-key= (=<C-h>k=) i =<M-x>describe-bindings=
 
 * Sažetak
 ==Emacs== dijeli posao baratanja sa dokumentima i prozorima kroz nekoliko boljki:
@@ -75,13 +75,13 @@ Emacs u startu nudi nekoliko file explorera
     + =s= i =v= su za otvaranje novih panela
     + =w= je za selektiranje idućeg panela
     + =c= ili =q= je za zatvaranje panela
-  + ~Cancel/quit~: =C-g= ili ponekad =ESC=
+  + ~Cancel/quit~: =<C-g> ili ponekad =ESC=
   + =<Leader>qr= je za ~restart~-anje Emacsa, ali meni ne radi jer pokrećem Emacs kroz =doom run=
 
 * Org Mode
 Iako postoji broj aplikacija za uređivanje Org datoteka (prvenstveno Logseq), sve ove bilješke ću pisati za rad u Emacs-u jer je tamo Org Mode najbolje implementiran i to ću još ograničeno samo na /evil mode/ kakav je prisutan u Spacemacsu ili Doom Emacsu.
 
-Za sve upute o /Org Modu/ može se unutar Emacsa lupiti komanda =M-x org-info=
+Za sve upute o /Org Modu/ može se unutar Emacsa lupiti komanda =<M-x>org-info=
 Ostale upute se mogu potražiti preko prečca =<Leader>ds= (documentation search)
 
 ** Osnovna sintaksa
@@ -110,14 +110,12 @@ Uobičajena sintaksa je slična, ali ipak drukčija od markdowna
 
 ** Uređivanje teksta
 Postoje neki defaultni prečci, ali doom emacs donosi svoje
-+ Otvori datoteku: ~find-file~, =C-x C-d= ili =SPC f f=, =SPC .= ili =SPC SPC=
-+ Prikaži datoteku: ~switch-buffer~, =C-x b= ili =SPC b b=, =SPC ,=
-+ Prikaži prozor: ~ibuffer~, =C-x C-b= ili =SPC b B=, =SPC b i=
-+ Prikaži prethodni prozor: ~previous-buffer~ ili ~next-buffer~, =C-x <left>= ili =C-x <right>=, =SPC b [= ili =SPC b ]=
-+ Spremi datoteku: ~save-buffer~, =C-x C-s= ili =SPC f s=, =:w<CR>=
-+ Spremi datoteku kao: ~write-file~, =C-x C-w= ili =SPC f S=, =:w <ime><CR>=
-+ Selektiraj tekst: =C-SPC <kretnje>= ili =v <kretnje>= ili =S-v <kretnje>=
-+ Copy/pastaenje: =C-w= (~kill~, tj. /cut/) i =C-y= (~yank~, tj. /paste/)
++ Prikaži datoteku: ~switch-buffer~, =:-x b= ili =<SPC>b b=, =<SPC>,=
++ Otvori datoteku: ~find-file~, =<C-x><C-d> ili =<SPC> f f=, =<SPC> .= ili =<SPC> <SPC>=
++ Prikaži prozor: ~ibuffer~, =<C-x><C-b> ili =<SPC>b B=, =<SPC>b i=
+  + Prikaži prethodni prozor: ~previous-buffer~ ili ~next-buffer~, =<C-x><left>= ili =<C-x><right>=, =<SPC>b [= ili =<SPC>b ]=
++ Spremi datoteku: ~save-buffer~, =<C-x><C-s> ili =<SPC>f s=, =:w<CR>=
++ Spremi datoteku kao: ~write-file~, =<C-x><C-w> ili =<SPC>f S=, =:w <ime><CR>=
 + =<C-Return>= daje novi redak istog stupnja u kojem se nalazimo
   - to može biti nova stavka u popisu ili novi naslov istog stupnja nakon cjeline
 + =<M-h>= i =<M-l>= ili =M-<left>= i =M-<right>= su za mijenjanje stupnja naslova
@@ -125,6 +123,13 @@ Postoje neki defaultni prečci, ali doom emacs donosi svoje
 + komanda =<M-t>= premeće riječi lijevo-desno, ovisno o tome gdje je smješten kursor. Ako je kursor smješten na početak riječi, onda će riječ zamijeniti mjesto s riječi prije, a ako je smješten usred riječi ili potkraj, onda joj zamijenjuje mjesto s riječi iza.
   - u Vimu se to postiže s /transwrd/ pluginom.
   - naprednija verzija ovog u Emacsu je [[https://github.com/rejeep/drag-stuff.el][rejeep/drag-stuff.el]]-ov plugin koji sve pomiće pomoću =<M-strjelica>= prečca.
+*** Selekcije (u Emacsu se to zovu regije i /killring/-i)
++ Selektiraj tekst: =<C-SPC><kretnje>= postavlja marker i započinje selekciju, ili u /evil modu/ to rade =v <kretnje>=, =<S-v><kretnje>= ili =<C-v><kretnje>=
++ Emacs navodno selektira i dok se drži =<S><kretnje>=, premda nisam sigura koliko je to pouzdano u /evil modu/
++ =<C-g>= je , ponovno, za ~cancel~ selekcije
++ čak i ako se deselektiralo, može se bilo kada stisnuti =<C-x><C-x>= i dobiti selekciju od zadnjeg mjesta gdje je postavljen marker, do mjesta gdje se sad nalazi kursor
+*** Kopiranje/rezanje/ljepljenje
++ Copy/pastaenje: =<C-w>= (~kill~, tj. /cut/) i =<C-y>= (~yank~, tj. /paste/), tj. kombinacije s =d= ili =y= i =p= u evil modu
 
 ** Tablice
 + tablice rabe uobičajenu sintaksu (kao i markdown), ali momogućuju
