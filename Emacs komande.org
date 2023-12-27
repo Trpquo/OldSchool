@@ -6,11 +6,12 @@
 - [[#korisničko-sučelje][Korisničko sučelje]]
   - [[#navigacija-dokumentima][Navigacija dokumentima]]
   - [[#baratanje-prozorima-i-panelima][Baratanje prozorima i panelima]]
-- [[#org-mode][Org Mode]]
+- [[#baratanje-tekstom][Baratanje tekstom]]
   - [[#osnovna-sintaksa][Osnovna sintaksa]]
+  - [[#kretnje][Kretnje]]
   - [[#uređivanje-teksta][Uređivanje teksta]]
   - [[#tablice][Tablice]]
-  - [[#kretnje][Kretnje]]
+- [[#org-mode][Org Mode]]
   - [[#org-babel][Org Babel]]
 - [[#izgled][Izgled]]
 - [[#terminali][Terminali]]
@@ -75,15 +76,10 @@ Emacs u startu nudi nekoliko file explorera
     + =s= i =v= su za otvaranje novih panela
     + =w= je za selektiranje idućeg panela
     + =c= ili =q= je za zatvaranje panela
-  + ~Cancel/quit~: =<C-g> ili ponekad =ESC=
+  + ~Cancel/quit~: =<C-g>= ili ponekad =ESC=
   + =<Leader>qr= je za ~restart~-anje Emacsa, ali meni ne radi jer pokrećem Emacs kroz =doom run=
 
-* Org Mode
-Iako postoji broj aplikacija za uređivanje Org datoteka (prvenstveno Logseq), sve ove bilješke ću pisati za rad u Emacs-u jer je tamo Org Mode najbolje implementiran i to ću još ograničeno samo na /evil mode/ kakav je prisutan u Spacemacsu ili Doom Emacsu.
-
-Za sve upute o /Org Modu/ može se unutar Emacsa lupiti komanda =<M-x>org-info=
-Ostale upute se mogu potražiti preko prečca =<Leader>ds= (documentation search)
-
+* Baratanje tekstom
 ** Osnovna sintaksa
 Uobičajena sintaksa je slična, ali ipak drukčija od markdowna
 
@@ -98,36 +94,64 @@ Uobičajena sintaksa je slična, ali ipak drukčija od markdowna
       =code=
       ~verbatim~
       [[https://webstranica][Poveznica]]
-      - stavka
-      - stavka s brojačem podstavki [0/2] [0%]
+      + stavka
+      + stavka s brojačem podstavki [0/2] [0%]
         - [ ] stavka s kućicom
         - [ ] =<Return>= bi trebao biti za vrtnju stanja
-      - stavka
-      - stavka
-      - TODO stavka za obaviti se gasi/pali s =<S-Left>= i =<S-Right>=
-      - TODO stavka za obaviti se preuređuje s =<Leader>mt=
+      + stavka
+      + stavka
+      + TODO stavka za obaviti se gasi/pali s =<S-Left>= i =<S-Right>=
+      + TODO stavka za obaviti se preuređuje s =<Leader>mt=
 #+END_SRC
+
+** Kretnje
++ =<C-b>=, =<C-f>=, =<C-p>= i =<C-n>= ili =h=, =l=, =k= i =j= su za ~backward~, ~forward~, ~previous~ i ~next~
++ =<M-b>= i =<M-f>= tj. =w=, =e=, =b= i =W=, =E=, =B= za kretanje po riječima
++ =<C-a>= i =<C-e>= (pogotovo praktični u insert modu) tj. =0= i =$= su za skakanje na početak i kraj retka
++ =<M-a>= i =<M-e>= tj. =)= i =(= su za skakanje naprijed/nazad po rečenicama (traži interpunkcijske znakove)
++ =}= i ={= su za skakanje naprijed/nazad po odlomcima
++ =<C-<>= i =<C->>= tj. =gg= i =G= za skakanje na počtak ili kraj dokumenta
++ =<C-l>=, =zz= su za skrolnje prozora srdina-vrh-dno (još mi fali za Vim)
+  - =<C-M-l>= pokušava optimizirati položaj ekrana za gledanje aktivnog bloka
++ =<C-s>= i =<C-r>= (? je u evilu za /undo/) tj. =/=, =f= i =t= pokreću pretragu za pojmom/znakom, a ponavljanje =<C-s/r>= dok j search buffer otvoren tj. =n= i =N= te =;= i =,= u nomalnom modu skaču do idućeg/prethodnog pretraživanog pojma/znaka
++ =<C-o>= i =<C-i>= skaču nazad/naprijed na nedavo uređivana mjesta (čak i između datoteka)
++ Pored uobičajenih Vim kretnji, Org Mode omogućava još nekoliko specifično korisnih:
+  + =<Tab>= je komanda za otvaranje i zatvaranje naslovnih cjelina
+    + =<S-Tab>= je za otvaranje/zatvaranje svih odjednom
+  + =<M-}>= i =<M-{>= tj. =gj= i =gk= su za skakanje od naslova do naslova istog stupnja
+  + =<M-g><M-g><broj>= skače na određeni redak , a =<M-g><Tab><broj>= na određenu kolumnu
 
 ** Uređivanje teksta
 Postoje neki defaultni prečci, ali doom emacs donosi svoje
 + Prikaži datoteku: ~switch-buffer~, =:-x b= ili =<SPC>b b=, =<SPC>,=
 + Otvori datoteku: ~find-file~, =<C-x><C-d> ili =<SPC> f f=, =<SPC> .= ili =<SPC> <SPC>=
 + Prikaži prozor: ~ibuffer~, =<C-x><C-b> ili =<SPC>b B=, =<SPC>b i=
-  + Prikaži prethodni prozor: ~previous-buffer~ ili ~next-buffer~, =<C-x><left>= ili =<C-x><right>=, =<SPC>b [= ili =<SPC>b ]=
++ Prikaži prethodni prozor: ~previous-buffer~ ili ~next-buffer~, =<C-x><left>= ili =<C-x><right>=, =<SPC>b [= ili =<SPC>b ]=
 + Spremi datoteku: ~save-buffer~, =<C-x><C-s> ili =<SPC>f s=, =:w<CR>=
 + Spremi datoteku kao: ~write-file~, =<C-x><C-w> ili =<SPC>f S=, =:w <ime><CR>=
 + =<C-Return>= daje novi redak istog stupnja u kojem se nalazimo
   - to može biti nova stavka u popisu ili novi naslov istog stupnja nakon cjeline
++ =J= spaja idući redak i stavlja razmak za riječ
 + =<M-h>= i =<M-l>= ili =M-<left>= i =M-<right>= su za mijenjanje stupnja naslova
 + =<M-k>= i =<M-j>= ili =M-<up>= i =M-<down>= su za zamjene položaja cijelih naslovljenih blokova
 + komanda =<M-t>= premeće riječi lijevo-desno, ovisno o tome gdje je smješten kursor. Ako je kursor smješten na početak riječi, onda će riječ zamijeniti mjesto s riječi prije, a ako je smješten usred riječi ili potkraj, onda joj zamijenjuje mjesto s riječi iza.
   - u Vimu se to postiže s /transwrd/ pluginom.
   - naprednija verzija ovog u Emacsu je [[https://github.com/rejeep/drag-stuff.el][rejeep/drag-stuff.el]]-ov plugin koji sve pomiće pomoću =<M-strjelica>= prečca.
+
 *** Selekcije (u Emacsu se to zovu regije i /killring/-i)
 + Selektiraj tekst: =<C-SPC><kretnje>= postavlja marker i započinje selekciju, ili u /evil modu/ to rade =v <kretnje>=, =<S-v><kretnje>= ili =<C-v><kretnje>=
 + Emacs navodno selektira i dok se drži =<S><kretnje>=, premda nisam sigura koliko je to pouzdano u /evil modu/
-+ =<C-g>= je , ponovno, za ~cancel~ selekcije
-+ čak i ako se deselektiralo, može se bilo kada stisnuti =<C-x><C-x>= i dobiti selekciju od zadnjeg mjesta gdje je postavljen marker, do mjesta gdje se sad nalazi kursor
++ =<M-@>= je za stavljanje markera i selekciju riječi (od kursora do kraja riječi)
++ =vi<simbol>= ili =va<simbol>= su za selekcije cijelina unutar kojih se nalazi kursor (sa ili bez navodnika)
+  - =w= je simbol za riječ, a =W= za bio što omeđeno razmacima
+  - =b= i =(= ili =)=, =[= ili =]=, te ={= ili =}= su za tekst unutar zagrada, a ="= ili ='= za tekst unitar navodnika
+  - =p= je simbol za odlomak
+  -
++ =<C-x><C-p>= je za selekciju cijelog dokumenta, kao i =ggvG=
++ =<C-g>= je , ponovno, za ~cancel~ selekcije, ali i dodavanje zadnjeg označenog mjesta u ~markring~
+  + čak i ako se deselektiralo, može se bilo kada stisnuti =<C-x><C-x>= i dobiti selekciju od zadnjeg mjesta gdje je postavljen marker, do mjesta gdje se sad nalazi kursor
+  + inače se može kretati u krug (?) s =<C-u><C-SPC>=, =<C-o>= i =<C-i>= ili =[`= i =]`= po /markring/-u
+
 *** Kopiranje/rezanje/ljepljenje
 + Copy/pastaenje: =<C-w>= (~kill~, tj. /cut/) i =<C-y>= (~yank~, tj. /paste/), tj. kombinacije s =d= ili =y= i =p= u evil modu
 
@@ -139,23 +163,11 @@ Postoje neki defaultni prečci, ali doom emacs donosi svoje
        + =<Leader>mb-= pretvara redak u thead
        + =<M-(hjkl)>= su za izmjene/pomicanja redaka i stupaca
 
-** Kretnje
-+ =<C-b>=, =<C-f>=, =<C-p>= i =<C-n>= ili =h=, =l=, =k= i =j= su za ~backward~, ~forward~, ~previous~ i ~next~
-+ =<M-b>= i =<M-f>= tj. =w=, =e=, =b= i =W=, =E=, =B= za kretanje po riječima
-+ =<C-a>= i =<C-e>= (pogotovo praktični u insert modu) tj. =0= i =$= su za skakanje na početak i kraj retka
-+ =<M-a>= i =<M-e>= su za skakanje naprijed/nazad po rečenicama (traži interpunkcijske znakove)
-+ =}= i ={= su za skakanje naprijed/nazad po odlomcima
-+ =<C-<>= i =<C->>= tj. =gg= i =G= za skakanje na počtak ili kraj dokumenta
-+ =<C-l>=, =zz= su za skrolnje prozora srdina-vrh-dno (još mi fali za Vim)
-  - =<C-M-l>= pokušava optimizirati položaj ekrana za gledanje aktivnog bloka
-+ =<C-s>= i =<C-r>= (? je u evilu za /undo/) tj. =/=, =f= i =t= pokreću pretragu za pojmom/znakom, a ponavljanje =<C-s/r>= dok j search buffer otvoren tj. =n= i =N= te =;= i =,= u nomalnom modu skaču do idućeg/prethodnog pretraživanog pojma/znaka
-+ =<C-o>= i =<C-i>= skaču nazad/naprijed na nedavo uređivana mjesta (čak i između datoteka)
-+ Pored uobičajenih Vim kretnji, Org Mode omogućava još nekoliko specifično korisnih:
-  + =<Tab>= je komanda za otvaranje i zatvaranje naslovnih cjelina
-    + =<S-Tab>= je za otvaranje/zatvaranje svih odjednom
-  + =<M-}>= i =<M-{>= tj. =gj= i =gk= su za skakanje od naslova do naslova istog stupnja
-  + =<M-@>= je za označivanje riječi kako bi se onda kasnije moglo skočiti do nje s
-  + =<M-g><M-g><broj>= skače na određeni redak , a =<M-g><Tab><broj>= na određenu kolumnu
+* Org Mode
+Iako postoji broj aplikacija za uređivanje Org datoteka (prvenstveno Logseq), sve ove bilješke ću pisati za rad u Emacs-u jer je tamo Org Mode najbolje implementiran i to ću još ograničeno samo na /evil mode/ kakav je prisutan u Spacemacsu ili Doom Emacsu.
+
+Za sve upute o /Org Modu/ može se unutar Emacsa lupiti komanda =<M-x>org-info=
+Ostale upute se mogu potražiti preko prečca =<Leader>ds= (documentation search)
 
 ** Org Babel
 + osnovna sintaksa za pisanje koda je =#+START_SRC= i =#+END_SRC=, a prečac =<s<Tab>=
@@ -188,7 +200,8 @@ Emacs ima četiri defaultna terminala:
 Postavke za terminale se unose u ~config.el~: =(setq shell-file-name  "/bin/fish")= ili =(setq eshell-aliases-file "~/.config/emacs/.eshellrc")=
 
 * Magit
-Za sada najbolji Git klijent koji sam našao (usporediv s lazygit-om)
-
+Za sada najbolji Git klijent koji sam našao (usporediv jedino s lazygit-om)
++ Osnovna komanda za paljenje je /Magit User Manual/-a =<C-x>g=, =G= (=<M-x>magit-refresh=) osvježuje pogled, a =q= ga zatvara
++ =h= (kada u Magitu) otvara popis dostupnih komandi a =hh= otvara /Help Pages/
 * Suradnja s Vimom
 Plugini [[https://github.com/jceb/vim-orgmode/blob/master/doc/orgguide.txt][Vim Org-Mode]] ili [[https://github.com/nvim-neorg/neorg][Neorg]] omogućuju otvaranje ~.org~ datoteka u *Vim*-u i simulaciju *Emacs*-ovih mogućnosti, ali nisam siguran koliko su međusobno kompatibilni i zahtijevaju li ubacivanje nekakvih posebnih headera ili metapodataka unutar datoteke
