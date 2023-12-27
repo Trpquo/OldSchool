@@ -16,6 +16,9 @@
 - [[#izgled][Izgled]]
 - [[#terminali][Terminali]]
 - [[#magit][Magit]]
+  - [[#fetch-i-pull][Fetch i Pull]]
+  - [[#log][Log]]
+  - [[#commit][Commit]]
 - [[#suradnja-s-vimom][Suradnja s Vimom]]
 
 * Reference
@@ -105,6 +108,7 @@ Uobičajena sintaksa je slična, ali ipak drukčija od markdowna
 #+END_SRC
 
 ** Kretnje
+Evil-mode često uspijeva dobro izbalansirati ubacivanje komandi koje se ponašaju kao u Vimu s upotrijebom Vim prečaca za već postojeće Emacs komande, ali tamo gdje se razilaze, Emacsove nekako bolje i pametnije rade (npr. bolje lociraju stvarne semantičke cjeline za skakanje po tekstu)
 + =<C-b>=, =<C-f>=, =<C-p>= i =<C-n>= ili =h=, =l=, =k= i =j= su za ~backward~, ~forward~, ~previous~ i ~next~
 + =<M-b>= i =<M-f>= tj. =w=, =e=, =b= i =W=, =E=, =B= za kretanje po riječima
 + =<C-a>= i =<C-e>= (pogotovo praktični u insert modu) tj. =0= i =$= su za skakanje na početak i kraj retka
@@ -118,7 +122,8 @@ Uobičajena sintaksa je slična, ali ipak drukčija od markdowna
 + Pored uobičajenih Vim kretnji, Org Mode omogućava još nekoliko specifično korisnih:
   + =<Tab>= je komanda za otvaranje i zatvaranje naslovnih cjelina
     + =<S-Tab>= je za otvaranje/zatvaranje svih odjednom
-  + =<M-}>= i =<M-{>= tj. =gj= i =gk= su za skakanje od naslova do naslova istog stupnja
+  + =<M-n>= i =<M-p>= ili (donekle) =<M-}>= i =<M-{>= tj. =gj= i =gk= su za skakanje od naslova do naslova istog stupnja
+    - =^= je za skakanje na najbliži naslov "roditeljske" sekcije
   + =<M-g><M-g><broj>= skače na određeni redak , a =<M-g><Tab><broj>= na određenu kolumnu
 
 ** Uređivanje teksta
@@ -201,7 +206,19 @@ Postavke za terminale se unose u ~config.el~: =(setq shell-file-name  "/bin/fish
 
 * Magit
 Za sada najbolji Git klijent koji sam našao (usporediv jedino s lazygit-om)
-+ Osnovna komanda za paljenje je /Magit User Manual/-a =<C-x>g=, =G= (=<M-x>magit-refresh=) osvježuje pogled, a =q= ga zatvara
-+ =h= (kada u Magitu) otvara popis dostupnih komandi a =hh= otvara /Help Pages/
++ Osnovna komanda za paljenje je /Magit User Manual/-a =<C-x>g=, =gz= (=<M-x>magit-refresh=) i =gR= (=<M-x>magit-referesh-all=) osvježuje pogled, a =q= ga zatvara
++ =?= ili =h= (kada u Magitu) otvara popis dostupnih komandi a =hh= otvara /Help Pages/
++ za kretanje se rabe iste kratice kao i za kretanje po Org tekstu
+** Fetch i Pull
++ =hzz= je za ~stash~-anje (nešto kao lokalno /commit/-anje i pitati će za novi /message/), =hzp= za ~pop~-anje (/unstash/-anje, nešto kao =hza= + =hzk= (/stash apply/ + /stash drop/))
+** Log
++ =ll= ispisuje povijest commita za branch od najnovijih prema starijima
++ =lo= je za ispisivanje loga bilo koje druge grane
+** Commit
++ =s= je za ~stage~-anje pojedionih /unstaged/ datoteka, sekcija koda ili čak samo pojedinih redaka, =S= za stageanje svega
+  - =<Tab>= prikazuje ~diff~ po datoteci pa se može i birati što se od izmjena želi /stage/-ati
++ =u= je za ~unstage~
++ =cc= je za osnovno ~commit~-anje (otvara prozor za /commit message/ i može ga se zatvoriti s =<C-c><C-c>= ili =:wq=)
++ =ce= je za /commit/ ~--amend~
 * Suradnja s Vimom
 Plugini [[https://github.com/jceb/vim-orgmode/blob/master/doc/orgguide.txt][Vim Org-Mode]] ili [[https://github.com/nvim-neorg/neorg][Neorg]] omogućuju otvaranje ~.org~ datoteka u *Vim*-u i simulaciju *Emacs*-ovih mogućnosti, ali nisam siguran koliko su međusobno kompatibilni i zahtijevaju li ubacivanje nekakvih posebnih headera ili metapodataka unutar datoteke
