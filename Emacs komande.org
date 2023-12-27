@@ -16,8 +16,11 @@
 - [[#izgled][Izgled]]
 - [[#terminali][Terminali]]
 - [[#magit][Magit]]
-  - [[#log][Log]]
-  - [[#commit][Commit]]
+  - [[#fetch-f-i-pull-f][Fetch (=f=) i Pull (=F=)]]
+  - [[#log-l][Log (=l=)]]
+  - [[#commit-c][Commit (=c=)]]
+  - [[#branch-b][Branch (=b=)]]
+  - [[#push-p][Push (=P=)]]
 - [[#suradnja-s-vimom][Suradnja s Vimom]]
 
 * Reference
@@ -208,14 +211,30 @@ Za sada najbolji Git klijent koji sam našao (usporediv jedino s lazygit-om)
 + Osnovna komanda za paljenje je /Magit User Manual/-a =<C-x>g=, =gz= (=<M-x>magit-refresh=) i =gR= (=<M-x>magit-referesh-all=) osvježuje pogled, a =q= ga zatvara
 + =?= ili =h= (kada u Magitu) otvara popis dostupnih komandi a =hh= otvara /Help Pages/
 + za kretanje se rabe iste kratice kao i za kretanje po Org tekstu
-** Log
+** Fetch (=f=) i Pull (=F=)
++
++ =hzz= je za ~stash~ (nešto kao lokalni /commit/, pa čak i pita za /message/), a /unstash/ se radi s =hzp= (/statsh pop/) ili sa =hza= + =hzk= (/statsh apply/ + /stash drop/)
+  - ako zaglavim s /merge conflict/-om sa stashom, njega (koliko znam?) ne mogu forcati ili riješiti u /diff/-u, tada mogu /checkout/-ati stash, /pop/-ati ga (ili /apply/-ati), te nakon toga /pull/-ati zadnje izmjene i pokušati riješiti konflikte.
+** Log (=l=)
 + =ll= ispisuje povijest commita za branch od najnovijih prema starijima
++ =lr= ispisuje /reflog/ commita za branch od najnovijih prema starijima
 + =lo= je za ispisivanje loga bilo koje druge grane
-** Commit
+** Commit (=c=)
 + =s= je za ~stage~-anje pojedionih /unstaged/ datoteka, sekcija koda ili čak samo pojedinih redaka, =S= za stageanje svega
   - =<Tab>= prikazuje ~diff~ po datoteci pa se može i birati što se od izmjena želi /stage/-ati
 + =u= je za ~unstage~
 + =cc= je za osnovno ~commit~-anje (otvara prozor za /commit message/ i može ga se zatvoriti s =<C-c><C-c>= ili =:wq=)
-+ =ce= je za /commit/ ~--amend~
++ =ca= je za /commit/ ~--amend~, a =ce= je isto to samo bez mogućnosti uređivanja poruke.
++ =cw= je za /reword/-anje poruke zadnjeg commita. Ostaje zabilježeno u /reflog/-u, ali ne i u /log/-u
++ za dodavanje izmjena u ranije /commit/-e, rabi se ~interactive rebase~ komanda =cF= (/Instant Fixup/) koja onda otvara /reflog/ popis s mogućnošću izbora i =<C-c><C-c>= izbora /commita/ u koji želimo spremiti promjene
+** Branch (=b=)
++ =bb= je za ~checkout~
++ nove grane se otvaraju sa =bn= (/branch --new/) =bc= (/branch checkout-n/)
+  - =cs= je za ~spinoff~ granu (novu granu u koju želimo prenijeti već /commit/-ane izmjene; npr. kad skužimo da smo radili na /master/-u mjesto novom /feature/-u). Ako /commit/-i nisu /push/-ani na krivoj grani, onda tu ne bi smjelo biti problema. Komanda samo pita za ime nove grane, ali onda u nju seli sve /unmerged commit/-e i briše ih iz neželjene grane.
+** Push (=P=)
++ =Pn= je za ~dry run~
++ =Pp= je za /push/-anje svega pa čak i nove grane (~--upstream~)
++ =P -f p= je za ~force~ (*Magit* automatski u pozadini /fetch/-a i prati koliko se lokalna grana razišla od /origin/-a)
++ =Pu= je za PR (?)
 * Suradnja s Vimom
 Plugini [[https://github.com/jceb/vim-orgmode/blob/master/doc/orgguide.txt][Vim Org-Mode]] ili [[https://github.com/nvim-neorg/neorg][Neorg]] omogućuju otvaranje ~.org~ datoteka u *Vim*-u i simulaciju *Emacs*-ovih mogućnosti, ali nisam siguran koliko su međusobno kompatibilni i zahtijevaju li ubacivanje nekakvih posebnih headera ili metapodataka unutar datoteke
