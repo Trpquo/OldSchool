@@ -59,8 +59,8 @@ Emacs u startu nudi nekoliko file explorera
 + otvara ga =<Leader>.=
 
 **** Dired (Directory Editor, ugrađen)
-+ omogućuje jednostavnu navigaciju Vim komandamazkretnje (=j=, =k=, =h=, =l=)
 + =(= pali/gasi ispis (meta) detalja u popisu datoteka
++ omogućuje jednostavnu navigaciju Vim komandamazkretnje (=j=, =k=, =h=, =l=)
 + =<Return>= je za ulazak u dirktorije (otvaranje datoteka), a =-= je za izlazak iz direktorija
 + =+= je za stvaranje dirktorija, a =<Leader>.= omogućava stvaranje i otvaranje nove datoteke
 + =m= je za selekciju stavke
@@ -70,6 +70,7 @@ Emacs u startu nudi nekoliko file explorera
 
 **** Treemacs
 + osnovni prečac za otvaranje zatvaranje je =<Leader>op=
+
 ** Baratanje prozorima i panelima
   + =<Leader>b{}= je za /buffere/ (prozore, tabove...)
     + =b= je za dobiti popis otvorenih dokumenata (=B= je za vidjeti i neke sistemske buffere, =<Leader>= za vidjeti i skrivene)
@@ -77,10 +78,30 @@ Emacs u startu nudi nekoliko file explorera
     + =n= je za otvaranje novog buffera
     + =<= i =>= su za otvaranje idućeg/prethodnog
     + =k= je za gašenje aktivnog buffera
+    + =<C-x><lijevo>= prebacuje na prethodni buffer, =<C-x><desno>= prebacuje na idući buffer
+    + =<SPC>bk= gasi aktivni buffer, =<SPC>bO= gasi sve osim aktivnog buffera
   + =<Leader>w{}= je za panele (/panes/) - uglavnom su svi u Doom-u preslika Vimovih (=<C-w>{}= komandi)
-    + =s= i =v= su za otvaranje novih panela
-    + =w= je za selektiranje idućeg panela
-    + =c= ili =q= je za zatvaranje panela
+    | Komanda                    | Emacs           | Doom                                      |
+    |----------------------------+-----------------+-------------------------------------------|
+    | create-window              | =<C-x>4f=       | =<SPC>wf=, =<SPC>wn=, =<C-v><C-f>=        |
+    | delete-window              | =<C-x> 0=       | =<SPC>wc=, =<SPC>wd=, =<SPC>wq=, =<C-w>c= |
+    | delete-other-window        | =<C-x> 1=       | =<SPC>w<C-o>=, =<C-w><C-o>=               |
+    | scroll-window              | =<C-(M-)l>=     | =zz=                                      |
+    | scroll-other-window        | =<M-PgUp/PgDn>= |                                           |
+    | info-other-window          | =<C-h>4i=       | =<SPC>h4i=                                |
+    | ibuffer-other-window       |                 |                                           |
+    | window-enlargen            | ?               | =<SPC>w[o_]=, =<SPC>wmm=                  |
+    | balance-windows            | =<C-x>+=        | =<SPC>w==, =<C-w>==                       |
+    | split-window-below         | =<C-x> 2=       | =<SPC>ws=, =<C-w>s=                       |
+    | split-window-right         | =<C-x> 3=       | =<SPC>wv=, =<C-w>v=                       |
+    | shrink-window-horizontaly  | =<C-x> {=       |                                           |
+    | enlarge-window-horizontaly | =<C-x> }=       |                                           |
+    | shrink-window              | None!           |                                           |
+    | move-window                |                 | =<SPC>w[HJKL]=, =<SPC>w[xrR]=             |
+    | other-window               | =<C-x>o=        | =<SPC>w[hjklw]=                           |
+    | tear-window                |                 | =<SPC>wT=                                 |
+    | quit                       |                 | =<C-w><C-q>=                              |
+
   + ~Cancel/quit~: =<C-g>= ili ponekad =ESC=
   + =<Leader>qr= je za ~restart~-anje Emacsa, ali meni ne radi jer pokrećem Emacs kroz =doom run=
 
@@ -101,8 +122,8 @@ Uobičajena sintaksa je slična, ali ipak drukčija od markdowna
       [[https://webstranica][Poveznica]]
       + stavka
       + stavka s brojačem podstavki [0/2] [0%]
-        - [ ] stavka s kućicom
         - [ ] =<Return>= bi trebao biti za vrtnju stanja
+        - [ ] stavka s kućicom
       + stavka
       + stavka
       + TODO stavka za obaviti se gasi/pali s =<S-Left>= i =<S-Right>=
@@ -110,16 +131,17 @@ Uobičajena sintaksa je slična, ali ipak drukčija od markdowna
 #+END_SRC
 
 ** Kretnje
-Evil-mode često uspijeva dobro izbalansirati ubacivanje komandi koje se ponašaju kao u Vimu s upotrijebom Vim prečaca za već postojeće Emacs komande, ali tamo gdje se razilaze, Emacsove nekako bolje i pametnije rade (npr. bolje lociraju stvarne semantičke cjeline za skakanje po tekstu)
+Evil-mode često uspijeva dobro izbalansirati ubacivanje komandi koje se ponašaju kao u Vimu s upotrijebom Vim prečaca za već postojeće Emacs komande, ali tamo gdje se razilaze, Emacsove nekako bolje i pametnije rade (npr. bolje lociraju:w
+stvarne semantičke cjeline za skakanje po tekstu)
 + =<C-b>=, =<C-f>=, =<C-p>= i =<C-n>= ili =h=, =l=, =k= i =j= su za ~backward~, ~forward~, ~previous~ i ~next~
 + =<M-b>= i =<M-f>= tj. =w=, =e=, =b= i =W=, =E=, =B= za kretanje po riječima
 + =<C-a>= i =<C-e>= (pogotovo praktični u insert modu) tj. =0= i =$= su za skakanje na početak i kraj retka
-+ =<M-a>= i =<M-e>= tj. =)= i =(= su za skakanje naprijed/nazad po rečenicama (traži interpunkcijske znakove)
-+ =}= i ={= su za skakanje naprijed/nazad po odlomcima
-+ =<C-<>= i =<C->>= tj. =gg= i =G= za skakanje na počtak ili kraj dokumenta
+  + =<M-a>= i =<M-e>= tj. =)= i =(= su za skakanje naprijed/nazad po ~rečenicama~ (traži interpunkcijske znakove)
++ =}= i ={= su za skakanje naprijed/nazad po ~odlomcima~
++ =<C-<>= i =<C->>= tj. =gg= i =G= za skakanje na početak ili kraj dokumenta
 + =<C-l>=, =zz= su za skrolnje prozora srdina-vrh-dno (još mi fali za Vim)
   - =<C-M-l>= pokušava optimizirati položaj ekrana za gledanje aktivnog bloka
-+ =<C-s>= i =<C-r>= (? je u evilu za /undo/) tj. =/=, =f= i =t= pokreću pretragu za pojmom/znakom, a ponavljanje =<C-s/r>= dok j search buffer otvoren tj. =n= i =N= te =;= i =,= u nomalnom modu skaču do idućeg/prethodnog pretraživanog pojma/znaka
++ =<C-s>= (~I-search~) i =<C-r>= (? je u evilu za /undo/) tj. =/=, =f= i =t= pokreću pretragu za pojmom/znakom, a ponavljanje =<C-s/r>= dok j search buffer otvoren tj. =n= i =N= te =;= i =,= u normalnom modu skaču do idućeg/prethodnog pretraživanog pojma/znaka
 + =<C-o>= i =<C-i>= skaču nazad/naprijed na nedavo uređivana mjesta (čak i između datoteka)
 + Pored uobičajenih Vim kretnji, Org Mode omogućava još nekoliko specifično korisnih:
   + =<Tab>= je komanda za otvaranje i zatvaranje naslovnih cjelina
@@ -202,7 +224,7 @@ Emacs ima četiri defaultna terminala:
 + ~shell~ - zvan /Inferior Shell/ kao wrapper oko sistemkog shella
 + ~eshell~ - shell pisan u emacs-lispu, pa je ujedno i REPL za elisp (nešto kao što je xonsh za python)
 + ~term~ i ~ansi-term~
-+ ~vterm~ - kao najbolji emulator terminala
++ ~vterm~ - kao najbolji emulator terminala. Otvara se/zatvara s =<SPC>ot=
 
 Postavke za terminale se unose u ~config.el~: =(setq shell-file-name  "/bin/fish")= ili =(setq eshell-aliases-file "~/.config/emacs/.eshellrc")=
 
@@ -212,8 +234,13 @@ Za sada najbolji Git klijent koji sam našao (usporediv jedino s lazygit-om)
 + =?= ili =h= (kada u Magitu) otvara popis dostupnih komandi a =hh= otvara /Help Pages/
 + za kretanje se rabe iste kratice kao i za kretanje po Org tekstu
 ** Fetch (=f=) i Pull (=F=)
++ =Fp= je za /pull/-anje sa aktivne grane na /origin/-u
++ =Fu= je za zadavanje ~upstram~ grane
++ =Fe= daje na izbor iz koje /remote/ grane želimo /pull/-ati
+  - =Fr= otvara dialog za postavljanje git konfiguracije (/upstream/, /merge/ taktike i sl.)
 + =hzz= je za ~stash~ (nešto kao lokalni /commit/, pa čak i pita za /message/), a /unstash/ se radi s =hzp= (~pop~) ili sa =hza= + =hzk= (~apply~ + ~drop~)
-  - ako zaglavim s /merge conflict/-om sa stashom, njega (koliko znam?) ne mogu forcati ili riješiti u /diff/-u, tada mogu /checkout/-ati stash,  /pop/-ati ga (ili /apply/-ati), iz toga načiniti novu granu,te nakon toga /pull/-ati zadnje izmjene i pokušati riješiti konflikte, /merge/-ati nazad u granu gdje je sve trebalo biti. Mora postojati jednostavniji način.
+  - NOTE ako zaglavim s /merge conflict/-om sa stashom, njega (koliko znam?) ne mogu forcati ili riješiti u /diff/-u, tada mogu /checkout/-ati stash,  /pop/-ati ga (ili /apply/-ati), iz toga načiniti novu granu,te nakon toga /pull/-ati zadnje izmjene i pokušati riješiti konflikte, /merge/-ati nazad u granu gdje je sve trebalo biti. Mora postojati jednostavniji način.
+  - NOTE navodno mogu samo /switch/-at na /main/ granu te lupiti komandu =git merge HEAD@{1}= ili pak =git reset --hard HEAD^=. Nemam poima bi li to upalilo niti koji su ekvivalenti za to u Magitu. =git stash push= nije tamo palio.
 ** Log (=l=)
 + =ll= ispisuje povijest commita za branch od najnovijih prema starijima
 + =lr= ispisuje /reflog/ commita za branch od najnovijih prema starijima
