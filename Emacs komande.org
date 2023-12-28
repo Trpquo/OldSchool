@@ -1,0 +1,375 @@
+#+TITLE: Emacs komande
+
+* Sadržaj :TOC:
+- [[#reference][Reference]]
+- [[#sažetak][Sažetak]]
+- [[#korisničko-sučelje][Korisničko sučelje]]
+  - [[#navigacija-dokumentima][Navigacija dokumentima]]
+  - [[#baratanje-prozorima-i-panelima][Baratanje prozorima i panelima]]
+- [[#baratanje-tekstom][Baratanje tekstom]]
+  - [[#osnovna-sintaksa][Osnovna sintaksa]]
+  - [[#kretnje][Kretnje]]
+  - [[#uređivanje-teksta][Uređivanje teksta]]
+  - [[#tablice][Tablice]]
+- [[#org-mode][Org Mode]]
+  - [[#poveznice][Poveznice]]
+  - [[#org-babel][Org Babel]]
+- [[#izgled][Izgled]]
+- [[#terminali][Terminali]]
+- [[#magit][Magit]]
+  - [[#fetch-f-i-pull-f][Fetch (=f=) i Pull (=F=)]]
+  - [[#log-l][Log (=l=)]]
+  - [[#commit-c][Commit (=c=)]]
+  - [[#branch-b][Branch (=b=)]]
+  - [[#push-p][Push (=P=)]]
+- [[#suradnja-s-vimom][Suradnja s Vimom]]
+
+* Reference
+Najprvo treba pregledati github [[https://github.com/doomemacs/doomemacs/blob/master/docs/index.org][dokumentaciju]] i [[https://discourse.doomemacs.org/c/guides/5][službenu dokumentaciju]] za Doom Emcas.
+Može se pogledati i [[https://www.emacswiki.org][dokumentaciju]] za Emacs.
+
+Nakon toga se pažnja može posvetiti tutorialima. Većinu sam ih pronašao preko Doomove dokumentacije.
+    + [[https://youtube.com/playlist?list=PLhXZp00uXBk4np17N39WvB80zgxlZfVwj&si=vV0165Engbh_gaXe][Zaiste Programming: DoomCasts]]
+    + [[https://youtube.com/playlist?list=PL5--8gKSku15uYCnmxWPO17Dq6hVabAB4&si=MO6j56c0xFxh7tmF][DistroTube: Church of Emacs]]
+    + [[https://youtube.com/playlist?list=PLEoMzSkcN8oPH1au7H6B7bBJ4ZO7BXjSZ&si=iM0yYS1J9INnFWs1][System Crafters: Emacs from Scratch]]
+
+*** NOTE =<M-x>describe-key= (=<C-h>k=) i =<M-x>describe-bindings=
+
+
+* Sažetak
+==Emacs== dijeli posao baratanja sa dokumentima i prozorima kroz nekoliko boljki:
+     + ~buffer~ - /ono štoje tvoreno/; blo kakav prokrenuti program, bilo da je za čitanje datoteka (/text editor/), bilo da je za bilo što drugo (dired, magit...)
+       + obično jedan buffer zauzme jedan prozor
+       + uobičajeni prečci za pristup otvorenim /buffer/-ima su =<SPC>,= i =<SPC>bb=, a za nedavno otvorene =<SPC>fr=
+     + ~window~ - okvir u kojem se može vrtiti buffer (obično zvan /pane/).
+       + može ih biti više u jednom ekranu (/split/) ili može uzimati cijeli ekran
+     + ~workspace~ - je set otvorenih buffera i prozora. Može ih se otvarati koliko se želi (otvaranje projekta se tretira kao stvaranje novog /workspace/-a) i/ili skakati među otvorenima s =<SPC><TAB>=
+     + ~project~ - /projekti/ su direktoriji koji sadrže neke uobičajene projektne datoteke ili direktorije (~.git~, ~.hg~...) i otkriveni su po automatizmu te su dostupni kroz =<SPC>pp=, a ako se želi neki dodatan direktorij učiniti "projektom", može se unutar njega smjestiti dadoteka ~.projectile~
+     + ~bookmark~ - omogućava brzo skakanje do dokumenta. Glavni prečac je =<SPC><RET>=.
+     + ~session~ - koliko znam ne može se ručno spremiti, ali se može povratiti prethodni s =<SPC>ql=
+
+* Korisničko sučelje
+** Navigacija dokumentima
+  + Otvori datoteku: ~find-file~, =<C-x><C-d>= ili =<SPC> f f=, =<SPC> .= ili =<SPC> <SPC>=
+    - =<SPC><SPC>= otvara /dired/ iliti Explorer krećući od ~root~ direktorija projekta
+    - =<SPC>.= otvara /dired/ iliti Explorer
+    - =<SPC>fr= otvara popis nedavno otvorenih datoteka
+    - =<SPC>fp= otvara popis konfiguracijskih datoteka
+    - =<SPC>sd= (documentation search) omogućava pretraživanje teksta dokumenata unutar projekta te njihovo otvaranje preko rezultata (s kursorom odmah na mjestu rezultata)
+    - =gf= i =gd= skaču do datoteka u kojima su definirane varijable pod kursorom (u običnom tekstu to znači riječnik)
+  + Prikaži otvorenu datoteku: ~switch-buffer~, =:-x b= ili =<SPC>b b=, =<SPC>,=
+  + Prikaži otvoreni program/datoteku: ~ibuffer~, =<C-x><C-b>= ili =<SPC>b B=, =<SPC>b i=
+  + Prikaži prethodni prozor: ~previous-buffer~ ili ~next-buffer~, =<C-x><left>= ili =<C-x><right>=, =<SPC>b [= ili =<SPC>b ]=
+  + Spremi datoteku: ~save-buffer~, =<C-x><C-s>= ili =<SPC>f s=, =:w<CR>=
+  + Spremi datoteku kao: ~write-file~, =<C-x><C-w>= ili =<SPC>f S=, =:w <ime><CR>=
+*** Dired i Treemacs
+Emacs u startu nudi nekoliko file explorera
+**** Osnovni file explorer (bezimen (?), ugrađen)
++ u načelu funkcionira kao ~fzf~
++ otvara ga =<SPC>.=
+
+**** Dired (Directory Editor, ugrađen)
+*Dired* postaje aktivan kada u osnovnom /file explorer/-u otvorimo direktorij mjesto datoteke, a gasi se sa =q=.
++ =(= pali/gasi ispis (meta) detalja u popisu datoteka
++ =o= je za ravnanje poretka po imenu ili datumu
++ omogućuje jednostavnu navigaciju Vim komandamazkretnje (=j=, =k=, =h=, =l=)
++ =<RET>= je za ulazak u dirktorije i/ili otvaranje datoteka, a =-= je za izlazak iz direktorija
++ =+= je za stvaranje direktorija, a inaće =<SPC>.= omogućava stvaranje i otvaranje nove datoteke
++ =m= je za selekciju stavke, =u= za deselekciju, =U= za deselekciju svega, a =t= za obrtanje selekcije
++ =D= je za brisanje stavke, a =d= je za selekciju stavke za naknadno brisanje (~delete~)
+  - =x= je za brisanje stavki predselektiranih za brisanje
++ =C= je za kopiranje datoteke na dodatnu lokaciju, a =R= je za seljenje datoteke (~copy~, ~cut~, ~paste~)
+
++ =c= je za komprimiranje stavke
++ s =i= se može ući u ~-INSERT-~ mode i preimenovati datoteku ili direktorij po želji, ali se treba nakon toga spremiti buffer s =<C-x><C-s>= ili =<SPC>f s= ili =:w<CR>=
++ =M= je za ~chmod~ selektirane stavke ili stavke ispod kursora, a =O= je za ~chown~
++ postoji i poseban ~peep-dired~ plugin za pretpregled (/preview/) multimedialnih datoteka. (ref. Church of Emacs, v.8, 12:30)
+
+**** Treemacs
++ /sidebar filetree explorer/
++ osnovni prečac za otvaranje zatvaranje je =<SPC>op=
+
+** Baratanje prozorima i panelima
+*** Bufferi
+ + /buffer/-i su bilo kakvi programi koji se mogu pokrenuti unutar Emacs-a (urednici datoteka, preglednici i pretraživači datoteka, terminali, igrice, ...)
+ + =<SPC>b{}= je za otvorene /buffere/ (prozore, tabove...), =<SPC>f{}= je za pronalaženje datoteka za otvoriti
+   - =b= ili =,= je za dobiti popis otvorenih dokumenata (=B= je za vidjeti i neke sistemske buffere)
+   - =i= je za otvaranje ~ibuffer~-a (programa za interakciju s popisom otvorenih buffera), a komande unutar njega su praktični identične kao i za /dired/
+     - =<RET>= otvara buffer ispod kursora
+     - =D= zatvara buffer ispod kursora
+     - =m= označuje buffer za kasnije akcije, a =u= je onda za odznačivanje (=t= za izvrtanje selekcije)
+     - =d= ga označuje za brisanje, gdje se onda s =x= brišu svi označeni
+     - =q= je za izlazak iz /ibuffera/
+ + =<C-x><lijevo>= ili =<SPC>bp= prebacuje na prethodni buffer, a =<C-x><desno>= ili =<SPC>bn= prebacuje na idući buffer
+ + =<SPC>bk= gasi aktivni buffer, =<SPC>bO= gasi sve osim aktivnog buffera
+     | Komanda                 | Emacs           | Doom                |
+     |-------------------------+-----------------+---------------------|
+     | switch-workspace-buffer |                 | =<SPC>bb=, =<SPC>,= |
+     | switch-buffer           |                 | =<SPC>bB=           |
+     | find-file               |                 | =<SPC>.=, =<SPC>ff= |
+     | projectile-find-file    |                 | =<SPC><SPC>=        |
+     | search-cwd              |                 | =<SPC>sd=           |
+     | ibuffer                 |                 | =<SPC>bi=           |
+     | kill-current-buffer     |                 | =<SPC>bk=, =zx=     |
+     | kill-other-buffers      |                 | =<SPC>bO=           |
+     | previous-buffer         | =<C-x><lijevo>= | =<SPC>bp=           |
+     | next-buffer             | =<C-x><desno>=  | =<SPC>bn=           |
+
+*** Prozori
++ =<SPC>w{}= je za panele (/panes/) - uglavnom su svi u Doom-u preslika Vimovih (=<C-w>{}= komandi)
+    | Komanda                    | Emacs           | Doom                                      |
+    |----------------------------+-----------------+-------------------------------------------|
+    | find-file-other-window     | =<C-x>4f=       | =<SPC>wf=, =<SPC>wn=, =<C-w><C-f>=        |
+    | delete-window              | =<C-x> 0=       | =<SPC>wc=, =<SPC>wd=, =<SPC>wq=, =<C-w>c= |
+    | delete-other-window        | =<C-x> 1=       | =<SPC>w<C-o>=, =<C-w><C-o>=               |
+    | scroll-window              | =<C-(M-)l>=     | =zz= ili =z.=, =zt= ili =z<RET>=, =zb=    |
+    | scroll-other-window        | =<M-PgUp/PgDn>= |                                           |
+    | info-other-window          | =<C-h>4i=       | =<SPC>h4i=                                |
+    | ibuffer-other-window       |                 |                                           |
+    | window-enlargen            | ?               | =<SPC>w[o_<M-w>]=, =<SPC>wmm=             |
+    | balance-windows            | =<C-x>+=        | =<SPC>w==, =<C-w>==                       |
+    | split-window-below         | =<C-x> 2=       | =<SPC>ws=, =<C-w>s=                       |
+    | split-window-right         | =<C-x> 3=       | =<SPC>wv=, =<C-w>v=                       |
+    | shrink-window-horizontaly  | =<C-x> {=       |                                           |
+    | enlarge-window-horizontaly | =<C-x> }=       |                                           |
+    | shrink-window              | None!           |                                           |
+    | move-window                |                 | =<SPC>w[HJKL]=, =<SPC>w[xrR]=             |
+    | other-window               | =<C-x>o=        | =<SPC>w[hjklw]=                           |
+    | tear-window                |                 | =<SPC>wT=                                 |
+    | quit                       | =<C-c><C-x>=    | =<C-w><C-q>=                              |
+
++ ~Cancel/quit~: =<C-g>= ili ponekad =ESC=
++ =<SPC>qr= je za ~restart~-anje Emacsa, ali meni ne radi jer pokrećem Emacs kroz =doom run=
+
+* Baratanje tekstom
+** Osnovna sintaksa
+Uobičajena sintaksa je slična, ali ipak drukčija od markdowna
+
+#+START_SRC conf
+      * Naslov prvog stupnja
+      ** Naslov drugog stupnja
+      *** Naslov trećleg stupnja
+      *masno*
+      /kurziv/
+      _potcrtano_
+      +precrtano+
+      =code=
+      ~verbatim~
+      [[https://webstranica][Poveznica]]
+      + stavka
+      + stavka s brojačem podstavki [0/2] [0%]
+        - [ ] =<RET>= bi trebao biti za vrtnju stanja
+        - [ ] stavka s kućicom
+      + stavka
+      + stavka
+      + TODO stavka za obaviti se gasi/pali s =<S-Left>= i =<S-Right>=
+      + TODO stavka za obaviti se preuređuje s =<SPC>mt=
+#+END_SRC
+
+** Kretnje
+/Evil-mode/ često uspijeva dobro izbalansirati ubacivanje komandi koje se ponašaju kao u Vimu s upotrijebom Vim prečaca za već postojeće Emacs komande, ali tamo gdje se razilaze, Emacsove nekako bolje i pametnije rade (npr. bolje lociraju:w
+stvarne semantičke cjeline za skakanje po tekstu)
++ =h=, =l=, =k= i =j= su za ~backward~, ~forward~, ~previous~ i ~next~
+  * Emacsove =<C-b>=, =<C-f>=, =<C-p>= i =<C-n>= su isključene u ~evil-mode~-u
++ =<M-b>= i =<M-f>= (Emacsove zbog modifikatora rade i u ~-INSERT-~ modu) tj. =w=, =e=, =b= i =W=, =E=, =B= (u ~-NORMAL-~ modu) za kretanje po riječima
++ =<C-a>= i =<C-e>= (pogotovo praktični u insert modu) tj. =0= i =$= su za skakanje na početak i kraj retka
+  + =<M-a>= i =<M-e>= tj. =)= i =(= su za skakanje naprijed/nazad po ~rečenicama~ (traži interpunkcijske znakove)
++ =}= i ={= su za skakanje naprijed/nazad po ~odlomcima~
++ =<C-<>= i =<C->>= tj. =gg= i =G= za skakanje na početak ili kraj dokumenta
++ =<C-l>=, =zz= su za skrolnje prozora srdina-vrh-dno (još mi fali za Vim)
+  - =<C-M-l>= pokušava optimizirati položaj ekrana za gledanje aktivnog bloka
++ =<C-s>= (~I-search~) i =<C-r>= (? je u evilu za /undo/) tj. =/=, =f=, =t= i =s= pokreću pretragu za pojmom/znakom/dvoznakom, a ponavljanje =<C-s/r>= dok je search buffer otvoren tj. =n= i =N= te =;= i =,= u normalnom modu skaču do idućeg/prethodnog pretraživanog pojma/znaka/dvoznaka (u Doom-u je pretraga po znaku/dvoznaku poboljšana pluginom ~evil-snipe~)
+  - /evil mode/ ima naravno i komandu =#= za pokretanje pretrage za riječ pod kursorom
++ Doom dolazi i s instaliranim ~Avi~ pluginom
+  - =gs<SPC>= aktivira /Avi/, zacrnjuje tekst i daje nam mogućnost tipkanja niza slova za pretragu. Ako pretraaga daje samo jedan rezultat, automatski skaće do njega. Ako pretraga daje više rezultata /Avi/ će svakom rezultatu dodijeliti slovo stiskanjem kojeg automatski skačemo do njega
+  - /Avi/ daje i opcije izvršenja komande sa selekcijom bez napuštanja lokacije kursora. Prvo se upiše komanda, a zatim se odabere ponuđena oznaka rezultata na koji se komanda želi primijeniti. Dostupne komande su:
+    - =X= za brisanje riječi
+    - =i= za ~ispell~ ispravak riječi
+    - =y= za copy/paste-anje riječi s mjesta rezultata na trenutno mjesto kursora
+    - =t= za cut/paste-anje (/teleport/) riječi s mjesta rezultata na trenutno mjesto kursora
++ NE RADI: Doom dolazi s predinstaliranim ~evil-multiedit~ (ali ga treba uključiti u ~init.el~) koji rabi =<M-d>= za selekciju cijele riječi pod kursorom i onda s =<M-d>= selekciju iduće pojave te riječi ili pak s =R= za selekciju svih podudaranja odjednom
++ =<M-g><M-g><broj>= skače na određeni redak , a =<M-g><TAB><broj>= na određenu kolumnu
++ =<C-o>= i =<C-i>= skaču nazad/naprijed na nedavo uređivana mjesta (čak i između datoteka)
++ Pored uobičajenih Vim kretnji, Org Mode omogućava još nekoliko specifično korisnih:
+  - =<TAB>= i =za= su komande za otvaranje i zatvaranje naslovnih cjelina (/toggle/), tj. =zo= (/open/) i =zc= (/close/)
+    - =<S-TAB>= je za zatvaranje/otvaranje svih /foldova/ odjednom i to stupnjevano
+    - =zM= je za zatvaranje svih /foldova/ odjednom
+  - =<M-}>= i =<M-{>= (ili donekle =<M-n>= i =<M-p>=, npr u /Magitu/)  tj. =gj= i =gk= su za skakanje od naslova do naslova istog stupnja
+    - =^= je za skakanje na najbliži naslov "roditeljske" sekcije
+
+** Uređivanje teksta
+Postoje neki defaultni prečci, ali doom emacs donosi i svoje
++ Emacs ima različite ~mode~-ove za prikaz teksta, koje prebacuje automatski po ekstenziji datoteke, ali se može prebaciti i ručno preko =<M-x>mode...=
++ =<C-RET>= daje novi redak istog stupnja u kojem se nalazimo
+  - to može biti nova stavka u popisu ili novi naslov istog stupnja nakon cjeline
++ =J= spaja idući redak i stavlja razmak za riječ
++ =<M-h>= i =<M-l>= ili =M-<left>= i =M-<right>= su za mijenjanje stupnja naslova
++ =<M-k>= i =<M-j>= ili =M-<up>= i =M-<down>= su za zamjene položaja cijelih naslovljenih blokova
++ komanda =<M-t>= premeće riječi lijevo-desno, ovisno o tome gdje je smješten kursor. Ako je kursor smješten na početak riječi, onda će riječ zamijeniti mjesto s riječi prije, a ako je smješten usred riječi ili potkraj, onda joj zamijenjuje mjesto s riječi iza.
+  - u Vimu se to postiže s /transwrd/ pluginom.
+  - naprednija verzija ovog u Emacsu je [[https://github.com/rejeep/drag-stuff.el][rejeep/drag-stuff.el]]-ov plugin koji sve pomiće pomoću =<M-strjelica>= prečca.
+
+*** Selekcije (u Emacsu se to zovu regije i /killring/-i)
++ Selektiraj tekst: =<C-SPC><kretnje>= postavlja marker i započinje selekciju, ili u /evil modu/ to rade =v <kretnje>=, =<S-v><kretnje>= ili =<C-v><kretnje>=
++ Emacs navodno selektira i dok se drži =<S><kretnje>=, premda nisam sigura koliko je to pouzdano u /evil modu/
++ =<M-@>= je za stavljanje markera i selekciju riječi (od kursora do kraja riječi)
++ =vi<simbol>= ili =va<simbol>= su za selekcije cijelina unutar kojih se nalazi kursor (sa ili bez navodnika)
+  - =w= je simbol za riječ, a =W= za bio što omeđeno razmacima
+  - =b= i =(= ili =)=, =[= ili =]=, te ={= ili =}= su za tekst unutar zagrada, a ="= ili ='= za tekst unitar navodnika
+  - =p= je simbol za odlomak
+  -
++ =<C-x><C-p>= je za selekciju cijelog dokumenta, kao i =ggvG=
++ =<C-g>= je , ponovno, za ~cancel~ selekcije, ali i dodavanje zadnjeg označenog mjesta u ~markring~
+  + čak i ako se deselektiralo, može se bilo kada stisnuti =<C-x><C-x>= i dobiti selekciju od zadnjeg mjesta gdje je postavljen marker, do mjesta gdje se sad nalazi kursor
+  + inače se može kretati u krug (?) s =<C-u><C-SPC>=, =<C-o>= i =<C-i>= ili =[`= i =]`= po /markring/-u
+
+*** Kopiranje/rezanje/ljepljenje
++ Copy/pastaenje: =<C-w>= (~kill~, tj. /cut/) i =<C-y>= (~yank~, tj. /paste/), tj. kombinacije s =d= ili =y= i =p= u evil modu
+
+** Tablice
++ tablice rabe uobičajenu sintaksu (kao i markdown), ali momogućuju
+ da se
+  + s =<C-RET>= stvaraju novi retci i da se s =<TAB>= skače iz čelije u čeliju
+  + =<S-RET>= je za kopiranje vrijednosti čelije u novi redak
+  + =<SPC>mba= je za uključivanje automatskog poravnanja čelija
+  + =<SPC>mb-= pretvara redak u thead
+  + =<M-[hjkl]>= ili =<M-strjelica>= su za izmjene/pomicanja redaka i stupaca
+  + =<S-strjelica>= je za izmjene/pomicanja sadržaja čelija
+  + =<M-S-[hjkl]>= ili =<M-S-strjelica>= je za dodavanje/brisanje stupaca ili redaka tablice
+
+* Org Mode
+Iako postoji broj aplikacija za uređivanje Org datoteka (prvenstveno Logseq), sve ove bilješke ću pisati za rad u Emacs-u jer je tamo Org Mode najbolje implementiran i to ću još ograničeno samo na /evil mode/ kakav je prisutan u Spacemacsu ili Doom Emacsu.
+
+Za sve upute o /Org Modu/ može se unutar Emacsa lupiti komanda =<M-x>org-info=
+
+** Poveznice
+Poveznice se mogu upisivati ručno sintaksom dvostrukih uglatih zagrada =[[URL]]= ili =[[URL][tekst]]= (=<SPC>mlt= pali/gasi mod za: prikaz punog teksta poveznica / prikaz koji skriva sintaksu):
++ po defaultu u uglatim se zagradama očekuje tekst naslova, npr. [[Izgled]] i tu postoji mogućnost automatskog nuđenja izbora (=<C-SPC>=)
+
+Ako se poveznice žele unijeti preko prečca, rabi se sintaksa =<SPC>ml{}= ili =<C-c><C-l>=:
++ prva opcija je lupiti =<SPC>mll= (/make link/) kako bi se unio link, npr. [[Baratanje tekstom]]
+  - ako se najprije selektira neki tekst, tada će se taj tekst ponuditi kao deskripcija poveznice (ono pisano u drugoj uglatoj zagradi)
++ druga opcija je kada se u clipboardu ima kopirani link, lupiti =<SPC>mlc=, npr. [[https://www.youtube.com/watch?v=BRqjaN4-gGQ&list=PLhXZp00uXBk4np17N39WvB80zgxlZfVwj&index=11][Emacs Doom E10: Org Mode - Links, Hyperlinks and more - YouTube]]
+  - ponovno, ako se selektira neki tekst, tada će se taj tekst ponuditi kao deskripcija poveznice (ono pisano u drugoj uglatoj zagradi)
+  - Emacs ima niz preddefiniranih funkcija za
++ postoji i pomoćni mehanizam za dodavanje poveznica na druge datoteke ili odlomke u njima, a to je da se upiše ključna riječ u sučelje nakon pokretanja =<SPC>mll=:
+  - ~file~ otvara dired te ubacuje adresu odabrane datoteke za URL poveznice, npr. [[file:tipkovnica][Znakovi na tipkovnici]]
+    - putanje do datoteka mogu biti apsolutne ili relativne, a ako putanja vodi na direktorij, Emacs će otvoriti /dired/
+    - ako se želi povezati neki odlomak u datoteci, tada se na adresu poveznice može dodati =::<naslov>= (to se može i preko =<SPC>mll= sučelja), npr. [[file:Vim komande.md::Za pisca][Druga datoteka, određeni naslov]], a pretraga naslova funkcionira preko nekog /fuzzy/ algoritma jer se ne treba upisati puni naslov.
+      - Varijabla ~org-link-search-must-match-exact-headline~ određuje hoće li poveznice pretraživati samo naslove ili ukupan tekst (v. =<SPC>hv= za više info)
+    - ako se ne želi pamtiti tekst naslova na koji se želi linkati, može se s kursorom na tom naslovu stisnuti =<SPC>nl=, te će se naslov spremiti u ~Store~ te će biti dostupni i u sučelju za dodavanje poveznica pod sekcijom ~file:~. [[*Poveznice][Poveznice]]
+    - može se i mjesto naslova upisati i broj, pa će skakati na redni broj retka, ali ne vidim poantu u tome osim ako datoteka nije zamrznuta (tipa [[file:tipkovnica::11][Zakon]] ili Biblija)
+  - ~elisp~ omogućuje unos bilo kakve komande koja će se izvršiti nakon pritiska na poveznicu, npr.: =(+ 2 2)= ili [[elisp:(org-toggle-link-display)][prikaži sintaksu poveznica]].
+    - to ujedno znači da se mogu u [[file:~/.config/doom/config.org][config.el]] definirati funkcije i onda pozivati preko sučelja u /.org/ dokumentu (praktički se može izraditi cijela aplikacija :))
+  - ~shell~ je za izvršavanje [[shell:ls ~/dokumenti/OldSchool/][shell komandi]]... premda mi ne funkcionira
+  - detaljnije upute o vrstama poveznica se može pogledati na [[https://orgmode.org/guide/Hyperlinks.html][orgmode.org/Hyperlinks]]
++ svaki se puta poveznica ispod kursora može prepraviti stiskanjem =<SPC>mll=
++ =<SPC>mld= briše sintaku poveznice oko taksta i ostavlja goli tekst
+
+** Org Babel
++ osnovna sintaksa za pisanje koda je =#+START_SRC= i =#+END_SRC=, a prečac =<s<TAB>=
++ =<SPC>m'= otvara novi /buffer/ za pisanje koda (=<C-c><C-c>= je za spremanje promjena i zatvaranje /buffer/-a)
++ jednom kada je kod ispisan, =<RET>= u normalnom modu, ili =<C-c><C-c>= općenito, izvršava blok koda
+# TODO za sada ne uspijevam dobiti evaluaciju koda za node uopće, a za python dobivam samo kada odredim :session (?).
+
+#+begin_src emacs-lisp
+
+(use-package pyvenv
+  :ensure t
+  :config
+  (pyvenv-mode t)
+
+  ;; Set correct Python interpreter
+  (setq pyvenv-post-activate-hooks
+        (list (lambda ()
+                (setq python-shell-interpreter (concat pyvenv-virtual-env "~/miniforge-pypy3/bin/")))))
+  (setq pyvenv-post-deactivate-hooks
+        (list (lambda ()
+                (setq python-shell-interpreter "python3")))))
+
+#+end_src
+
+#+begin_src emacs-lisp
+(setq python-shell-interpreter (concat pyvenv-virtual-env "$HOME/miniforge-pypy3/bin/"))
+(pyvenv-mode t)
+#+end_src
+#+RESULTS:
+: t
+
+#+begin_src python :session testing
+import random
+
+def x(a):
+    return a + random.randint(1,5)
+
+x(2)
+#+end_src
+
+#+RESULTS:
+: 7
+
++ a može se namjestitit i automatska konverzija datoteka u /.org/,(v. [[https://martibosch.github.io/jupyter-emacs-universe/][martibosch/jupiter-emacs-universe]]) npr.:
+#+begin_src emacs-lisp
+(setq code-cells-convert-ipynb-style '(
+("pandoc" "--to" "ipynb" "--from" "org")
+    ("pandoc" "--to" "org" "--from" "ipynb")
+    org-mode))
+#+end_src
+
+*** Tangle
++ /Org Bable Tangle/ je mehanizam za prikupljanje koda iz ~.org~ dokumenata i izvoz u druge datoteke
++ svaki /snippet/ može imati svoj ~:tangle~ atribut namješten na URL datoteke u koji se kod treba ispisati, ali može se i u /frontmatter/ dokumenta postaviti =#+properties: header-args :tangle <URL>= koji će se primijeniti na sve /snippet/-a kojima nije zadano drukčije
++ osnovni prečac za pokretanje izvoza koda je =<C-c><C-v>t=
+
+* Izgled
+Ovo se više tiče postavki nego ičega, ali eto:
++ dodavanje tema: =(add-to-list 'custom-theme-load-path "~/.config/emacs/themes ili štoveć")=
+  + za učitavanje određene: (load-theme '<ime-teme> t)
++ prozirnost: =(add-to-list 'default-frame-alist '(alpha-background . 90)) ; za prozirnost svi prozora nadalje /dodano s Emacs v.29/=
+
+* Terminali
+Emacs ima četiri defaultna terminala:
++ ~shell~ - zvan /Inferior Shell/ kao wrapper oko sistemkog shella
++ ~eshell~ - shell pisan u emacs-lispu, pa je ujedno i REPL za elisp (nešto kao što je xonsh za python)
++ ~term~ i ~ansi-term~
++ ~vterm~ - kao najbolji emulator terminala. Otvara se/zatvara s =<SPC>ot=
+
+Postavke za terminale se unose u ~config.el~: =(setq shell-file-name  "/bin/fish")= ili =(setq eshell-aliases-file "~/.config/emacs/.eshellrc")=
+
+* Magit
+Za sada najbolji Git klijent koji sam našao (usporediv jedino s lazygit-om)
++ Osnovna komanda za paljenje je /Magit User Manual/-a =<C-x>g=, =gz= (=<M-x>magit-refresh=) i =gR= (=<M-x>magit-referesh-all=) osvježuje pogled, a =q= ga zatvara
++ =?= ili =h= (kada u Magitu) otvara popis dostupnih komandi a =hh= otvara /Help Pages/
++ za kretanje se rabe iste kratice kao i za kretanje po Org tekstu
+** Fetch (=f=) i Pull (=F=)
++ =Fp= je za /pull/-anje sa aktivne grane na /origin/-u
++ =Fu= je za zadavanje ~upstram~ grane
++ =Fe= daje na izbor iz koje /remote/ grane želimo /pull/-ati
+  - =Fr= otvara dialog za postavljanje git konfiguracije (/upstream/, /merge/ taktike i sl.)
++ =hzz= je za ~stash~ (nešto kao lokalni /commit/, pa čak i pita za /message/), a /unstash/ se radi s =hzp= (~pop~) ili sa =hza= + =hzk= (~apply~ + ~drop~)
+  - NOTE ako zaglavim s /merge conflict/-om sa stashom, njega (koliko znam?) ne mogu forcati ili riješiti u /diff/-u, tada mogu /checkout/-ati stash,  /pop/-ati ga (ili /apply/-ati), iz toga načiniti novu granu,te nakon toga /pull/-ati zadnje izmjene i pokušati riješiti konflikte, /merge/-ati nazad u granu gdje je sve trebalo biti. Mora postojati jednostavniji način.
+  - NOTE navodno mogu samo /switch/-at na /main/ granu te lupiti komandu =git merge HEAD@{1}= ili pak =git reset --hard HEAD^=. Nemam poima bi li to upalilo niti koji su ekvivalenti za to u Magitu. =git stash push= nije tamo palio.
+** Log (=l=)
++ =ll= ispisuje povijest commita za branch od najnovijih prema starijima
++ =lr= ispisuje /reflog/ commita za branch od najnovijih prema starijima
++ =lo= je za ispisivanje loga bilo koje druge grane
+** Commit (=c=)
++ =s= je za ~stage~-anje pojedionih /unstaged/ datoteka, sekcija koda ili čak samo pojedinih redaka, =S= za stageanje svega
+  - =<TAB>= prikazuje ~diff~ po datoteci pa se može i birati što se od izmjena želi /stage/-ati
++ =u= je za ~unstage~
++ =cc= je za osnovno ~commit~-anje (otvara prozor za /commit message/ i može ga se zatvoriti s =<C-c><C-c>= ili =:wq=)
++ =ca= je za /commit/ ~--amend~, a =ce= je isto to samo bez mogućnosti uređivanja poruke.
++ =cw= je za /reword/-anje poruke zadnjeg commita. Ostaje zabilježeno u /reflog/-u, ali ne i u /log/-u
++ za dodavanje izmjena u ranije /commit/-e, rabi se ~interactive rebase~ komanda =cF= (/Instant Fixup/) koja onda otvara /reflog/ popis s mogućnošću izbora i =<C-c><C-c>= izbora /commita/ u koji želimo spremiti promjene
+** Branch (=b=)
++ =bb= je za ~checkout~
++ nove grane se otvaraju sa =bn= (/branch --new/) =bc= (/branch checkout-n/)
+  - =cs= je za ~spinoff~ granu (novu granu u koju želimo prenijeti već /commit/-ane izmjene; npr. kad skužimo da smo radili na /master/-u mjesto novom /feature/-u). Ako /commit/-i nisu /push/-ani na krivoj grani, onda tu ne bi smjelo biti problema. Komanda samo pita za ime nove grane, ali onda u nju seli sve /unmerged commit/-e i briše ih iz neželjene grane.
+** Push (=P=)
++ =Pn= je za ~dry run~
++ =Pp= je za /push/-anje svega pa čak i nove grane (~--upstream~)
++ =P -f p= je za ~force~ (*Magit* automatski u pozadini /fetch/-a i prati koliko se lokalna grana razišla od /origin/-a)
++ =Pu= je za PR (?)
+
+* Suradnja s Vimom
+Plugini [[https://github.com/jceb/vim-orgmode/blob/master/doc/orgguide.txt][Vim Org-Mode]] ili [[https://github.com/nvim-neorg/neorg][Neorg]] omogućuju otvaranje ~.org~ datoteka u *Vim*-u i simulaciju *Emacs*-ovih mogućnosti, ali nisam siguran koliko su međusobno kompatibilni i zahtijevaju li ubacivanje nekakvih posebnih headera ili metapodataka unutar datoteke
