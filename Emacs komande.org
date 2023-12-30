@@ -11,6 +11,8 @@
   - [[#kretnje][Kretnje]]
   - [[#uređivanje-teksta][Uređivanje teksta]]
   - [[#tablice][Tablice]]
+  - [[#latex][LaTeX]]
+  - [[#pandoc][Pandoc]]
 - [[#org-mode][Org Mode]]
   - [[#poveznice][Poveznice]]
   - [[#org-babel][Org Babel]]
@@ -79,9 +81,8 @@ Emacs u startu nudi nekoliko file explorera
 + =D= je za brisanje stavke, a =d= je za selekciju stavke za naknadno brisanje (~delete~)
   - =x= je za brisanje stavki predselektiranih za brisanje
 + =C= je za kopiranje datoteke na dodatnu lokaciju, a =R= je za seljenje datoteke (~copy~, ~cut~, ~paste~)
-
 + =c= je za komprimiranje stavke
-+ s =i= se može ući u ~-INSERT-~ mode i preimenovati datoteku ili direktorij po želji, ali se treba nakon toga spremiti buffer s =<C-x><C-s>= ili =<SPC>f s= ili =:w<CR>=
++ s =i= se može ući u ~-INSERT-~ mode i preimenovati datoteku ili direktorij po želji, ali se treba nakon toga spremiti buffer s =<C-x><C-s>= ili =<SPC>f s= ili =:w<CR>= ili =zz=
 + =M= je za ~chmod~ selektirane stavke ili stavke ispod kursora, a =O= je za ~chown~
 + postoji i poseban ~peep-dired~ plugin za pretpregled (/preview/) multimedialnih datoteka. (ref. Church of Emacs, v.8, 12:30)
 
@@ -229,13 +230,35 @@ Postoje neki defaultni prečci, ali doom emacs donosi i svoje
 ** Tablice
 + tablice rabe uobičajenu sintaksu (kao i markdown), ali momogućuju
  da se
-  + s =<C-RET>= stvaraju novi retci i da se s =<TAB>= skače iz čelije u čeliju
-  + =<S-RET>= je za kopiranje vrijednosti čelije u novi redak
-  + =<SPC>mba= je za uključivanje automatskog poravnanja čelija
-  + =<SPC>mb-= pretvara redak u thead
-  + =<M-[hjkl]>= ili =<M-strjelica>= su za izmjene/pomicanja redaka i stupaca
-  + =<S-strjelica>= je za izmjene/pomicanja sadržaja čelija
-  + =<M-S-[hjkl]>= ili =<M-S-strjelica>= je za dodavanje/brisanje stupaca ili redaka tablice
+  - s =<C-RET>= stvaraju novi retci i da se s =<TAB>= skače iz čelije u čeliju
+  - =<S-RET>= je za kopiranje vrijednosti čelije u novi redak
+  - =<SPC>mba= je za uključivanje automatskog poravnanja čelija
+  - =<SPC>mb-= pretvara redak u thead
+  - =<M-[hjkl]>= ili =<M-strjelica>= su za izmjene/pomicanja redaka i stupaca
+  - =<S-strjelica>= je za izmjene/pomicanja sadržaja čelija
+  - =<M-S-[hjkl]>= ili =<M-S-strjelica>= je za dodavanje/brisanje stupaca ili redaka tablice
++ i tablicama i slikama treba prethoditi =#+CAPTION= komanda.
+
+** LaTeX
++ Čini mi se da Doom Emacs po tvorničkim postavkama nema bogzna kakve alate za oblikovanje LaTeX-a
++ Ne nudi automatski preview kao MathJax u Obsidianu ili Logsequ, ali bi trebao imati komandu =<C-c><C-x><C-l>= za ~org-latex-preview~, gdje bi se trebao stvoriti /overlay/ prikaza jednadžbe, ali mi za sada ni to ne radi.
++ Blok za LaTeX se otvara prečcem =<l<TAB>=
+
+#+caption[LaTeX blok]: Ovo je pravi LaTeX blok za testranje
+#+begin_export latex
+\setlength{\unitlength}{1cm}
+\thicklines
+\begin{picture}(10,6)
+\put(2,2.2){\line(1,0){6}}
+\put(2,2.2){\circle{2}}
+\put(6,2.2){\oval(4,2)[r]}
+\end{picturej
+#+end_export
+
+** Pandoc
+Sve ovo bi trebalo raditi sa Pandocom peko komande =<C-c><C-e>= za /export/ i onda, npr., =lo= za izvoz LaTeX-a u PDF, ali ni to ne uspijevam dobiti da radi.
+
+Dobra je vijest što ~pandoc~ komanda super radi iz /WSL/-a ili Emacsova /vterm/-a i čak vuče reference iz Zoterove BibTex baze i oblikuje ih po zadanom ~.csl~-u.
 
 * Org Mode
 Iako postoji broj aplikacija za uređivanje Org datoteka (prvenstveno Logseq), sve ove bilješke ću pisati za rad u Emacs-u jer je tamo Org Mode najbolje implementiran i to ću još ograničeno samo na /evil mode/ kakav je prisutan u Spacemacsu ili Doom Emacsu.
@@ -257,7 +280,7 @@ Ako se poveznice žele unijeti preko prečca, rabi se sintaksa =<SPC>ml{}= ili =
     - putanje do datoteka mogu biti apsolutne ili relativne, a ako putanja vodi na direktorij, Emacs će otvoriti /dired/
     - ako se želi povezati neki odlomak u datoteci, tada se na adresu poveznice može dodati =::<naslov>= (to se može i preko =<SPC>mll= sučelja), npr. [[file:Vim komande.md::Za pisca][Druga datoteka, određeni naslov]], a pretraga naslova funkcionira preko nekog /fuzzy/ algoritma jer se ne treba upisati puni naslov.
       - Varijabla ~org-link-search-must-match-exact-headline~ određuje hoće li poveznice pretraživati samo naslove ili ukupan tekst (v. =<SPC>hv= za više info)
-    - ako se ne želi pamtiti tekst naslova na koji se želi linkati, može se s kursorom na tom naslovu stisnuti =<SPC>nl=, te će se naslov spremiti u ~Store~ te će biti dostupni i u sučelju za dodavanje poveznica pod sekcijom ~file:~. [[*Poveznice][Poveznice]]
+    - ako se ne želi pamtiti tekst naslova na koji se želi linkati, može se s kursorom na tom naslovu stisnuti =<SPC>nl=, te će se naslov spremiti u ~Store~ pa će biti dostupni i u sučelju za dodavanje poveznica pod sekcijom ~file:~. [[*Poveznice][Poveznice]]
     - može se i mjesto naslova upisati i broj, pa će skakati na redni broj retka, ali ne vidim poantu u tome osim ako datoteka nije zamrznuta (tipa [[file:tipkovnica::11][Zakon]] ili Biblija)
   - ~elisp~ omogućuje unos bilo kakve komande koja će se izvršiti nakon pritiska na poveznicu, npr.: =(+ 2 2)= ili [[elisp:(org-toggle-link-display)][prikaži sintaksu poveznica]].
     - to ujedno znači da se mogu u [[file:~/.config/doom/config.org][config.el]] definirati funkcije i onda pozivati preko sučelja u /.org/ dokumentu (praktički se može izraditi cijela aplikacija :))
@@ -306,7 +329,7 @@ x(2)
 #+end_src
 
 #+RESULTS:
-: 7
+: 4
 
 + a može se namjestitit i automatska konverzija datoteka u /.org/,(v. [[https://martibosch.github.io/jupyter-emacs-universe/][martibosch/jupiter-emacs-universe]]) npr.:
 #+begin_src emacs-lisp
@@ -357,6 +380,7 @@ Za sada najbolji Git klijent koji sam našao (usporediv jedino s lazygit-om)
 + =s= je za ~stage~-anje pojedionih /unstaged/ datoteka, sekcija koda ili čak samo pojedinih redaka, =S= za stageanje svega
   - =<TAB>= prikazuje ~diff~ po datoteci pa se može i birati što se od izmjena želi /stage/-ati
 + =u= je za ~unstage~
++ i =s= i =u= se mogu rabiti i za pojedinačne retke /staged/ i /unstaged/ datoteka, a ako se osjećam baš žestoko, mogu s =x= u potpunosti odbaciti retke koje ne želim (to ih onda briše iz dokumenta)
 + =cc= je za osnovno ~commit~-anje (otvara prozor za /commit message/ i može ga se zatvoriti s =<C-c><C-c>= ili =:wq=)
 + =ca= je za /commit/ ~--amend~, a =ce= je isto to samo bez mogućnosti uređivanja poruke.
 + =cw= je za /reword/-anje poruke zadnjeg commita. Ostaje zabilježeno u /reflog/-u, ali ne i u /log/-u
