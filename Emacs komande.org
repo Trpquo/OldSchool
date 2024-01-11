@@ -137,7 +137,7 @@ Emacs u startu nudi nekoliko file explorera
     | move-window                |                 | =<SPC>w[HJKL]=, =<SPC>w[xrR]=             |
     | other-window               | =<C-x>o=        | =<SPC>w[hjklw]=                           |
     | tear-window                |                 | =<SPC>wT=                                 |
-    | quit                       | =<C-c><C-x>=    | =<C-w><C-q>=                              |
+    | quit                       | =<C-c><C-x>=    | =<C-w><C-q>=, =<SPC>qf=                   |
 
 + ~Cancel/quit~: =<C-g>= ili ponekad =ESC=
 + =<SPC>qr= je za ~restart~-anje Emacsa, ali meni ne radi jer pokrećem Emacs kroz =doom run=
@@ -168,8 +168,8 @@ Uobičajena sintaksa je slična, ali ipak drukčija od markdowna
 #+END_SRC
 
 ** Kretnje
-/Evil-mode/ često uspijeva dobro izbalansirati ubacivanje komandi koje se ponašaju kao u Vimu s upotrijebom Vim prečaca za već postojeće Emacs komande, ali tamo gdje se razilaze, Emacsove nekako bolje i pametnije rade (npr. bolje lociraju:w
-stvarne semantičke cjeline za skakanje po tekstu)
+/Evil-mode/ često uspijeva dobro izbalansirati ubacivanje komandi koje se ponašaju kao u Vimu s upotrijebom Vim prečaca za već postojeće Emacs komande, ali tamo gdje se razilaze, Emacsove nekako bolje i pametnije rade (npr. bolje lociraju stvarne semantičke cjeline za skakanje po tekstu).
+Gotovo sve komande ovdje dolje se odnose na rad u ~-NORMAL-~ modu. U njega se ulazi komandom =<Esc>=, a /doom/ to još mapira na kombinaciju brzog tipkanja =jk=, a uvijek postoji mogućnost lupanja komande =<C-o>= u ~-INSERT-~ modu kako bi se uključio privremeni ~-NORMAL-~ mod za unos komande
 + =h=, =l=, =k= i =j= su za ~backward~, ~forward~, ~previous~ i ~next~
   * Emacsove =<C-b>=, =<C-f>=, =<C-p>= i =<C-n>= su isključene u ~evil-mode~-u
 + =<M-b>= i =<M-f>= (Emacsove zbog modifikatora rade i u ~-INSERT-~ modu) tj. =w=, =e=, =b= i =W=, =E=, =B= (u ~-NORMAL-~ modu) za kretanje po riječima
@@ -209,8 +209,9 @@ Postoje neki defaultni prečci, ali doom emacs donosi i svoje
 + komanda =<M-t>= premeće riječi lijevo-desno, ovisno o tome gdje je smješten kursor. Ako je kursor smješten na početak riječi, onda će riječ zamijeniti mjesto s riječi prije, a ako je smješten usred riječi ili potkraj, onda joj zamijenjuje mjesto s riječi iza.
   - u Vimu se to postiže s /transwrd/ pluginom.
   - naprednija verzija ovog u Emacsu je [[https://github.com/rejeep/drag-stuff.el][rejeep/drag-stuff.el]]-ov plugin koji sve pomiće pomoću =<M-strjelica>= prečca.
++ u /evil mode/-u, unutar ~-INSERT-~ moda, komanda =<C-o>= omogućuje da se nakon nje lupi bilo koja komanda kao u ~-NORMAL-~ modu, ali da se automatski po izvršenju vrati u ~-INSERT-~ mod
 
-*** Selekcije (u Emacsu se to zovu regije i /killring/-i)
+*** Selekcije (u Emacsu se to zovu regije)
 + Selektiraj tekst: =<C-SPC><kretnje>= postavlja marker i započinje selekciju, ili u /evil modu/ to rade =v <kretnje>=, =<S-v><kretnje>= ili =<C-v><kretnje>=
 + Emacs navodno selektira i dok se drži =<S><kretnje>=, premda nisam sigura koliko je to pouzdano u /evil modu/
 + =<M-@>= je za stavljanje markera i selekciju riječi (od kursora do kraja riječi)
@@ -225,7 +226,12 @@ Postoje neki defaultni prečci, ali doom emacs donosi i svoje
   + inače se može kretati u krug (?) s =<C-u><C-SPC>=, =<C-o>= i =<C-i>= ili =[`= i =]`= po /markring/-u
 
 *** Kopiranje/rezanje/ljepljenje
+#+begin_note
+Emacs obrnuto od Vim-a i rezanje i kopiranje naziva ~kill~ (mjesto /yank/-anjem) (pritom /pasteboard/ naziva ~killring~-om mjesto /registry/-om), dok ljepljenje naziva ~yank~-anjem mjesto /put/-anjem
+#+end_note
 + Copy/pastaenje: =<C-w>= (~kill~, tj. /cut/) i =<C-y>= (~yank~, tj. /paste/), tj. kombinacije s =d= ili =y= i =p= u evil modu
+  - ostali ključevi za copy/paste-anje su =<C-c>=, =<M-w>= i =<C-Ins>= za kopiranje; =<C-x>=, =<C-w>= i =<S-Del>= za rezanje; te =<C-v>=, =<C-y>= i =<S-Ins>= za ljepljenje; svaki funkcionalan u nekakvom modu ili tipu /buffer/-a
++ kada god u ~-INSERT-~ modu i želi se izvršiti uobičajena komanda, može se stisnuti =<C-o>{bilo-koja-komanda-iz-normal-moda}= (npr. =<C-o>p= za pasteanje)
 
 ** Tablice
 + tablice rabe uobičajenu sintaksu (kao i markdown), ali momogućuju
@@ -295,7 +301,7 @@ Ako se poveznice žele unijeti preko prečca, rabi se sintaksa =<SPC>ml{}= ili =
 + jednom kada je kod ispisan, =<RET>= u normalnom modu, ili =<C-c><C-c>= općenito, izvršava blok koda
 # TODO za sada ne uspijevam dobiti evaluaciju koda za node uopće, a za python dobivam samo kada odredim :session (?).
 
-#+begin_src emacs-lisp
+#+begin_example emacs-lisp
 
 (use-package pyvenv
   :ensure t
@@ -310,14 +316,13 @@ Ako se poveznice žele unijeti preko prečca, rabi se sintaksa =<SPC>ml{}= ili =
         (list (lambda ()
                 (setq python-shell-interpreter "python3")))))
 
-#+end_src
+#+end_example
 
-#+begin_src emacs-lisp
+#+begin_example emacs-lisp
 (setq python-shell-interpreter (concat pyvenv-virtual-env "$HOME/miniforge-pypy3/bin/"))
 (pyvenv-mode t)
-#+end_src
-#+RESULTS:
-: t
+#+end_example
+
 
 #+begin_src python :session testing
 import random
@@ -329,15 +334,15 @@ x(2)
 #+end_src
 
 #+RESULTS:
-: 4
+: 7
 
 + a može se namjestitit i automatska konverzija datoteka u /.org/,(v. [[https://martibosch.github.io/jupyter-emacs-universe/][martibosch/jupiter-emacs-universe]]) npr.:
-#+begin_src emacs-lisp
+#+begin_example emacs-lisp
 (setq code-cells-convert-ipynb-style '(
 ("pandoc" "--to" "ipynb" "--from" "org")
     ("pandoc" "--to" "org" "--from" "ipynb")
     org-mode))
-#+end_src
+#+end_example
 
 *** Tangle
 + /Org Bable Tangle/ je mehanizam za prikupljanje koda iz ~.org~ dokumenata i izvoz u druge datoteke

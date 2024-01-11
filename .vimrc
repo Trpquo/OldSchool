@@ -1,16 +1,10 @@
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Maintainer:
-" "       (Amir Salihefendic - @amix3k)
 " "       Trpimir - @trpquo
-" " " " Awesome_version:
-" "       Get this config, nice color schemes and lots of plugins!
-" "
-" "       Install the awesome version from:
-" "
-" "           https://github.com/amix/vimrc
-" "
-" " Sections:
+" Sources:
+" "       (Amir Salihefendic - @amix3k)
+" Sections:
 " "    -> General
 " "    -> VIM user interface
 " "    -> Colors and Fonts
@@ -63,18 +57,14 @@ nnoremap <leader>h :noh<cr>
 " " Managing documents
 " " Fast saving
 nnoremap <leader>w :w!<cr>
-nnoremap <C-s> :w!<cr>
-inoremap <C-s> :w!<cr>
-vnoremap <C-s> :w!<cr>
+noremap <C-s> :w!<cr>
 " " Fast editing of .vimrc
 nnoremap <leader>rc :vsplit $VIMRC<cr>
 nnoremap <leader>rr :source $VIMRC<CR>
 nnoremap <M-s> :source $VIMRC<cr>
 " 
 " " Fast closing
-nnoremap <C-q> :q<cr>
-inoremap <C-q> :q<cr>
-vnoremap <C-q> :q<cr>
+noremap <C-q> :q<cr>
 
 " " Managing panes
 nnoremap <C-l> <C-w>l
@@ -116,11 +106,11 @@ set spelllang=en_us,hr
 set wildmenu
 "
 " " Ignore compiled files
-set wildignore=*.o,*~,*.pyc
+set wildignore=*.o,*~,*.pyc,*.doc,*.docx,*.pdf,*.jpg,*.jpeg,*.png,*.xls,*.xlsx 
 if has("win16") || has("win32")
     set wildignore+=.git\*,.hg\*,.svn\*
     else
-        set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+        set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store,*/node_modules/*
         endif
 " " Show numberlines
 set number relativenumber numberwidth=6
@@ -184,6 +174,7 @@ set shiftround
 set shiftwidth=2
 set smarttab
 set tabstop=2
+set softtabstop=2
 
 " " Manage rows
 set linebreak " awoid wrapping a line in the middle of the word

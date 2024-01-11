@@ -30,50 +30,75 @@
         - `s` - izbriši slovni znak ispod kursora i uđi u insert mod
         - `c<kretnja>` - izbriši što god je dohvaćeno <kretnjom> i uđi u insert mod
           - ima i oznaka `i` aka *inside* koji omogućuje selekciju i brisanje cijele neke cjeline unutar koje je bilogdje kursor smješten (npr. `ciw` je za mijenjanje cijele riječi, `ci(` je za zamjenu svega unutar zagrada)
-        - `s` - izbriši znak i uđi u unsert mode (kratica za `xi`)
+        - `s` - izbriši znak i uđi u unsert mode (kratica za `xi` ili `cl`)
+        - `r` je za zamjenu jednog slovnog znaka, a `R` je za ulazak u *-REPLACE-* mod (poput *insert* moda u Windowsima)
     - **visual** - za domare (omogućuje selekcije teksta)
       - u njega se ulazi iz normalnog moda komandom `v`
-    - **command** - za strojare (omogućuje unos komandi za automatizaciju)
+      - `<S-v>` je verzija *-VISUAL-* moda za selekciju redaka
+      - `<C-v>` je verzija *-VISUAL-* moda zvana *visual block mode*
+    - **command** iliti **execution mode** - za strojare (omogućuje unos komandi za automatizaciju)
       - u njega se ulazi iz normalnog ili vizualnog moda komandom `:`
+    - **undo** i **redo** se pokreću komandama `u` i `<C-r>` iz normalnog moda
+    - ==.== je komanda za ponavljanje zadnje akcije, ma što ona bila
 
 ## Za istraživače (normal mode)
 
-    ### h, j, k, l,  {, }, <C-d>, <C-u>, gg, G, <C-i>, <C-o>, m  
-        - ==h== (←), ==j== (↓), ==k== (↑) i ==l== (→) su za kretanje korak po korak; s time da `j` i `k` nastoje skakati po zadnjim mjestima gdje smo bili pozicionirani u retku
-        - =={== i ==}== su za skakanje od odlomka do odlomka (izgleda da traže prazan redak)
-        - ==<C-d>== i ==<C-u>== su za skakanje po pola ekrana dolje-gore
-        - ==gg== i ==G== su za skakanje na sam početak ili sam kraj dokumenta
-        - ==<C-o>== i ==<C-i>== su iznimno korisne jer omogućuju skakanje na prethodne i "buduće" pozicije kursora (nešto kao undo i redo za poziciju kursora) 
-        - ==m== je za označivanje nekog mjesta kako bi se lako vratili na njega #proučiti
+### h, j, k, l, <C-u>, <C-d>, <C-f>, <C-b>, M, <C-e>, <C-y>, zz, gg, G, <C-i>, <C-o>, m
+  - ==h== (←), ==j== (↓), ==k== (↑) i ==l== (→) su za kretanje korak po korak; s time da `j` i `k` nastoje skakati po zadnjim mjestima gdje smo bili pozicionirani u retku
+  - ==<C-d>== i ==<C-u>== su za skakanje po pola ekrana dolje-gore 
+  - ==<C-f>== i ==<C-b>== su za skakanje po pola stranice dolje-gore 
+  - ==M== je za smještanje kursora na pola ekrana, a ==H== i ==L== bi trebali biti za skakanje kursorom na vrh i dno ekrana (ali ti su ključevi u lazyvim-u prenamijenjeni za skakanje između buffera)
+  - ==<C-e>== i ==<C-y>== su za *scroll*-anje ekrana gore/dolje, ==zz== je za /scroll/-anje tako da se kursor nađe usred ekrana
+  - ==gg== i ==G== su za skakanje na sam početak ili sam kraj dokumenta
+  - ==:<broj>== ili ==<broj>G== je komanda za skakanje na točno određenu liniju teksta po broju
+  - ==<C-o>== i ==<C-i>== su iznimno korisne jer omogućuju skakanje na prethodne i "buduće" pozicije kursora (nešto kao undo i redo za poziciju kursora), a Vim ili Nvim će skakati čak i između dokumenata obrađivanih u zadnjoj sesiji
+  - ==m== je za označivanje nekog mjesta kako bi se lako vratili na njega #proučiti
 
-    ### w, W, e, E, b, B, ge, gE, 0, $, ^, g_ 
-      - ==w== i ==W== su za skakanje od riječi do riječi (gdje `W` pod riječ podrazumijeva sve između razmaka (\s,\n,\t ili \r )), a ==e== je slično tome samo smješta kursor pred razmak i ==E== prepoznaje riječi kao i `W`
-      - ==b== i ==B== su isto kao i `w` i `W`, ali skaču u suprotnom smjeru, a ==ge== i ==gE== su isto što i `e` i `E`, ali unazad
-      - ==0== i ==$== su za skakanje na početak ili kraj retka
-      - ==^== i ==g_== su za skakanje na prvi ili zadnji (ne prazni) znak u retku
+### w, W, e, E, b, B, ge, gE, (, ), {, }, 0, `$`, ^, g_
+  - ==w== i ==W== su za skakanje od riječi do riječi (gdje `W` pod riječ podrazumijeva sve između razmaka (\s,\n,\t ili \r )), a ==e== je slično tome samo smješta kursor pred razmak i ==E== prepoznaje riječi kao i `W`
+  - ==b== i ==B== su isto kao i `w` i `W`, ali skaču u suprotnom smjeru, a ==ge== i ==gE== su isto što i `e` i `E`, ali unazad
+  - ==^== i ==g_== su za skakanje na prvi ili zadnji (ne prazni) znak u retku
+  - ==(== i ==)== su za skakanje od rečenice do rečenice (izgleda da traže interpunkcijski znak)
+  - =={== i ==}== su za skakanje od odlomka do odlomka (izgleda da traže prazan redak)
+  - ==0== i ==$== su za skakanje na početak ili kraj retka
+  - ==^== ili =_= i ==g_== su za skakanje na prvi ili zadnji slovni znak u retku
 
-    ### f, F, t, T, ';' i ',', % (za traženje znakova)
-      - ==f== i ==t== su vrhunske komande za skakanje do idućeg proizvoljnog znaka. Sintaksa je `f<znak> ` ili `t<znak>`, a razlika je u tome što će `f` skočiti na znak, a `t` će skočiti do odmah do znaka
-      - ==F== i ==T== su isto što i `f` i `t`, ali skaču u suprotnom smijeru (traže prethodno)
-        - `;` traži iduće podudaranje zadnjeg traženog znaka unutar retka sa slovom ispod kursora, a `,`  prethodno
-      - ==%== je komanda za skakanje do para dvodjelnog interpunkcijskog znaka ispod kursora, poput (), [], {}, <> itd. (a u slučaju da takav znak nije smješten pod kursor, skočit će do prvog znaka koji zadovoljava taj kriterij)
+### f, F, t, T, s, ';' i ',', %, g- (za traženje znakova)
+  - ==f== i ==t== su vrhunske komande za skakanje do idućeg proizvoljnog znaka. Sintaksa je `f<znak> ` ili `t<znak>`, a razlika je u tome što će `f` skočiti na znak, a `t` će skočiti do odmah do znaka
+  - ==F== i ==T== su isto što i `f` i `t`, ali skaču u suprotnom smjeru (traže prethodno)
+    - `;` traži iduće podudaranje zadnjeg traženog znaka unutar retka sa slovom ispod kursora, a `,`  prethodno
+  - ==%== je komanda za skakanje do para dvodijelnog interpunkcijskog znaka ispod kursora, poput (), [], {}, <> itd. (a u slučaju da takav znak nije smješten pod kursor, skočit će do prvog znaka koji zadovoljava taj kriterij)
+  - `g-` će skočiti do prve brojke u retku
+  - ==s== je u *lazyvim*-u namješten kao prečac za `flash` (nešto kao slabiji `snipe` ili `aye` u Emacsu), a ==vR== otvara `Treesitter search` koji još pametnije omogućuje automatsku selekciju teksta odmah po skakanju. (==vS== je za `Treesitter flash` koji omogućuje selekciju od točke kursora do rezultata pretrage)
 
-    ### /, ?, \*, #, gd, gf (za traženje izraza)
-      - ==/== i ==?== su za traženje određenih riječi direktno u tekstu
-        - oznake `n` i `N` su za skakanja na iduća i prethodna podudaranja, a `<enter>` je za ulazak u tekst
-        - `gn` i `gN` su posebne oznake za iduće ili prethodno podudaranje koje se mogu uparivati sa operaterima, npr. `dgn` će izbrisati iduće podudarajuće mjesto iz teksta, a jednom kada je izvršeno `.` može nadalje zamijeniti cijeli `dgn` 
-      - ==\*== i ==#== su za olakšano pretraživanje unaprijed i unazad jer se za unos traženog pojma odmah uzima riječ ispod kursora
-      - ==gd== i ==gf== su napredne funkcije za programiranje koje skaču na mjesta definicija i otvaraju uvezene datoteke
+### /, ?, *, #, vS, vR, gd, gf i K  (za traženje izraza)
+  - ==/== i ==?== su za traženje određenih riječi direktno u tekstu
+    - oznake `n` i `N` su za skakanja na iduća i prethodna podudaranja, a `<enter>` je za ulazak u tekst
+    - `gn` i `gN` su posebne oznake za iduće ili prethodno podudaranje koje se mogu uparivati sa operaterima, npr. `dgn` će izbrisati iduće podudarajuće mjesto iz teksta, a jednom kada je izvršeno `.` može nadalje zamijeniti cijeli `dgn` 
+  - ==*== i ==#== su za olakšano pretraživanje unaprijed i unazad jer se za unos traženog pojma odmah uzima riječ ispod kursora
+  - ==gd== i ==gf== su napredne funkcije za programiranje koje skaču na mjesta definicija i otvaraju uvezene datoteke
+  - ==K== je komanda za otvaranje *man* dokumentacije za riječ ispod kursora
 
 ## Za pisca (insert mod)
-    - tu se nama puno za reći što nije uobičajeno u ostalim tekstovnim urednicima, ali je potrebno brzo i lako skakati iz moda u mod, uvijek prvo u normalni, pa dalje kako treba (pisac + istraživač = urednik, pisac + domar = kompozitor, pisac + strojar = redaktor)
-    - svejedno, ima i tu prečaca koji su korisni:
-      - ==<C-h>== je backspace
-      - ==<C-w>== je backspace ali za cijelu riječ
-      - ==<C-u>== je backspace, ali za cijeli red
-      - ==<C-r><ime-registra>== će biti za pasteanje iz registra (v. dolje)
-      - ==<C-c>==, ==<C-x>== i  ==<C-v>== će vjerojatno u svim Vimovima raditi kako i očekivano kada u insert modu
-  - kada god poželimo, uvijek možemo dok smo u insert modu lupiti `<C-o>` i nakon toga unijeti koju god komandu iz normal moda želimo (bez da zapravo izađemo iz insert moda)
+- tu se nama puno za reći što nije uobičajeno u ostalim tekstovnim urednicima, ali je potrebno brzo i lako skakati iz moda u mod, uvijek prvo u normalni, pa dalje kako treba (pisac + istraživač = urednik, pisac + domar = kompozitor, pisac + strojar = redaktor)
+- svejedno, ima i tu prečaca koji su korisni:
+  - ==<C-h>== je backspace
+  - ==<C-w>== je backspace ali za cijelu riječ
+  - ==<C-u>== je backspace, ali za cijeli red
+  - ==<C-r><ime-registra>== će biti za paste-anje iz registra (v. dolje)
+  - ==<C-c>==, ==<C-x>== i  ==<C-v>== će vjerojatno u svim Vimovima raditi kako i očekivano kada u insert modu
+- kada god poželimo, uvijek možemo dok smo u insert modu lupiti `<C-o>` i nakon toga unijeti koju god komandu iz normal moda želimo (bez da zapravo izađemo iz insert moda)
+- ==gq== je prečac za formatiranje teksta (npr. `gqpa` je za formatiranje aktivnog odlomka)
+- Vim ima nazive za razne semantičke cjeline koje se onda može rabiti za selekciju s prefiksima `i` (in) i `a` (around):
+  - `w` je za ==riječ==
+  - `s` je za ==rečenicu==
+  - `p` je za ==odlomak==
+  - `b` je za ==blok== (unutar zagrada, vitica, čeggod što određuje blok koda)
+  - `t` je za ==tag==
+  - a cjeline se mogu identificirati i eksplicitno s `"`, `'`, ```, `(`, `[`, `{`, `<` itd.)
+    - a selektiranje se može prošitriti s unošenjem brojeva, npr. `d2i(` će izbrisati sve unutar drugog reda zagrada gledajući s pozicije kursora
+
+    "blabla"
 
 ## Za domara (vizualni mod)
 
