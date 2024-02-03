@@ -2,6 +2,20 @@
 
     Uglavnom preuzeto iz [freecodecamp](https://www.freecodecamp.org/news/the-linux-commands-handbook).
 
+Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *readline* editor za uređivanje teksta komandi:
+  + `<up>` će započeti listanje po prethodno unesenim komandama
+    + `<C-M-y>` će vratiti samo prvu riječ zadnje komande ili tako nešto (možda bez parametara ili štoveć)
+    + `!` bi trebalo ibiti kratica za ponovno izvršavanje zadnje komande (ali čini se da u *fish*-u nije)
+  + `<C-r>` će pretraživati po povijesti prije unesenih komandi
+  + `<C-a>` i `<C-e>` su za skakanje na početak ili kraj retka
+  + `<C-w>` je za brisanje cijele riječi unazad
+  + `<M-t>` je za zamjenu mjesta zadnje dvije riječi prije kursora, a `<C-t>` bi trebao biti za zamjenu zadnja dva slova (no obično je prečac preuzet od *fd*-a)
+  + `<C-u>` i `<C-k>` su za brisanje teksta od kursora do početka ili kraja linije
+  + `<C-l>` "čisti" ekran starih komandi i izlaza 
+  + `cd ~` ili `cd` su za skočiti u *home* direktorij
+  + `cd -` je za skočiti na zadnju lokaciju gdje smo bili
+  + ==.inputrc== je datoteka za unošenje početnih postavki *readline*-a, npr. `set expand-tilde on`
+
 ## Za istraživača
 
 ### man, whatis, apropos, tldr
@@ -11,7 +25,7 @@
   - ==apropos== slično kao `whatis` daje kratak opis komande, ali i popis povezanih komandi uz njihove opise
   - ==tldr== ne dolazi predinstaliran, ali na vrlo zgodan način opisuje poantu komandi i nudi popise primjera uobičajenih primjena
 
-### pwd, whoami, cd, su, open, which  
+### pwd, whoami, cd, su, open, which 
   - ==pwd== jednostavno ispisuje direktorij u kojem se trenutno nalazimo
   - ==whoami== ispisuje ime korisnika (pogledaj dolje i `id`)
   - ==cd== je za promjenu direktorija `cd (<url-novog-direktorija>`)
