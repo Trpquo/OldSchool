@@ -1,8 +1,8 @@
 # Biljeske za bash komande
 
-    Uglavnom preuzeto iz [freecodecamp](https://www.freecodecamp.org/news/the-linux-commands-handbook).
+Uglavnom preuzeto iz [freecodecamp](https://www.freecodecamp.org/news/the-linux-commands-handbook).
 
-Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *readline* editor za uređivanje teksta komandi:
+Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *readline* editor za uređivanje teksta komandi (v. [Readlinr Cheat Sheet](https://readline.kablamo.org/emacs.html):
   + `<up>` će započeti listanje po prethodno unesenim komandama
     + `<C-M-y>` će vratiti samo prvu riječ zadnje komande ili tako nešto (možda bez parametara ili štoveć)
     + `!` bi trebalo ibiti kratica za ponovno izvršavanje zadnje komande (ali čini se da u *fish*-u nije)
@@ -30,7 +30,7 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
   - ==whoami== ispisuje ime korisnika (pogledaj dolje i `id`)
   - ==cd== je za promjenu direktorija `cd (<url-novog-direktorija>`)
   - ==open== je za otvaranje lokacije (datoteke ili direktorija) defaultnim programom
-  - kako se ovdje radi gotovo isključivo o tekstovnim datotekama, linux dođe s (ili se mogu instalirati) brojnim tekst editorima: `vi`, `vim`, `nvim`, `nano`, `emacs`...
+  - kako se ovdje radi gotovo isključivo o tekstovnim datotekama, linux dođe s (ili se mogu instalirati) brojnim tekst editorima: `vi`, `vim`, `nvim`, `nano`, `micro`, `kate`, `emacs`...
   - ==which== javlja adresu gdje je pohranjena datoteka komandi prisutnih u radnom okružju
 
 ### ls, find

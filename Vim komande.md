@@ -86,7 +86,7 @@
   + ==<C-w>== je backspace ali za cijelu riječ
   + ==<C-u>== je backspace, ali za cijeli red
   + ==<C-r><ime-registra>== će biti za paste-anje iz registra (v. dolje)
-  + ==<C-r>.== je za posebni registar u kojem je spremljeno štogod je zadnje utipkano u *insert* modu, a ==<C-a>== je prečac za to (ali ne u *evil-modu* jer je u Emacsu to prečac za skok na početak reda) 
+  + ==<C-r>.== je za posebni registar u kojem je spremljeno štogod je zadnje utipkano u *insert* modu, a ==<lC-a>== je prečac za to (ali ne u *evil-modu* jer je u Emacsu to prečac za skok na početak reda) 
   + ==<C-c>==, ==<C-x>== i  ==<C-v>== će vjerojatno u svim Vimovima raditi kako i očekivano kada u insert modu
   + ==<C-p>== i ==<C-n>== su za pokretanje *autocomplete*-a (s `p` je za pretragu sličnih riječi unazad unutar dokumenta, a s `n` je za pronalaženje sličnih riječi unaprijed, ali obje komande pretržuju cijeli dokument)
   + ==<C-x>== je za ulazak u mod za *autocomplete* sa lokalnim kontekstom (ponovno ne u *evil-modu* jer emacs ima jasnu prednost za `<C-x>` Emacsu)
@@ -103,6 +103,22 @@
   - `t` je za ==tag==
   - a cjeline se mogu identificirati i eksplicitno s svim vrstama navodinka ili zagrada
     - a selektiranje se može prošitriti s unošenjem brojeva, npr. `d2i(` će izbrisati sve unutar drugog reda zagrada gledajući s pozicije kursora
+    
+### Pisci u vizualnom modu
+  + `zc` i `zo` su za *foldanje* i *unfoldanje* pojedinačnih odlomaka, funkcija.... 
+    + `zM` i `zR` su za *foldanje* i *unfoldanje* svih odlomaka, funkcija.... odjednom
+  + `>>`, `<<` i `==` su za uvlake: uvlačenje za jednu mjeru, izvlačenje za jednu mjeru i izvlačenje retka na početak linije
+  + `<C-a>` i `<C-x>` su za povećavanje za 1 ili smanjivanje bilokakve brojke u aktivnom retku (ili ispod kursora) (ne u *evil-mode*-u)
+
+### Pisci u komandnom modu
+  + `:read <url-datoteke>` je komanda za učitati sadržaj neke vanjske datoteke na mjesto kursora
+    + `:read !ls <url>` ovo je samo primjer kako se može dohvatiti bilokakav izlaz shell komande i ispisati ga na mjestu kursora 
+    + `:read !jq.<svojstvo> <url-datoteke>` je za učitavanje vrijednosti nekog svojstva iz *.json* datoteke (uz pretpostavku da je u radnom okružju instaliran alat *jq*) i ispisivanje ga na mjesto kursora
+    + `'<,'>!jq.<svojstvo>` je za učitavanje nekog svojstva iz selektiranog objekta u tekstu otvorenog dokumenta i ispisivanje ga namjesto selektiranog teksta (?)
+  + `:sort` je za sortiranje svih linija u dokumentu (?), a `:sort u` za sortiranje i zadržavanje jedinstvenih redaka (?), a `:sort!` je za obrtanje redoslijeda
+  + `:%s/<traženi-uzorak>/<zamjena>/<zastavice>` je komanda za *find/change*, a zastavice mogu biti `g` za golobalno, `r` za pitati prije zamjene, `u` za neosjetljivu pretragu po veličini slova #provjeriti
+    + ovo je vrlo moćan alat jer omogućuje porabu svih alata *regex*-a, npr. `:%s/\(.*\),\(.*\),\(.*\)/\2,\1,\3/g` će zamijeniti prvi i drugu kolumnu u *.csv*-u
+  + `:g/<uzorak>/d` je za izbrisati sve retke koji počinju s određenim uzorkom teksta, a `:v/<uzorak>/d` za brisanje svih redaka koji ne započinju uzorkom teksta
 
 ## Za domara (vizualni mod)
 
@@ -111,19 +127,19 @@
   - ==V== je za ulazak u mod selekcije cijelih redaka
   - ==<C-v>== je za ulazak u mod *blok selekcije*, a taj je pak pogodan za multi-cursor mod ili sl.
 
-### (v,) d, c, y, =, g~ (gu, gU), p (aka. operateri)
+### (v,) d, c, y, =, g~ (gu, gU), p (aka. operatori)
 
   - operatori su posebne komande koje zahtijevaju daljnje upute. Najjednostavniji (i ne potpuno primjeren) primjer je komanda ==v== koja nas ubacuje u vizualni mod, a zbog naravi vizualnog moda funkcionira kao operater. Komanda `vw`, npr., selektira tekst do kraja riječi.
     1) uobičajeni oblik unošenja komandi s operaterima u normalnom modu je `<operater><broj><kretnja>`
       - npr. `d5w` briše pet riječi, a `y2k` kopira aktivni i prethodna dva retka
-    2) drugi format unošenja komandi s operaterima je `<operater><potraga>`
+    2) drugi format unošenja komandi s operaterima je `<operator><potraga>`
       - npr. `df"` briše sve do idućih navodnika, a `c/return` briše sve do naredbe 'return', a tako bi `ggdG` izbrisalo cijeli dokument.
     3) treći način porabe operatera je s porabom selektora i identifikatora *tekstovnih objekata*, a ti su:
       - **selektori** - ==i== i ==a== kao sinonimi za 'cijele riječi' i 'riječi i sve okolo'
       - **identifikatori** - ==w== (riječ), ==s== (rečenica), ==p== (odlomak), ==b== ili ==(== (ono unutar zagrada), ==B== ili =={== (ono unutar vitica), ==t== za HTML ili XML tag (!), te =="== ili =='== (ono unutar navodnika), a opcije su još ==<== i ==[== i svi obrnuti parovi dvodjelnih interpunkcija
-    4) u vizualnom modu, operacija je obrnuta nego u normalnom (1), a ta je `v<kretnja><operato>`. Vizualni je mod nešto sporiji, ali daje vizualne naznake o tome što će se odviti kada izvršimo komandu
+    4) u vizualnom modu, operacija je obrnuta nego u normalnom (1), a ta je `v<kretnja><operator>`. Vizualni je mod nešto sporiji, ali daje vizualne naznake o tome što će se odviti kada izvršimo komandu
 
-#### Operateri
+#### Operatori
   - ==d== je operater za brisanje
     - ima dvije kratice `D` za brisanje sveg do kraja retka i `dd` za brisanje cijelog retka
   - ==c== je oprater za izmjenu (kombinacija `d` i `i`)
