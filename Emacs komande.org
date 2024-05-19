@@ -40,15 +40,18 @@ Nakon toga se pažnja može posvetiti tutorialima. Većinu sam ih pronašao prek
 
 * Sažetak
 ==Emacs== dijeli posao baratanja sa dokumentima i prozorima kroz nekoliko boljki:
-     + ~buffer~ - /ono štoje tvoreno/; blo kakav prokrenuti program, bilo da je za čitanje datoteka (/text editor/), bilo da je za bilo što drugo (dired, magit...)
+     + ~buffer~ - /ono što je otvoreno/; blo kakav prokrenuti program, bilo da je za čitanje datoteka (/text editor/), bilo da je za bilo što drugo (dired, magit...)
        + obično jedan buffer zauzme jedan prozor
-       + uobičajeni prečci za pristup otvorenim /buffer/-ima su =<SPC>,= i =<SPC>bb=, a za nedavno otvorene =<SPC>fr=
+         + uobičajeni prečci za pristup otvorenim /buffer/-ima su =<SPC>,= i =<SPC>bb=, a za nedavno otvorene =<SPC>fr=
      + ~window~ - okvir u kojem se može vrtiti buffer (obično zvan /pane/).
        + može ih biti više u jednom ekranu (/split/) ili može uzimati cijeli ekran
      + ~workspace~ - je set otvorenih buffera i prozora. Može ih se otvarati koliko se želi (otvaranje projekta se tretira kao stvaranje novog /workspace/-a) i/ili skakati među otvorenima s =<SPC><TAB>=
      + ~project~ - /projekti/ su direktoriji koji sadrže neke uobičajene projektne datoteke ili direktorije (~.git~, ~.hg~...) i otkriveni su po automatizmu te su dostupni kroz =<SPC>pp=, a ako se želi neki dodatan direktorij učiniti "projektom", može se unutar njega smjestiti dadoteka ~.projectile~
      + ~bookmark~ - omogućava brzo skakanje do dokumenta. Glavni prečac je =<SPC><RET>=.
      + ~session~ - koliko znam ne može se ručno spremiti, ali se može povratiti prethodni s =<SPC>ql=
+     + Korisni shortcuti:
+       + =<C-g>= je za ubiti process
+       + =<SPC> h r r= je za reloadati setup nekon promjena u ~init.el~-u
 
 * Korisničko sučelje
 ** Navigacija dokumentima
