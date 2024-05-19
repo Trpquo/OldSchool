@@ -27,7 +27,7 @@
         - `gi` - vraća u insert mod na zadnje mjesto gdje smo iz njega izašli!!! (i stvarno radi)
         - `o` - upiši u redak ispod
         - `O` - upiši u redak iznad
-        - `s` - izbriši znak i uđi u unsert mode (kratica za `xi` ili `cl`)
+        - `s` - izbriši znak i uđi u insert mode (kratica za `xi` ili `cl`)
         - `c<kretnja>` - izbriši što god je dohvaćeno <kretnjom> i uđi u insert mod
           - ima i oznaka `i` aka *inside* koji omogućuje selekciju i brisanje cijele neke cjeline unutar koje je bilogdje kursor smješten (npr. `ciw` je za mijenjanje cijele riječi, `ci(` je za zamjenu svega unutar zagrada)
           - oznaka `a` je slična kao `i`, ali stoji za 'around' te u selekciju uključuje rubne (granične) oznake
@@ -53,7 +53,7 @@
   - ==:<broj>== ili ==<broj>G== je komanda za skakanje na točno određenu liniju teksta po broju
   - =={broj}%== je za skakanje na određeni postotak dokumenta, ma koji to bio redak
   - ==<C-o>== i ==<C-i>== su iznimno korisne jer omogućuju skakanje na prethodne i "buduće" pozicije kursora (nešto kao undo i redo za poziciju kursora), a Vim ili Nvim će skakati čak i između dokumenata obrađivanih u zadnjoj sesiji
-  - ==m<regisar>== je za označivanje nekog mjesta kako bi se lako vratili na njega, a skače se nazad na označeni redak s komandom `'<registar>`
+  - ==m<registar>== je za označivanje nekog mjesta kako bi se lako vratili na njega, a skače se nazad na označeni redak s komandom `'<registar>`
 
 ### w, W, e, E, b, B, ge, gE, (, ), {, }, 0, `$`, ^, g_
   - ==w== i ==W== su za skakanje od riječi do riječi (gdje `W` pod riječ podrazumijeva sve između razmaka (\s,\n,\t ili \r )), a ==e== je slično tome samo smješta kursor pred razmak i ==E== prepoznaje riječi kao i `W`
@@ -62,6 +62,7 @@
   - ==^== i ==g_== su za skakanje na prvi ili zadnji (ne prazni) znak u retku
   - ==(== i ==)== su za skakanje od rečenice do rečenice (izgleda da traže interpunkcijski znak)
   - =={== i ==}== su za skakanje od odlomka do odlomka (izgleda da traže prazan redak)
+  - ==[[== i ==]]== su za skakanje naprijed-nazad po početcima sekcija, a ==[]== i ==][== su za skakanje po krajevima sekcija 
 
 ### f, F, t, T, s, ';' i ',', %, g- (za traženje znakova)
   - ==f== i ==t== su vrhunske komande za skakanje do idućeg proizvoljnog znaka. Sintaksa je `f<znak> ` ili `t<znak>`, a razlika je u tome što će `f` skočiti na znak, a `t` će skočiti do odmah do znaka
@@ -94,7 +95,7 @@
     + s dodatkom `f` Vim će zanti da želimo unijeti ime datoteke, pa će to za dovršetke nuditi URL-ove 
     + s `<C-x><C-o>` se ulazi u *omnicomplete* mod koji je prema ekstenziji datoteke prilagođen programskom jeziku kojeg se rabi (?)
   + kada god poželimo, uvijek možemo dok smo u insert modu lupiti `<C-o>` i nakon toga unijeti koju god komandu iz normal moda želimo (bez da zapravo izađemo iz insert moda)
-- ==gq== je prečac za formatiranje teksta (npr. `gqpa` je za formatiranje aktivnog odlomka), a druga opcija za isti efekt je selektirati tekst koji želimo formatirati i onda lupiti `=`
+- ==gq== je prečac za formatiranje teksta (npr. `gqap` je za formatiranje aktivnog odlomka), a druga opcija za isti efekt je selektirati tekst koji želimo formatirati i onda lupiti `=`
 - Vim ima nazive za razne semantičke cjeline koje se onda može rabiti za selekciju s prefiksima `i` (in) i `a` (around):
   - `w` je za ==riječ==
   - `s` je za ==rečenicu==
@@ -228,7 +229,7 @@
     - ==:qa== iliti ==:qall== - zatvaranje svih otvorenih datoteka
     - sufiks `!` znači da se komanda treba izvršiti makar ju nešto blokira
 
-### Vimskript i .vimrc
+### Vimscript i .vimrc
   - naravno da Vim ima svoj skriptni jezik: [learnvimscriptthehardway](https://learnvimscriptthehardway.stevelosh.com/)
   - to je najočitije korisno u organizaciji *.vimrc*-a
   - postoje tri vrste varijabli:
