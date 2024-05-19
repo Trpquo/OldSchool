@@ -27,10 +27,10 @@
         - `gi` - vraća u insert mod na zadnje mjesto gdje smo iz njega izašli!!! (i stvarno radi)
         - `o` - upiši u redak ispod
         - `O` - upiši u redak iznad
-        - `s` - izbriši slovni znak ispod kursora i uđi u insert mod
+        - `s` - izbriši znak i uđi u unsert mode (kratica za `xi` ili `cl`)
         - `c<kretnja>` - izbriši što god je dohvaćeno <kretnjom> i uđi u insert mod
           - ima i oznaka `i` aka *inside* koji omogućuje selekciju i brisanje cijele neke cjeline unutar koje je bilogdje kursor smješten (npr. `ciw` je za mijenjanje cijele riječi, `ci(` je za zamjenu svega unutar zagrada)
-        - `s` - izbriši znak i uđi u unsert mode (kratica za `xi` ili `cl`)
+          - oznaka `a` je slična kao `i`, ali stoji za 'around' te u selekciju uključuje rubne (granične) oznake
         - `r` je za zamjenu jednog slovnog znaka, a `R` je za ulazak u *-REPLACE-* mod (poput *insert* moda u Windowsima)
     - **visual** - za domare (omogućuje selekcije teksta)
       - u njega se ulazi iz normalnog moda komandom `v`
@@ -75,7 +75,7 @@
   - ==/== i ==?== su za traženje određenih riječi direktno u tekstu
     - oznake `n` i `N` su za skakanja na iduća i prethodna podudaranja, a `<enter>` je za ulazak u tekst
     - `gn` i `gN` su posebne oznake za iduće ili prethodno podudaranje koje se mogu uparivati sa operaterima, npr. `dgn` će izbrisati iduće podudarajuće mjesto iz teksta, a jednom kada je izvršeno `.` može nadalje zamijeniti cijeli `dgn` 
-  - ==*== i ==#== su za olakšano pretraživanje unaprijed i unazad jer se za unos traženog pojma odmah uzima riječ ispod kursora
+  - `*` i ==#== su za olakšano pretraživanje unaprijed i unazad jer se za unos traženog pojma odmah uzima riječ ispod kursora
   - ==gd== i ==gf== su napredne funkcije za programiranje koje skaču na mjesta definicija i otvaraju uvezene datoteke
   - ==K== je komanda za otvaranje *man* dokumentacije za riječ ispod kursora 
 
@@ -168,13 +168,14 @@
     - ==(a-z)== su slobodni registri u koje možemo pohranjivati po volji
       - ==(A-Z)== su ponovljeni nazivi za gornje registre, ali kada ne želimo zamijeniti pohranjeni sadržaj, već želimo nadodati u njega. 
     - ==\*== i ==+== znam da postoje i tiču se nečega kao dijeljenog registra između različitih buffera, ali ne znam #provjeriti
+      - npr., ==`*`== je registar za clipboard od Windowsa kada u WSL-u (a možda i gdje drugdje)
     - popis registara i njihovih sadržaja se može pregledati komandom `:reg` ili `:reg <ime-registra>` ako se želi pregledati sadržaj specifičnog registra
 
 ### Plugini
   - *surround* plugin je za baratanje uparenim (dvodjelnim) interpunkcijskim znakovima
     - ==ds== za brisanje okolnih interpunkcija, npr. `ds"` je za brisanje navodnika
     - ==cs== za zamjenu okolnih interpunkcija, npr. `cs[{` je za zamjenu uglatih s vitičastim zagradama
-    - ==ys== za dodavanje okolne interpunkcije, npr. `ysaptli>` stavlja tag '<li>' oko odlomka (`ys<kretnja><znak>`)i
+    - ==ys== za dodavanje okolne interpunkcije, npr. `ysaptli>` stavlja tag '<li>' oko odlomka (`ys<kretnja><znak>`)
     - sve surround izmjene se mogu onda ponavljati s komandom `.`
 
 ## Za strojara (komandni mod)
