@@ -1,0 +1,32 @@
+#+title: Emacs-lisp
+
+* Uvod
+Prema emacs-lisp tutorialu dobivenom s Emacs-om (=<SPC>hi= ): *Emacs Lisp Intro* /A simple introduction to Emacs Lisp programming/
+
+Lisp programi se sastoje od izraza (eng. /expressions/) koji su popisi atoma ili samotni atomi. Popisi mogu biti prazni (=()=) Atomi mogu biti više-slovni simboli poput ~org-insert-item~ ili jednoslovni simboli poput ~+~ ili niske slovnih znakova okruženih dvostrukim navodnicima ili brojevi. Brojevi i niske evaluiraju sami sebe, a ostali simbol pri evaluaciji vraćaju svoju uparenu (povezanu) vrijednost.
+
+Komentari se u lispu započinju s ~;~.
+
+* Popisi
+Emacs-lisp se sastoji od ~listi~, a one se pak sastoje od atoma. Atomi mogu biti /simboli/, /niske/, /brojevi/, /funkcije/ ili /liste/.
+
+Sintaksa je sljedeća:
+#+begin_src emacs-lisp :tangle no
+'(stavka1 stavka2 stavka3)
+(set 'brojka '2)
+(/ (+ 3 3) brojka)
+#+end_src
+
++ popisi se ispisuju unutar zagrada
++ popisi sadrže atome razdijeljene razmakom (broj razmaka ili proreda nije bitan)
++ simboli se evaluiraju komandom ~eval-last-sexp~ (=<C-x><C-e>=) tako da se kursor postavi iza ili na kraj simbola koji se želi interpretirati
+  + ako se pred zagradu (ili bilo koji simbol) stavi apostrof ~'~, tada se simbol ne evaluira (interpretira) već samo proslijeđuje, a u suprotnom se uvijek evaluira i dalje se proslijeđuje isključivo rezultat te evaluacije
+  + prilikom evaluacije popisa očekuje se kako je prvi atom u popisu simbol upućen na nekakvu fukciju, dok ostali atomi služe kao argumenti
+  + popisi se evaluiraju krenuvši od najunutarnijeg popisa, prema van
+
+* Varijable
+Varijablama se vrijednost zadaje preddefiniranim simbolom ~set~. Kako bi se imenu varijable pripisala vrijednost varijable oba atoma moraju biti prefiksirana apostrofom ~'~ (u suprotnom bi se evaluirala)
+ + komanda ~setq~ zaobilazi taj zahtijev za prefiksom pred imenom (*q* stoji za /quoted/) i omogućava definiranje više varijabli odjednom:
+   #+begin_src emacs-lisp :tangle no
+   (setq brojke '(1 2 3) slova '(A B C))
+   #+end_src

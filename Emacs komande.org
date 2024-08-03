@@ -6,11 +6,12 @@
 - [[#korisničko-sučelje][Korisničko sučelje]]
   - [[#navigacija-dokumentima][Navigacija dokumentima]]
   - [[#baratanje-prozorima-i-panelima][Baratanje prozorima i panelima]]
+- [[#tablice][Tablice]]
 - [[#baratanje-tekstom][Baratanje tekstom]]
   - [[#osnovna-sintaksa][Osnovna sintaksa]]
   - [[#kretnje][Kretnje]]
   - [[#uređivanje-teksta][Uređivanje teksta]]
-  - [[#tablice][Tablice]]
+  - [[#tablice-1][Tablice]]
   - [[#latex][LaTeX]]
   - [[#pandoc][Pandoc]]
 - [[#org-mode][Org Mode]]
@@ -35,7 +36,7 @@ Nakon toga se pažnja može posvetiti tutorialima. Većinu sam ih pronašao prek
     + [[https://youtube.com/playlist?list=PL5--8gKSku15uYCnmxWPO17Dq6hVabAB4&si=MO6j56c0xFxh7tmF][DistroTube: Church of Emacs]]
     + [[https://youtube.com/playlist?list=PLEoMzSkcN8oPH1au7H6B7bBJ4ZO7BXjSZ&si=iM0yYS1J9INnFWs1][System Crafters: Emacs from Scratch]]
 
-*** NOTE =<M-x>describe-key= (=<C-h>k=) i =<M-x>describe-bindings=
+*** NOTE =<M-x>describe-key= (=<C-h>k=), =<M-x>describe-bindings= i =<M-x>describe-function= (=<SPC>hf=)
 
 
 * Sažetak
@@ -52,20 +53,21 @@ Nakon toga se pažnja može posvetiti tutorialima. Većinu sam ih pronašao prek
      + Korisni shortcuti:
        + =<C-g>= je za ubiti process
        + =<SPC> h r r= je za reloadati setup nekon promjena u ~init.el~-u
+       +
 
 * Korisničko sučelje
 ** Navigacija dokumentima
-  + Otvori datoteku: ~find-file~, =<C-x><C-d>= ili =<SPC> f f=, =<SPC> .= ili =<SPC> <SPC>=
+  + Otvori datoteku: ~find-file~, =<C-x><C-d>= ili =<SPC> f f=, =<SPC> .= ili =<SPC><SPC>=
     - =<SPC><SPC>= otvara /dired/ iliti Explorer krećući od ~root~ direktorija projekta
     - =<SPC>.= otvara /dired/ iliti Explorer
     - =<SPC>fr= otvara popis nedavno otvorenih datoteka
     - =<SPC>fp= otvara popis konfiguracijskih datoteka
     - =<SPC>sd= (documentation search) omogućava pretraživanje teksta dokumenata unutar projekta te njihovo otvaranje preko rezultata (s kursorom odmah na mjestu rezultata)
     - =gf= i =gd= skaču do datoteka u kojima su definirane varijable pod kursorom (u običnom tekstu to znači riječnik)
-  + Prikaži otvorenu datoteku: ~switch-buffer~, =:-x b= ili =<SPC>b b=, =<SPC>,=
-  + Prikaži otvoreni program/datoteku: ~ibuffer~, =<C-x><C-b>= ili =<SPC>b B=, =<SPC>b i=
-  + Prikaži prethodni prozor: ~previous-buffer~ ili ~next-buffer~, =<C-x><left>= ili =<C-x><right>=, =<SPC>b [= ili =<SPC>b ]=
-  + Spremi datoteku: ~save-buffer~, =<C-x><C-s>= ili =<SPC>f s=, =:w<CR>=
+  + Prikaži otvorenu datoteku: ~switch-buffer~, =:-x b= ili =<SPC>bb=, =<SPC>,=
+  + Prikaži otvoreni program/datoteku: ~ibuffer~, =<C-x><C-b>= ili =<SPC>bB=, =<SPC>bi=
+  + Prikaži prethodni prozor: ~previous-buffer~ ili ~next-buffer~, =<C-x><left>= ili =<C-x><right>=, =<SPC>b[= ili =<SPC>b]=
+  + Spremi datoteku: ~save-buffer~, =<C-x><C-s>= ili =<SPC>fs=, =:w<CR>=
   + Spremi datoteku kao: ~write-file~, =<C-x><C-w>= ili =<SPC>f S=, =:w <ime><CR>=
 *** Dired i Treemacs
 Emacs u startu nudi nekoliko file explorera
@@ -144,6 +146,13 @@ Emacs u startu nudi nekoliko file explorera
 
 + ~Cancel/quit~: =<C-g>= ili ponekad =ESC=
 + =<SPC>qr= je za ~restart~-anje Emacsa, ali meni ne radi jer pokrećem Emacs kroz =doom run=
++ =<C-x><C-c>= je za ubiti Emacs
+
+* Tablice
+| Prvo  | Drugo  | Treće |
+|-------+--------+-------|
+| tekst | tekst2 | nekaj |
+|       |        |       |
 
 * Baratanje tekstom
 ** Osnovna sintaksa
