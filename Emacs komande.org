@@ -68,7 +68,7 @@ Nakon toga se pažnja može posvetiti tutorialima. Većinu sam ih pronašao prek
   + Prikaži otvoreni program/datoteku: ~ibuffer~, =<C-x><C-b>= ili =<SPC>bB=, =<SPC>bi=
   + Prikaži prethodni prozor: ~previous-buffer~ ili ~next-buffer~, =<C-x><left>= ili =<C-x><right>=, =<SPC>b[= ili =<SPC>b]=
   + Spremi datoteku: ~save-buffer~, =<C-x><C-s>= ili =<SPC>fs=, =:w<CR>=
-  + Spremi datoteku kao: ~write-file~, =<C-x><C-w>= ili =<SPC>f S=, =:w <ime><CR>=
+  + Spremi datoteku kao: ~write-file~, =<C-x><C-w>= ili =<SPC>fS=, =:w {ime}<CR>=
 *** Dired i Treemacs
 Emacs u startu nudi nekoliko file explorera
 **** Osnovni file explorer (bezimen (?), ugrađen)
@@ -87,7 +87,7 @@ Emacs u startu nudi nekoliko file explorera
   - =x= je za brisanje stavki predselektiranih za brisanje
 + =C= je za kopiranje datoteke na dodatnu lokaciju, a =R= je za seljenje datoteke (~copy~, ~cut~, ~paste~)
 + =c= je za komprimiranje stavke
-+ s =i= se može ući u ~-INSERT-~ mode i preimenovati datoteku ili direktorij po želji, ali se treba nakon toga spremiti buffer s =<C-x><C-s>= ili =<SPC>f s= ili =:w<CR>= ili =zz=
++ s =i= se može ući u ~-INSERT-~ mode i preimenovati datoteku ili direktorij po želji, ali se treba nakon toga spremiti buffer s =<C-x><C-s>= ili =<SPC>fs= ili =:w<CR>= ili =zz=
 + =M= je za ~chmod~ selektirane stavke ili stavke ispod kursora, a =O= je za ~chown~
 + postoji i poseban ~peep-dired~ plugin za pretpregled (/preview/) multimedialnih datoteka. (ref. Church of Emacs, v.8, 12:30)
 
