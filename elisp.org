@@ -50,6 +50,9 @@ Postoje funkcije ugrađene u Emacs poput onih za baratanje bufferima i datotekam
   4. izraz koji čini funkciju interaktivnom (opcionalno)
      - funkcija se čini interaktivnom tako da se u njenoj definiciji kao četvrti argument doda popis koji započinje riječju ~interactive~ i slijedi ju popis argumenata za opcije (Emacs ima preddefiniranih preko 20 opcija):
        - ="p"= stoji za /prefiks/ i znači da funkcija treba rabiti prethodno proslijeđeni argument i tada se može u Emacsu rabiti kroz =<C-u>{argument}<M-x>{ime-funkcije}= shemu
+       - ="b"= se odnosi na ime buffera
+       - ="f"= se odnosi na naziv datoteke
+       - ="r"= se odnosi na položaj kursora u dokumentu
   5. tijelo funkcije ispisano unutar zagrada
 
 + funkcije se pozivaju tako da ih se postavi kao prvu stavku Lisp popisa
@@ -64,9 +67,9 @@ Postoje funkcije ugrađene u Emacs poput onih za baratanje bufferima i datotekam
 
 + komanda ~let~ je za definiranje funkcija sa varijablama unutar lokalnog /scope/-a. To je nužno raditi kod varijabli definiranih unutar definicija funkcija kako ne bi došlo do neželjenih /side-effect/-a ili brkanja lončića prilikom izvršavanja funkcija
   - lokalne varijable se definiraju tako da se komandi ~let~ proslijedi popis ili naziva vaijabli kojima će se automatski pripojiti vrijednost ~nil~, ili parova =({ime} {vrijednost})= pisanih kao /tuple/-e unutar zagrada
-  #+begin_src emacs-lisp
-(let ((voće "bananu") (povrće "paprike") ništo (brojka 3)) (message "Volim jesti %s sa %d %s, a najdraža rijeka mi je %s." voće brojka povrće ništo))
-  #+end_src
+    #+begin_src emacs-lisp
+  (let ((voće "bananu") (povrće "paprike") ništo (brojka 3)) (message "Volim jesti %s sa %d %s, a najdraža rijeka mi je %s." voće brojka povrće ništo))
+    #+end_src
 
 + dodatna posebna forma koje se rabi u definicijama funkcija je ~if~ forma.
   #+begin_src emacs-lisp
@@ -75,4 +78,8 @@ Postoje funkcije ugrađene u Emacs poput onih za baratanje bufferima i datotekam
     (message "Bogzna što se događa.") ; ovo je "else" dio
 )
 (if 0 (message "Ideš! Samo ~nil~ je /false/."))
-  #+end_src
+#+end_src
+
++ posljednja posebna forma koju će se ovdje predstaviti je ~save-excursion~ i služi za spremanje položaja miša kako bi se po želji moglo vratiti na taj položaj.
+
+  Je li stvar ovako brža? Ili je ovako brža? Svuda zapinje koliko vidi. Što ako se Eamcsov prozor smjesti na monitor manje rezolucije? Onda brže i bolje radi... Možda bih trebao updateati drivere na WSL-u... Ne znam kakvog to ima smisla.

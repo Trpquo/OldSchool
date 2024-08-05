@@ -6,16 +6,16 @@
 - [[#korisničko-sučelje][Korisničko sučelje]]
   - [[#navigacija-dokumentima][Navigacija dokumentima]]
   - [[#baratanje-prozorima-i-panelima][Baratanje prozorima i panelima]]
-- [[#tablice][Tablice]]
 - [[#baratanje-tekstom][Baratanje tekstom]]
   - [[#osnovna-sintaksa][Osnovna sintaksa]]
   - [[#kretnje][Kretnje]]
   - [[#uređivanje-teksta][Uređivanje teksta]]
-  - [[#tablice-1][Tablice]]
+  - [[#tablice][Tablice]]
   - [[#latex][LaTeX]]
   - [[#pandoc][Pandoc]]
 - [[#org-mode][Org Mode]]
   - [[#poveznice][Poveznice]]
+  - [[#suradnja-s-vimom][Suradnja s Vimom]]
   - [[#org-babel][Org Babel]]
 - [[#izgled][Izgled]]
 - [[#terminali][Terminali]]
@@ -25,7 +25,6 @@
   - [[#commit-c][Commit (=c=)]]
   - [[#branch-b][Branch (=b=)]]
   - [[#push-p][Push (=P=)]]
-- [[#suradnja-s-vimom][Suradnja s Vimom]]
 
 * Reference
 Najprvo treba pregledati github [[https://github.com/doomemacs/doomemacs/blob/master/docs/index.org][dokumentaciju]] i [[https://discourse.doomemacs.org/c/guides/5][službenu dokumentaciju]] za Doom Emcas.
@@ -52,7 +51,7 @@ Nakon toga se pažnja može posvetiti tutorialima. Većinu sam ih pronašao prek
      + ~session~ - koliko znam ne može se ručno spremiti, ali se može povratiti prethodni s =<SPC>ql=
      + Korisni shortcuti:
        + =<C-g>= je za ubiti process
-       + =<SPC> h r r= je za reloadati setup nekon promjena u ~init.el~-u
+       + =<SPC>hrr= je za reloadati setup nekon promjena u ~init.el~-u
        +
 
 * Korisničko sučelje
@@ -62,12 +61,12 @@ Nakon toga se pažnja može posvetiti tutorialima. Većinu sam ih pronašao prek
     - =<SPC>.= otvara /dired/ iliti Explorer
     - =<SPC>fr= otvara popis nedavno otvorenih datoteka
     - =<SPC>fp= otvara popis konfiguracijskih datoteka
-    - =<SPC>sd= (documentation search) omogućava pretraživanje teksta dokumenata unutar projekta te njihovo otvaranje preko rezultata (s kursorom odmah na mjestu rezultata)
+    - =<SPC>sd= (search documentation) omogućava pretraživanje teksta dokumenata unutar projekta te njihovo otvaranje preko rezultata (s kursorom odmah na mjestu rezultata)
     - =gf= i =gd= skaču do datoteka u kojima su definirane varijable pod kursorom (u običnom tekstu to znači riječnik)
   + Prikaži otvorenu datoteku: ~switch-buffer~, =:-x b= ili =<SPC>bb=, =<SPC>,=
   + Prikaži otvoreni program/datoteku: ~ibuffer~, =<C-x><C-b>= ili =<SPC>bB=, =<SPC>bi=
   + Prikaži prethodni prozor: ~previous-buffer~ ili ~next-buffer~, =<C-x><left>= ili =<C-x><right>=, =<SPC>b[= ili =<SPC>b]=
-  + Spremi datoteku: ~save-buffer~, =<C-x><C-s>= ili =<SPC>fs=, =:w<CR>=
+  + Spremi datoteku: ~save-buffer~, =<C-x><C-s>= ili =<SPC>fs=, =:w<CR>= (u evil modu)
   + Spremi datoteku kao: ~write-file~, =<C-x><C-w>= ili =<SPC>fS=, =:w {ime}<CR>=
 *** Dired i Treemacs
 Emacs u startu nudi nekoliko file explorera
@@ -147,12 +146,6 @@ Emacs u startu nudi nekoliko file explorera
 + ~Cancel/quit~: =<C-g>= ili ponekad =ESC=
 + =<SPC>qr= je za ~restart~-anje Emacsa, ali meni ne radi jer pokrećem Emacs kroz =doom run=
 + =<C-x><C-c>= je za ubiti Emacs
-
-* Tablice
-| Prvo  | Drugo  | Treće |
-|-------+--------+-------|
-| tekst | tekst2 | nekaj |
-|       |        |       |
 
 * Baratanje tekstom
 ** Osnovna sintaksa
@@ -257,6 +250,12 @@ Emacs obrnuto od Vim-a i rezanje i kopiranje naziva ~kill~ (mjesto /yank/-anjem)
   - =<M-S-[hjkl]>= ili =<M-S-strjelica>= je za dodavanje/brisanje stupaca ili redaka tablice
 + i tablicama i slikama treba prethoditi =#+CAPTION= komanda.
 
+#+caption "Probna tablica"
+| Prvo   | Drugo  | Treće       |
+|--------+--------+-------------|
+| tekst1 | tekst2 | nekaj       |
+| tekst3 | tekst4 | nekaj drugo |
+
 ** LaTeX
 + Čini mi se da Doom Emacs po tvorničkim postavkama nema bogzna kakve alate za oblikovanje LaTeX-a
 + Ne nudi automatski preview kao MathJax u Obsidianu ili Logsequ, ali bi trebao imati komandu =<C-c><C-x><C-l>= za ~org-latex-preview~, gdje bi se trebao stvoriti /overlay/ prikaza jednadžbe, ali mi za sada ni to ne radi.
@@ -307,6 +306,9 @@ Ako se poveznice žele unijeti preko prečca, rabi se sintaksa =<SPC>ml{}= ili =
 + svaki se puta poveznica ispod kursora može prepraviti stiskanjem =<SPC>mll=
 + =<SPC>mld= briše sintaku poveznice oko taksta i ostavlja goli tekst
 
+** Suradnja s Vimom
+Plugini [[https://github.com/jceb/vim-orgmode/blob/master/doc/orgguide.txt][Vim Org-Mode]] ili [[https://github.com/nvim-neorg/neorg][Neorg]] omogućuju otvaranje ~.org~ datoteka u *Vim*-u i simulaciju *Emacs*-ovih mogućnosti, ali nisam siguran koliko su međusobno kompatibilni i zahtijevaju li ubacivanje nekakvih posebnih headera ili metapodataka unutar datoteke
+
 ** Org Babel
 + osnovna sintaksa za pisanje koda je =#+START_SRC= i =#+END_SRC=, a prečac =<s<TAB>=
 + =<SPC>m'= otvara novi /buffer/ za pisanje koda (=<C-c><C-c>= je za spremanje promjena i zatvaranje /buffer/-a)
@@ -346,7 +348,7 @@ x(2)
 #+end_src
 
 #+RESULTS:
-: 7
+: 3
 
 + a može se namjestitit i automatska konverzija datoteka u /.org/,(v. [[https://martibosch.github.io/jupyter-emacs-universe/][martibosch/jupiter-emacs-universe]]) npr.:
 #+begin_example emacs-lisp
@@ -370,7 +372,7 @@ Ovo se više tiče postavki nego ičega, ali eto:
 * Terminali
 Emacs ima četiri defaultna terminala:
 + ~shell~ - zvan /Inferior Shell/ kao wrapper oko sistemkog shella
-+ ~eshell~ - shell pisan u emacs-lispu, pa je ujedno i REPL za elisp (nešto kao što je xonsh za python)
++ ~eshell~ - shell pisan u emacs-lispu, pa je ujedno i REPL za elisp (nešto kao što je xonsh za python) (=<SPC>oe=)
 + ~term~ i ~ansi-term~
 + ~vterm~ - kao najbolji emulator terminala. Otvara se/zatvara s =<SPC>ot=
 
@@ -412,5 +414,3 @@ Za sada najbolji Git klijent koji sam našao (usporediv jedino s lazygit-om)
 + =P -f p= je za ~force~ (*Magit* automatski u pozadini /fetch/-a i prati koliko se lokalna grana razišla od /origin/-a)
 + =Pu= je za PR (?)
 
-* Suradnja s Vimom
-Plugini [[https://github.com/jceb/vim-orgmode/blob/master/doc/orgguide.txt][Vim Org-Mode]] ili [[https://github.com/nvim-neorg/neorg][Neorg]] omogućuju otvaranje ~.org~ datoteka u *Vim*-u i simulaciju *Emacs*-ovih mogućnosti, ali nisam siguran koliko su međusobno kompatibilni i zahtijevaju li ubacivanje nekakvih posebnih headera ili metapodataka unutar datoteke
