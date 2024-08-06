@@ -15,8 +15,8 @@
   - [[#pandoc][Pandoc]]
 - [[#org-mode][Org Mode]]
   - [[#poveznice][Poveznice]]
-  - [[#suradnja-s-vimom][Suradnja s Vimom]]
   - [[#org-babel][Org Babel]]
+  - [[#suradnja-s-vimom][Suradnja s Vimom]]
 - [[#izgled][Izgled]]
 - [[#terminali][Terminali]]
 - [[#magit][Magit]]
@@ -35,7 +35,8 @@ Nakon toga se pažnja može posvetiti tutorialima. Većinu sam ih pronašao prek
     + [[https://youtube.com/playlist?list=PL5--8gKSku15uYCnmxWPO17Dq6hVabAB4&si=MO6j56c0xFxh7tmF][DistroTube: Church of Emacs]]
     + [[https://youtube.com/playlist?list=PLEoMzSkcN8oPH1au7H6B7bBJ4ZO7BXjSZ&si=iM0yYS1J9INnFWs1][System Crafters: Emacs from Scratch]]
 
-*** NOTE =<M-x>describe-key= (=<C-h>k=), =<M-x>describe-bindings= i =<M-x>describe-function= (=<SPC>hf=)
+*** NOTE =<M-x>describe-key= (=<C-h>k=), =<M-x>describe-bindings= (=<C-h>c= ili =<C-h>k=) i =<M-x>describe-function= (=<SPC>hf=)
+*** NOTE druga opcija je =<C-h>?= ili jednostavno =<M-x>help=, ili uobičajeni =F1=.
 
 
 * Sažetak
@@ -50,9 +51,9 @@ Nakon toga se pažnja može posvetiti tutorialima. Većinu sam ih pronašao prek
      + ~bookmark~ - omogućava brzo skakanje do dokumenta. Glavni prečac je =<SPC><RET>=.
      + ~session~ - koliko znam ne može se ručno spremiti, ali se može povratiti prethodni s =<SPC>ql=
      + Korisni shortcuti:
-       + =<C-g>= je za ubiti process
+       + =<C-g>= je nativna Emacs komanda za ubiti process: ~keyboard-quit~, a =<ESC><ESC><ESC>= je univerzalna komanda za izlazak iz navodno bilo čega
        + =<SPC>hrr= je za reloadati setup nekon promjena u ~init.el~-u
-       +
+       + u Emacsu se sve =<M-{}>= komande mogu utipkati i bez /Alt/ tipke kao =<ESC>{}= komande.
 
 * Korisničko sučelje
 ** Navigacija dokumentima
@@ -107,18 +108,20 @@ Emacs u startu nudi nekoliko file explorera
      - =q= je za izlazak iz /ibuffera/
  + =<C-x><lijevo>= ili =<SPC>bp= prebacuje na prethodni buffer, a =<C-x><desno>= ili =<SPC>bn= prebacuje na idući buffer
  + =<SPC>bk= gasi aktivni buffer, =<SPC>bO= gasi sve osim aktivnog buffera
-     | Komanda                 | Emacs           | Doom                |
-     |-------------------------+-----------------+---------------------|
-     | switch-workspace-buffer |                 | =<SPC>bb=, =<SPC>,= |
-     | switch-buffer           |                 | =<SPC>bB=           |
-     | find-file               |                 | =<SPC>.=, =<SPC>ff= |
-     | projectile-find-file    |                 | =<SPC><SPC>=        |
-     | search-cwd              |                 | =<SPC>sd=           |
-     | ibuffer                 |                 | =<SPC>bi=           |
-     | kill-current-buffer     |                 | =<SPC>bk=, =zx=     |
-     | kill-other-buffers      |                 | =<SPC>bO=           |
-     | previous-buffer         | =<C-x><lijevo>= | =<SPC>bp=           |
-     | next-buffer             | =<C-x><desno>=  | =<SPC>bn=           |
+     | Komanda                 | Emacs           | Doom                  |
+     |-------------------------+-----------------+-----------------------|
+     | switch-workspace-buffer |                 | =<SPC>bb=, =<SPC>,=   |
+     | find-file               | =<C-x><C-f>=    | =<SPC>.=, =<SPC>ff=   |
+     | projectile-find-file    |                 | =<SPC><SPC>=          |
+     | save-buffer             | =<C-x><C-s>=    | =<SPC>fs=, =:w=       |
+     | save-some-buffers       | =<C-x>s=        |                       |
+     | switch-buffer           | =<C-x>b=        | =<SPC>bB=             |
+     | search-cwd              |                 | =<SPC>sd=             |
+     | ibuffer                 | =<C-x><C-b>=    | =<SPC>bi=             |
+     | kill-current-buffer     |                 | =<SPC>bk=, =zx=, =:q= |
+     | kill-other-buffers      |                 | =<SPC>bO=             |
+     | previous-buffer         | =<C-x><lijevo>= | =<SPC>bp=             |
+     | next-buffer             | =<C-x><desno>=  | =<SPC>bn=             |
 
 *** Prozori
 + =<SPC>w{}= je za panele (/panes/) - uglavnom su svi u Doom-u preslika Vimovih (=<C-w>{}= komandi)
@@ -131,15 +134,15 @@ Emacs u startu nudi nekoliko file explorera
     | scroll-other-window        | =<M-PgUp/PgDn>= |                                           |
     | info-other-window          | =<C-h>4i=       | =<SPC>h4i=                                |
     | ibuffer-other-window       |                 |                                           |
-    | window-enlargen            | ?               | =<SPC>w[o_<M-w>]=, =<SPC>wmm=             |
+    | window-enlargen            | =<C-x>1=        | =<SPC>w[o_<M-w>]=, =<SPC>wmm=             |
     | balance-windows            | =<C-x>+=        | =<SPC>w==, =<C-w>==                       |
-    | split-window-below         | =<C-x> 2=       | =<SPC>ws=, =<C-w>s=                       |
-    | split-window-right         | =<C-x> 3=       | =<SPC>wv=, =<C-w>v=                       |
-    | shrink-window-horizontaly  | =<C-x> {=       |                                           |
-    | enlarge-window-horizontaly | =<C-x> }=       |                                           |
+    | split-window-below         | =<C-x>2=        | =<SPC>ws=, =<C-w>s=                       |
+    | split-window-right         | =<C-x>3=        | =<SPC>wv=, =<C-w>v=                       |
+    | shrink-window-horizontaly  | =<C-x>{=        |                                           |
+    | enlarge-window-horizontaly | =<C-x>}=        |                                           |
     | shrink-window              | None!           |                                           |
     | move-window                |                 | =<SPC>w[HJKL]=, =<SPC>w[xrR]=             |
-    | other-window               | =<C-x>o=        | =<SPC>w[hjklw]=                           |
+    | other-window               | =<C-x>o=        | =<SPC>w[hjklw]=, =<C-w>[hjklw]=           |
     | tear-window                |                 | =<SPC>wT=                                 |
     | quit                       | =<C-c><C-x>=    | =<C-w><C-q>=, =<SPC>qf=                   |
 
@@ -173,6 +176,13 @@ Uobičajena sintaksa je slična, ali ipak drukčija od markdowna
 #+END_SRC
 
 ** Kretnje
+Emacs sam po sebi ima vlastite (i neuobičajene) komande za sve, pa tako i za kretanje po dokumentima:
++ najosnovnije kretnje su =<C-v>= za scrollati ekran dolje i =<M-v>= za scrollati gore (tome služe i =PgUp= i =PgDn= tipke), te =<C-l>= za scrollati ekran tako da se kursor nađe u sredini. Ako se =<C-l>= komanda ponavlja, tekst pod kursorom će se nastaviti scrollati na vrh ekrana, na dno, pa opet u sredinu...
++ obične kursor kretnje se mogu izvršavati i preko komandi =<C-p>= (gore, /Previous/ ili /uP/), =<C-n>= (dolje, /Next/ ili /dowN/) i =<C-b>= (lijevo, /Back/), =<C-f>= (desno, /Forward/), dok =<M-f>= i =<M-b>= to rade za cijele riječi.
++ =<C-a>= i =<C-e>= skaču kursor na početak i kraj retka, dok =<M-a>= i =<M-e>= skaču kursor na početak i kraj rečenice.
++ =<M-<>= i =<M->>= scrollaju ekran na početak i kraj dokumenta.
++ svim ovim komandama se može pružiti /prefiks argument/ koji onda utječe na to kako će se iduća komanda izvršiti. Neajčešće se tu radi o tome koliko će se puta izvršiti. To se radi na načina: =<C-u>{arg}<komanda>= ili =<M-{arg}><komanda>=.
+
 /Evil-mode/ često uspijeva dobro izbalansirati ubacivanje komandi koje se ponašaju kao u Vimu s upotrijebom Vim prečaca za već postojeće Emacs komande, ali tamo gdje se razilaze, Emacsove nekako bolje i pametnije rade (npr. bolje lociraju stvarne semantičke cjeline za skakanje po tekstu).
 Gotovo sve komande ovdje dolje se odnose na rad u ~-NORMAL-~ modu. U njega se ulazi komandom =<Esc>=, a /doom/ to još mapira na kombinaciju brzog tipkanja =jk=, a uvijek postoji mogućnost lupanja komande =<C-o>= u ~-INSERT-~ modu kako bi se uključio privremeni ~-NORMAL-~ mod za unos komande
 + =h=, =l=, =k= i =j= su za ~backward~, ~forward~, ~previous~ i ~next~
@@ -204,7 +214,13 @@ Gotovo sve komande ovdje dolje se odnose na rad u ~-NORMAL-~ modu. U njega se ul
     - =^= je za skakanje na najbliži naslov "roditeljske" sekcije
 
 ** Uređivanje teksta
-Postoje neki defaultni prečci, ali doom emacs donosi i svoje
+Emacs ima svoj način uređivanja teksta. U načelu ne koristi modove kao Vim, ali daje mogućnost unosa komande nakon =<C-u>= ili prilikom držanja =<M->= tipke koja se ne istipkava na ekranu, npr. komanda =<C-u>8*= će ispisati slijed znakova /********/.
+Pored toga nudi sve osnovne komande:
++ =<DEL>= (backspace) i =<C-d>= su za brisanje slova unazad i unaprijed. =<M-<DEL>>= i =<M-d>= su za brisanje riječi unazad i unaprijed.
++ =<C-k>= (kill) je za /cut/-anje teksta od kursora do kraja retka. =<M-k>= je za rezanje teksta do kraja rečenice.
++ =<C-/>= ili =<C-_>= ili =<C-x>u= su /undo/ u Emacsu, dok evil-mode-e, naravno, to je =u=.
+
+Postoje neki defaultni prečci, ali *doom* emacs donosi i svoje
 + Emacs ima različite ~mode~-ove za prikaz teksta, koje prebacuje automatski po ekstenziji datoteke, ali se može prebaciti i ručno preko =<M-x>mode...=
 + =<C-RET>= daje novi redak istog stupnja u kojem se nalazimo
   - to može biti nova stavka u popisu ili novi naslov istog stupnja nakon cjeline
@@ -217,7 +233,7 @@ Postoje neki defaultni prečci, ali doom emacs donosi i svoje
 + u /evil mode/-u, unutar ~-INSERT-~ moda, komanda =<C-o>= omogućuje da se nakon nje lupi bilo koja komanda kao u ~-NORMAL-~ modu, ali da se automatski po izvršenju vrati u ~-INSERT-~ mod
 
 *** Selekcije (u Emacsu se to zovu regije)
-+ Selektiraj tekst: =<C-SPC><kretnje>= postavlja marker i započinje selekciju, ili u /evil modu/ to rade =v <kretnje>=, =<S-v><kretnje>= ili =<C-v><kretnje>=
++ Selektiraj tekst: =<C-<SPC>><kretnje>= postavlja marker i započinje selekciju, ili u /evil modu/ to rade =v <kretnje>=, =<S-v><kretnje>= ili =<C-v><kretnje>=
 + Emacs navodno selektira i dok se drži =<S><kretnje>=, premda nisam sigura koliko je to pouzdano u /evil modu/
 + =<M-@>= je za stavljanje markera i selekciju riječi (od kursora do kraja riječi)
 + =vi<simbol>= ili =va<simbol>= su za selekcije cijelina unutar kojih se nalazi kursor (sa ili bez navodnika)
@@ -237,6 +253,10 @@ Emacs obrnuto od Vim-a i rezanje i kopiranje naziva ~kill~ (mjesto /yank/-anjem)
 + Copy/pastaenje: =<C-w>= (~kill~, tj. /cut/) i =<C-y>= (~yank~, tj. /paste/), tj. kombinacije s =d= ili =y= i =p= u evil modu
   - ostali ključevi za copy/paste-anje su =<C-c>=, =<M-w>= i =<C-Ins>= za kopiranje; =<C-x>=, =<C-w>= i =<S-Del>= za rezanje; te =<C-v>=, =<C-y>= i =<S-Ins>= za ljepljenje; svaki funkcionalan u nekakvom modu ili tipu /buffer/-a
 + kada god u ~-INSERT-~ modu i želi se izvršiti uobičajena komanda, može se stisnuti =<C-o>{bilo-koja-komanda-iz-normal-moda}= (npr. =<C-o>p= za pasteanje)
+
+*** Spremanje datoteka
++ Emacs nativno otvara datoteke sa komandom =<C-x><C-f>=, a sprema ih sa =<C-x><C-s>=.
++ =<C-x><C-b>= daje popis otvorenih buffera.
 
 ** Tablice
 + tablice rabe uobičajenu sintaksu (kao i markdown), ali momogućuju
@@ -306,9 +326,6 @@ Ako se poveznice žele unijeti preko prečca, rabi se sintaksa =<SPC>ml{}= ili =
 + svaki se puta poveznica ispod kursora može prepraviti stiskanjem =<SPC>mll=
 + =<SPC>mld= briše sintaku poveznice oko taksta i ostavlja goli tekst
 
-** Suradnja s Vimom
-Plugini [[https://github.com/jceb/vim-orgmode/blob/master/doc/orgguide.txt][Vim Org-Mode]] ili [[https://github.com/nvim-neorg/neorg][Neorg]] omogućuju otvaranje ~.org~ datoteka u *Vim*-u i simulaciju *Emacs*-ovih mogućnosti, ali nisam siguran koliko su međusobno kompatibilni i zahtijevaju li ubacivanje nekakvih posebnih headera ili metapodataka unutar datoteke
-
 ** Org Babel
 + osnovna sintaksa za pisanje koda je =#+START_SRC= i =#+END_SRC=, a prečac =<s<TAB>=
 + =<SPC>m'= otvara novi /buffer/ za pisanje koda (=<C-c><C-c>= je za spremanje promjena i zatvaranje /buffer/-a)
@@ -363,11 +380,14 @@ x(2)
 + svaki /snippet/ može imati svoj ~:tangle~ atribut namješten na URL datoteke u koji se kod treba ispisati, ali može se i u /frontmatter/ dokumenta postaviti =#+properties: header-args :tangle <URL>= koji će se primijeniti na sve /snippet/-a kojima nije zadano drukčije
 + osnovni prečac za pokretanje izvoza koda je =<C-c><C-v>t=
 
+** Suradnja s Vimom
+Plugini [[https://github.com/jceb/vim-orgmode/blob/master/doc/orgguide.txt][Vim Org-Mode]] ili [[https://github.com/nvim-neorg/neorg][Neorg]] omogućuju otvaranje ~.org~ datoteka u *Vim*-u i simulaciju *Emacs*-ovih mogućnosti, ali nisam siguran koliko su međusobno kompatibilni i zahtijevaju li ubacivanje nekakvih posebnih headera ili metapodataka unutar datoteke
+
 * Izgled
 Ovo se više tiče postavki nego ičega, ali eto:
 + dodavanje tema: =(add-to-list 'custom-theme-load-path "~/.config/emacs/themes ili štoveć")=
   + za učitavanje određene: (load-theme '<ime-teme> t)
-+ prozirnost: =(add-to-list 'default-frame-alist '(alpha-background . 90)) ; za prozirnost svi prozora nadalje /dodano s Emacs v.29/=
++ prozirnost: =(add-to-list 'default-frame-alist '(alpha-background . 90)) ; za prozirnost svih prozora nadalje /dodano s Emacs v.29/=
 
 * Terminali
 Emacs ima četiri defaultna terminala:

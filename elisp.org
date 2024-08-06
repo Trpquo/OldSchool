@@ -20,7 +20,7 @@ Sintaksa je sljedeća:
 * Evaluacija
 + popisi se ispisuju unutar zagrada
 + popisi sadrže atome razdijeljene razmakom (broj razmaka ili proreda nije bitan)
-+ simboli se evaluiraju komandom ~eval-last-sexp~ (=<C-x><C-e>=) tako da se kursor postavi iza ili na kraj simbola koji se želi interpretirati
++ simboli se evaluiraju komandom ~eval-last-sexp~ (=<C-c><C-e>= za .el buffer ili =<C-x><C-e>= za prethodni elisp izraz ili =<C-M-x>= za izraz u kojem se nalazi kursor) tako da se kursor postavi iza ili na kraj simbola koji se želi interpretirati
   + ako se pred zagradu (ili bilo koji simbol) stavi apostrof ~'~, tada se simbol ne evaluira (interpretira) već samo proslijeđuje, a u suprotnom se uvijek evaluira i dalje se proslijeđuje isključivo rezultat te evaluacije
   + prilikom evaluacije popisa očekuje se kako je prvi atom u popisu simbol upućen na nekakvu fukciju, dok ostali atomi služe kao argumenti
   + popisi se evaluiraju krenuvši od najunutarnijeg popisa, prema van
@@ -33,7 +33,7 @@ Varijablama se vrijednost zadaje preddefiniranim simbolom ~set~. Kako bi se imen
   #+end_src
 
 * Funkcije
-Kada god se evaluiraju izrazi, očekuje se kako će prvi element biti funkcija. Evaluacija funkcija može biti automatska - kao kod davanja komandi prilikom uređivanja teksta, npr. =self-insert-command= - ili ručno pokretana (=<C-c><C-e>=).
+Kada god se evaluiraju izrazi, očekuje se kako će prvi element biti funkcija. Evaluacija funkcija može biti automatska - kao kod davanja komandi prilikom uređivanja teksta, npr. =self-insert-command= - ili ručno pokretana (=<C-c><C-e>= za .el buffer ili =<C-x><C-e>= za prethodni izraz ili =<C-M-x>= za izraz u kojem se nalazi kursor).
 
 Postoje funkcije ugrađene u Emacs poput onih za baratanje bufferima i datotekama.
 + =(buffer-name)= i =(buffer-file-name)= dohvaćaju nazive buffera i datoteka. Buffer se obično naziva po datoteci an naziv datoteke je obično putanja do te datoteke.
