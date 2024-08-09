@@ -16,4 +16,12 @@ opt         ‹ ¡ @ £ € ∞ § ¶ • ª º ÷ ≠ œ ∑ ´ 
 shift+opt   › ⁄ ™ ‹ › ¢ ı – ° · ‚ ¿ ± Œ „ ‰ “ ‘ ” ’ É Ø ∏ { } Å Í Î Ï Ì Ó Ô  Ò æ Æ | ~ « » Ç ◊ Ñ ˆ ¯ È ˇ —
 
 
+# Trikovi za postavke tipkovnice
+
+Jedini za sada pronađen način kako remapirati CAPSLOCK tipku da funkcionira i kao <ctrl> i kao <esc> tipke, ovisno o uporabi, jest pomoću AutoHotKey programa (V2 je dostupan u Windows Store-u).
+
+Potrebno je preuzeti skriptu sa [guthub.com/sedm0784/CapsLockCtrlEscape.ahk](https://gist.github.com/sedm0784/4443120) i pokrenuti sa desnim klikom. To je to. Skriptu sam spremio i u ovaj repozitorij pod naziv /skripta_za_remapiranje_capslock-a.ahk/.
+
+Uputu sam našao preko [Remap control and esc to caps lock windows](https://www.youtube.com/watch?v=fSfuHspXy5s), ali zapravo su upute ispisane na GitHub-u [tanyuan/smart-caps-lock.md](https://gist.github.com/tanyuan/55bca522bf50363ae4573d4bdcf06e2e).
+
 

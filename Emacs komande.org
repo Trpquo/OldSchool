@@ -35,9 +35,10 @@ Nakon toga se pažnja može posvetiti tutorialima. Većinu sam ih pronašao prek
     + [[https://youtube.com/playlist?list=PL5--8gKSku15uYCnmxWPO17Dq6hVabAB4&si=MO6j56c0xFxh7tmF][DistroTube: Church of Emacs]]
     + [[https://youtube.com/playlist?list=PLEoMzSkcN8oPH1au7H6B7bBJ4ZO7BXjSZ&si=iM0yYS1J9INnFWs1][System Crafters: Emacs from Scratch]]
 
-*** NOTE =<M-x>describe-key= (=<C-h>k=), =<M-x>describe-bindings= (=<C-h>c= ili =<C-h>k=) i =<M-x>describe-function= (=<SPC>hf=)
-*** NOTE druga opcija je =<C-h>?= ili jednostavno =<M-x>help=, ili uobičajeni =F1=.
 
+    NOTE =<M-x>describe-key= (=<C-h>k=), =<M-x>describe-bindings= (=<C-h>c= ili =<C-h>k=) i =<M-x>describe-function= (=<SPC>hf=)
+    NOTE druga opcija je =<C-h>?= ili jednostavno =<M-x>help=, ili uobičajeni =F1=.
+    NOTE ako se sve to zaboravi, uvijek se može doći do otvornog ekrana s poveznicama preko =<C-h><C-a>=.
 
 * Sažetak
 ==Emacs== dijeli posao baratanja sa dokumentima i prozorima kroz nekoliko boljki:
@@ -69,6 +70,7 @@ Nakon toga se pažnja može posvetiti tutorialima. Većinu sam ih pronašao prek
   + Prikaži prethodni prozor: ~previous-buffer~ ili ~next-buffer~, =<C-x><left>= ili =<C-x><right>=, =<SPC>b[= ili =<SPC>b]=
   + Spremi datoteku: ~save-buffer~, =<C-x><C-s>= ili =<SPC>fs=, =:w<CR>= (u evil modu)
   + Spremi datoteku kao: ~write-file~, =<C-x><C-w>= ili =<SPC>fS=, =:w {ime}<CR>=
+    
 *** Dired i Treemacs
 Emacs u startu nudi nekoliko file explorera
 **** Osnovni file explorer (bezimen (?), ugrađen)
@@ -128,20 +130,21 @@ Emacs u startu nudi nekoliko file explorera
     | Komanda                    | Emacs           | Doom                                      |
     |----------------------------+-----------------+-------------------------------------------|
     | find-file-other-window     | =<C-x>4f=       | =<SPC>wf=, =<SPC>wn=, =<C-w><C-f>=        |
-    | delete-window              | =<C-x> 0=       | =<SPC>wc=, =<SPC>wd=, =<SPC>wq=, =<C-w>c= |
-    | delete-other-window        | =<C-x> 1=       | =<SPC>w<C-o>=, =<C-w><C-o>=               |
+    | delete-window              | =<C-x>0=        | =<SPC>wc=, =<SPC>wd=, =<SPC>wq=, =<C-w>c= |
+    | delete-other-window        | =<C-x>1=        | =<SPC>w<C-o>=, =<C-w><C-o>=               |
     | scroll-window              | =<C-(M-)l>=     | =zz= ili =z.=, =zt= ili =z<RET>=, =zb=    |
     | scroll-other-window        | =<M-PgUp/PgDn>= |                                           |
     | info-other-window          | =<C-h>4i=       | =<SPC>h4i=                                |
     | ibuffer-other-window       |                 |                                           |
-    | window-enlargen            | =<C-x>1=        | =<SPC>w[o_<M-w>]=, =<SPC>wmm=             |
+    | window-enlargen            |                 | =<SPC>w[o_<M-w>]=, =<SPC>wmm=             |
     | balance-windows            | =<C-x>+=        | =<SPC>w==, =<C-w>==                       |
     | split-window-below         | =<C-x>2=        | =<SPC>ws=, =<C-w>s=                       |
     | split-window-right         | =<C-x>3=        | =<SPC>wv=, =<C-w>v=                       |
     | shrink-window-horizontaly  | =<C-x>{=        |                                           |
     | enlarge-window-horizontaly | =<C-x>}=        |                                           |
-    | shrink-window              | None!           |                                           |
+    | shrink-window              |                 |                                           |
     | move-window                |                 | =<SPC>w[HJKL]=, =<SPC>w[xrR]=             |
+    | window-swap-states         |                 |                                           |
     | other-window               | =<C-x>o=        | =<SPC>w[hjklw]=, =<C-w>[hjklw]=           |
     | tear-window                |                 | =<SPC>wT=                                 |
     | quit                       | =<C-c><C-x>=    | =<C-w><C-q>=, =<SPC>qf=                   |
@@ -151,7 +154,9 @@ Emacs u startu nudi nekoliko file explorera
 + =<C-x><C-c>= je za ubiti Emacs
 
 * Baratanje tekstom
+
 ** Osnovna sintaksa
+
 Uobičajena sintaksa je slična, ali ipak drukčija od markdowna
 
 #+START_SRC conf
@@ -203,7 +208,7 @@ Gotovo sve komande ovdje dolje se odnose na rad u ~-NORMAL-~ modu. U njega se ul
     - =i= za ~ispell~ ispravak riječi
     - =y= za copy/paste-anje riječi s mjesta rezultata na trenutno mjesto kursora
     - =t= za cut/paste-anje (/teleport/) riječi s mjesta rezultata na trenutno mjesto kursora
-+ NE RADI: Doom dolazi s predinstaliranim ~evil-multiedit~ (ali ga treba uključiti u ~init.el~) koji rabi =<M-d>= za selekciju cijele riječi pod kursorom i onda s =<M-d>= selekciju iduće pojave te riječi ili pak s =R= za selekciju svih podudaranja odjednom
++ Doom dolazi s predinstaliranim ~evil-multiedit~ (ali ga treba uključiti u ~init.el~) koji rabi =<M-d>= za selekciju cijele riječi pod kursorom i onda s =<M-d>= selekciju iduće pojave te riječi ili pak s =R= za selekciju svih podudaranja odjednom
 + =<M-g><M-g><broj>= skače na određeni redak , a =<M-g><TAB><broj>= na određenu kolumnu
 + =<C-o>= i =<C-i>= skaču nazad/naprijed na nedavo uređivana mjesta (čak i između datoteka)
 + Pored uobičajenih Vim kretnji, Org Mode omogućava još nekoliko specifično korisnih:
@@ -214,9 +219,11 @@ Gotovo sve komande ovdje dolje se odnose na rad u ~-NORMAL-~ modu. U njega se ul
     - =^= je za skakanje na najbliži naslov "roditeljske" sekcije
 
 ** Uređivanje teksta
+
 Emacs ima svoj način uređivanja teksta. U načelu ne koristi modove kao Vim, ali daje mogućnost unosa komande nakon =<C-u>= ili prilikom držanja =<M->= tipke koja se ne istipkava na ekranu, npr. komanda =<C-u>8*= će ispisati slijed znakova /********/.
 Pored toga nudi sve osnovne komande:
 + =<DEL>= (backspace) i =<C-d>= su za brisanje slova unazad i unaprijed. =<M-<DEL>>= i =<M-d>= su za brisanje riječi unazad i unaprijed.
++ =<C-<SPC>>= je za početak selekcije, pa se onda selektirani tekst može kopirati s =<M-w>=, izrezati s =<C-w>= i onda kasnije pasteati s =<C-y>=.
 + =<C-k>= (kill) je za /cut/-anje teksta od kursora do kraja retka. =<M-k>= je za rezanje teksta do kraja rečenice.
 + =<C-/>= ili =<C-_>= ili =<C-x>u= su /undo/ u Emacsu, dok evil-mode-e, naravno, to je =u=.
 
@@ -239,7 +246,7 @@ Postoje neki defaultni prečci, ali *doom* emacs donosi i svoje
 + =vi<simbol>= ili =va<simbol>= su za selekcije cijelina unutar kojih se nalazi kursor (sa ili bez navodnika)
   - =w= je simbol za riječ, a =W= za bio što omeđeno razmacima
   - =b= i =(= ili =)=, =[= ili =]=, te ={= ili =}= su za tekst unutar zagrada, a ="= ili ='= za tekst unitar navodnika
-  - =p= je simbol za odlomak
+  - =p= je simbol za odlomak, =b= za blok, =s= za sekciju
   -
 + =<C-x><C-p>= je za selekciju cijelog dokumenta, kao i =ggvG=
 + =<C-g>= je , ponovno, za ~cancel~ selekcije, ali i dodavanje zadnjeg označenog mjesta u ~markring~
@@ -298,11 +305,15 @@ Sve ovo bi trebalo raditi sa Pandocom peko komande =<C-c><C-e>= za /export/ i on
 Dobra je vijest što ~pandoc~ komanda super radi iz /WSL/-a ili Emacsova /vterm/-a i čak vuče reference iz Zoterove BibTex baze i oblikuje ih po zadanom ~.csl~-u.
 
 * Org Mode
+
 Iako postoji broj aplikacija za uređivanje Org datoteka (prvenstveno Logseq), sve ove bilješke ću pisati za rad u Emacs-u jer je tamo Org Mode najbolje implementiran i to ću još ograničeno samo na /evil mode/ kakav je prisutan u Spacemacsu ili Doom Emacsu.
 
 Za sve upute o /Org Modu/ može se unutar Emacsa lupiti komanda =<M-x>org-info=
 
+Ono što poprilično iritira u startu (ako ništo nije drukčije namješteno je to što se retci ne lome po širini ekrana). To se riješava parom komandi ~toggle-truncate-line~ i ~toggle-word-wrap~ jer u suprotnom je tekst nečitljiv ili se tekst nasumično prelama unutar riječi.
+
 ** Poveznice
+
 Poveznice se mogu upisivati ručno sintaksom dvostrukih uglatih zagrada =[[URL]]= ili =[[URL][tekst]]= (=<SPC>mlt= pali/gasi mod za: prikaz punog teksta poveznica / prikaz koji skriva sintaksu):
 + po defaultu u uglatim se zagradama očekuje tekst naslova, npr. [[Izgled]] i tu postoji mogućnost automatskog nuđenja izbora (=<C-SPC>=)
 
@@ -327,6 +338,7 @@ Ako se poveznice žele unijeti preko prečca, rabi se sintaksa =<SPC>ml{}= ili =
 + =<SPC>mld= briše sintaku poveznice oko taksta i ostavlja goli tekst
 
 ** Org Babel
+
 + osnovna sintaksa za pisanje koda je =#+START_SRC= i =#+END_SRC=, a prečac =<s<TAB>=
 + =<SPC>m'= otvara novi /buffer/ za pisanje koda (=<C-c><C-c>= je za spremanje promjena i zatvaranje /buffer/-a)
 + jednom kada je kod ispisan, =<RET>= u normalnom modu, ili =<C-c><C-c>= općenito, izvršava blok koda
@@ -384,12 +396,14 @@ x(2)
 Plugini [[https://github.com/jceb/vim-orgmode/blob/master/doc/orgguide.txt][Vim Org-Mode]] ili [[https://github.com/nvim-neorg/neorg][Neorg]] omogućuju otvaranje ~.org~ datoteka u *Vim*-u i simulaciju *Emacs*-ovih mogućnosti, ali nisam siguran koliko su međusobno kompatibilni i zahtijevaju li ubacivanje nekakvih posebnih headera ili metapodataka unutar datoteke
 
 * Izgled
+
 Ovo se više tiče postavki nego ičega, ali eto:
 + dodavanje tema: =(add-to-list 'custom-theme-load-path "~/.config/emacs/themes ili štoveć")=
   + za učitavanje određene: (load-theme '<ime-teme> t)
 + prozirnost: =(add-to-list 'default-frame-alist '(alpha-background . 90)) ; za prozirnost svih prozora nadalje /dodano s Emacs v.29/=
 
 * Terminali
+
 Emacs ima četiri defaultna terminala:
 + ~shell~ - zvan /Inferior Shell/ kao wrapper oko sistemkog shella
 + ~eshell~ - shell pisan u emacs-lispu, pa je ujedno i REPL za elisp (nešto kao što je xonsh za python) (=<SPC>oe=)
@@ -399,6 +413,7 @@ Emacs ima četiri defaultna terminala:
 Postavke za terminale se unose u ~config.el~: =(setq shell-file-name  "/bin/fish")= ili =(setq eshell-aliases-file "~/.config/emacs/.eshellrc")=
 
 * Magit
+
 Za sada najbolji Git klijent koji sam našao (usporediv jedino s lazygit-om)
 + Osnovna komanda za paljenje je /Magit User Manual/-a =<C-x>g=, =gz= (=<M-x>magit-refresh=) i =gR= (=<M-x>magit-referesh-all=) osvježuje pogled, a =q= ga zatvara
 + =?= ili =h= (kada u Magitu) otvara popis dostupnih komandi a =hh= otvara /Help Pages/
