@@ -55,7 +55,34 @@ Nakon toga se pažnja može posvetiti tutorialima. Većinu sam ih pronašao prek
        + =<C-g>= je nativna Emacs komanda za ubiti process: ~keyboard-quit~, a =<ESC><ESC><ESC>= je univerzalna komanda za izlazak iz navodno bilo čega
        + =<SPC>hrr= je za reloadati setup nekon promjena u ~init.el~-u
        + u Emacsu se sve =<M-{}>= komande mogu utipkati i bez /Alt/ tipke kao =<ESC>{}= komande.
+* Postavke
+==Emacs== koristi ~init.el~ datoteku pri podizanju sustava kako bi učitao pakete. Tvornički dolazi sa predinstaliranim ~package.el~ /package managerom/ i paketom ~use-package~ za postavke baratanja paketima unutar ~init.el~ datoteke.
 
+Jedna od aternativa defaultnom PM-u je ~straight.el~. U njegovoj [[https://github.com/radian-software/straight.el][dokumentaciji]] iznosi i usporedbe *straight*-a sa ostalim Emascovim PM-ovima, poput Quelpa, Cask, el-get, Borg i sl. Svi nude nekakve prednosti i mane, ovisno o svrsi uporabe.
+
+Preko [[https://www.youtube.com/watch?v=RaqtzemHFDU&t=1496s][Protovog videa]] sam našao i upute baratanja sa =use-package= komandom, za što ~straight~ nudi svoju istoimenu alternativnu funkciju (objašnjeno u njihovoj dokumentaciji i u mom ~init.org~ dokumentu.
+
+#+begin_src elisp
+
+  (use-package paket
+    :ensure t ; redak koji osigurava da je paket instaliran (ako se zada ~nil~, onda to preskače). Mjesto ~:ensure t~, *straight* rabi komandu ~:straight t~.
+    :mode "*.pkt" ; daje uputu o tome kada se ~paket-mode~ treba paliti
+    :defer 1 ; broj sekundi koliko da se odgodi učitavanje paketa od trenutka kada mu je zadano da se učita. Ako se zada vrijednost ~t~, tada znači da se odgađa dokle god se ručno ne pokrene.  (obrnuto od toga je :demand)
+    :load-path "~/.config/emacs-crafters/local/"; alternativna putanja do paketa kada je spremljen lokalno i nije upravljan od strane nekog PM-a
+    :init ; komande koje se pokreću zajedno sa Emacsom (izbjegavati)
+    (setq-default banana "voće")
+    :bind ; parovi komandnih prečaca i komandi koje se izvršavaju dok je paket aktivan
+    ( :map global-map ; ~:map~ daje dodatnu mogućnost određivanja u mapu kojeg moda se komandni prečac treba pohraniti
+      ("<f13>" . paket-do-your-thing)
+      :map org-mode-map
+      ("C-x ww" . (lambda () (toggle-truncate-lines) (toggle-word-wrap)))
+    :config ; komande koje se pokreću tek sa aktivacijom paketa
+    (setq banananas nil)
+    :hook ; modovi koji se automatski pale pri pokretanju nekih drugih modova koji se automatski pamte (može biti i lista njih)
+    (dired-mode . paket-dired-mode)
+    )
+
+#+end_src
 * Korisničko sučelje
 ** Navigacija dokumentima
   + Otvori datoteku: ~find-file~, =<C-x><C-d>= ili =<SPC> f f=, =<SPC> .= ili =<SPC><SPC>=
