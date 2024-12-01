@@ -333,7 +333,7 @@ Dobra je vijest što ~pandoc~ komanda super radi iz /WSL/-a ili Emacsova /vterm/
 
 * Org Mode
 
-Iako postoji broj aplikacija za uređivanje Org datoteka (prvenstveno Logseq), sve ove bilješke ću pisati za rad u Emacs-u jer je tamo Org Mode najbolje implementiran i to ću još ograničeno samo na /evil mode/ kakav je prisutan u Spacemacsu ili Doom Emacsu.
+Iako postoji broj aplikacija za uređivanje Org datoteka (prvenstveno Logseq), sve ove bilješke ću pisati za rad u Emacs-u jer je od tamo Org Mode originalno potekao, ali to ću ovdje izvesti ograničeno samo na /evil mode/ kakav je prisutan u Spacemacsu ili Doom Emacsu.
 
 Za sve upute o /Org Modu/ može se unutar Emacsa lupiti komanda =<M-x>org-info=
 
