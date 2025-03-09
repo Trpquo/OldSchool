@@ -34,7 +34,7 @@ Nakon toga se pažnja može posvetiti tutorialima. Većinu sam ih pronašao prek
     + [[https://youtube.com/playlist?list=PLhXZp00uXBk4np17N39WvB80zgxlZfVwj&si=vV0165Engbh_gaXe][Zaiste Programming: DoomCasts]]
     + [[https://youtube.com/playlist?list=PL5--8gKSku15uYCnmxWPO17Dq6hVabAB4&si=MO6j56c0xFxh7tmF][DistroTube: Church of Emacs]]
     + [[https://youtube.com/playlist?list=PLEoMzSkcN8oPH1au7H6B7bBJ4ZO7BXjSZ&si=iM0yYS1J9INnFWs1][System Crafters: Emacs from Scratch]]
-
+    + [[https://www.youtube.com/@protesilaos][Protesilaos Stavrou kanal]]
 
     NOTE =<M-x>describe-key= (=<C-h>k=), =<M-x>describe-bindings= (=<C-h>c= ili =<C-h>k=) i =<M-x>describe-function= (=<SPC>hf=)
     NOTE druga opcija je =<C-h>?= ili jednostavno =<M-x>help=, ili uobičajeni =F1=.
@@ -97,7 +97,10 @@ Preko [[https://www.youtube.com/watch?v=RaqtzemHFDU&t=1496s][Protovog videa]] sa
   + Prikaži prethodni prozor: ~previous-buffer~ ili ~next-buffer~, =<C-x><left>= ili =<C-x><right>=, =<SPC>b[= ili =<SPC>b]=
   + Spremi datoteku: ~save-buffer~, =<C-x><C-s>= ili =<SPC>fs=, =:w<CR>= (u evil modu)
   + Spremi datoteku kao: ~write-file~, =<C-x><C-w>= ili =<SPC>fS=, =:w {ime}<CR>=
-    
+
+ + =<C-x><C-f>= je za otvaranje datoteka. =<tab>= se koristi za autocomplete. =<enter>= se koristi za potvrdu. Ako se u ~url~ upiše datoteka koja ne postoji, tada će Emacs stvoriti tu datoteku na unesenoj lokaciji. Ako se =<enter>= stisne na imenu direktorija, tada će Emacs otvoriti ~dired~ program (kao explorer u Windowsima).
+      
+ + 
 *** Dired i Treemacs
 Emacs u startu nudi nekoliko file explorera
 **** Osnovni file explorer (bezimen (?), ugrađen)
@@ -123,7 +126,6 @@ Emacs u startu nudi nekoliko file explorera
 **** Treemacs
 + /sidebar filetree explorer/
 + osnovni prečac za otvaranje zatvaranje je =<SPC>op=
-
 ** Baratanje prozorima i panelima
 *** Bufferi
  + /buffer/-i su bilo kakvi programi koji se mogu pokrenuti unutar Emacs-a (urednici datoteka, preglednici i pretraživači datoteka, terminali, igrice, ...)
@@ -137,44 +139,44 @@ Emacs u startu nudi nekoliko file explorera
      - =q= je za izlazak iz /ibuffera/
  + =<C-x><lijevo>= ili =<SPC>bp= prebacuje na prethodni buffer, a =<C-x><desno>= ili =<SPC>bn= prebacuje na idući buffer
  + =<SPC>bk= gasi aktivni buffer, =<SPC>bO= gasi sve osim aktivnog buffera
-     | Komanda                 | Emacs           | Doom                  |
-     |-------------------------+-----------------+-----------------------|
-     | switch-workspace-buffer |                 | =<SPC>bb=, =<SPC>,=   |
-     | find-file               | =<C-x><C-f>=    | =<SPC>.=, =<SPC>ff=   |
-     | projectile-find-file    |                 | =<SPC><SPC>=          |
-     | save-buffer             | =<C-x><C-s>=    | =<SPC>fs=, =:w=       |
-     | save-some-buffers       | =<C-x>s=        |                       |
-     | switch-buffer           | =<C-x>b=        | =<SPC>bB=             |
-     | search-cwd              |                 | =<SPC>sd=             |
-     | ibuffer                 | =<C-x><C-b>=    | =<SPC>bi=             |
-     | kill-current-buffer     |                 | =<SPC>bk=, =zx=, =:q= |
-     | kill-other-buffers      |                 | =<SPC>bO=             |
-     | previous-buffer         | =<C-x><lijevo>= | =<SPC>bp=             |
-     | next-buffer             | =<C-x><desno>=  | =<SPC>bn=             |
+     | Komanda                 | Emacs         | Doom            |
+     |-------------------------+---------------+-----------------|
+     | switch-workspace-buffer |               | =<SPC>bb=, =<SPC>,= |
+     | find-file               | =<C-x><C-f>=    | =<SPC>.=, =<SPC>ff= |
+     | projectile-find-file    |               | =<SPC><SPC>=      |
+     | save-buffer             | =<C-x><C-s>=    | =<SPC>fs=, =:w=     |
+     | save-some-buffers       | =<C-x>s=        |                 |
+     | switch-buffer           | =<C-x>b=        | =<SPC>bB=         |
+     | search-cwd              |               | =<SPC>sd=         |
+     | ibuffer                 | =<C-x><C-b>=    | =<SPC>bi=         |
+     | kill-current-buffer     |               | =<SPC>bk=, =zx=, =:q= |
+     | kill-other-buffers      |               | =<SPC>bO=         |
+     | previous-buffer         | =<C-x><lijevo>= | =<SPC>bp=         |
+     | next-buffer             | =<C-x><desno>=  | =<SPC>bn=         |
 
 *** Prozori
 + =<SPC>w{}= je za panele (/panes/) - uglavnom su svi u Doom-u preslika Vimovih (=<C-w>{}= komandi)
-    | Komanda                    | Emacs           | Doom                                      |
-    |----------------------------+-----------------+-------------------------------------------|
-    | find-file-other-window     | =<C-x>4f=       | =<SPC>wf=, =<SPC>wn=, =<C-w><C-f>=        |
+    | Komanda                    | Emacs         | Doom                              |
+    | find-file-other-window     | =<C-x>4f=       | =<SPC>wf=, =<SPC>wn=, =<C-w><C-f>=      |
+    |----------------------------+---------------+-----------------------------------|
     | delete-window              | =<C-x>0=        | =<SPC>wc=, =<SPC>wd=, =<SPC>wq=, =<C-w>c= |
-    | delete-other-window        | =<C-x>1=        | =<SPC>w<C-o>=, =<C-w><C-o>=               |
-    | scroll-window              | =<C-(M-)l>=     | =zz= ili =z.=, =zt= ili =z<RET>=, =zb=    |
-    | scroll-other-window        | =<M-PgUp/PgDn>= |                                           |
-    | info-other-window          | =<C-h>4i=       | =<SPC>h4i=                                |
-    | ibuffer-other-window       |                 |                                           |
-    | window-enlargen            |                 | =<SPC>w[o_<M-w>]=, =<SPC>wmm=             |
-    | balance-windows            | =<C-x>+=        | =<SPC>w==, =<C-w>==                       |
-    | split-window-below         | =<C-x>2=        | =<SPC>ws=, =<C-w>s=                       |
-    | split-window-right         | =<C-x>3=        | =<SPC>wv=, =<C-w>v=                       |
-    | shrink-window-horizontaly  | =<C-x>{=        |                                           |
-    | enlarge-window-horizontaly | =<C-x>}=        |                                           |
-    | shrink-window              |                 |                                           |
-    | move-window                |                 | =<SPC>w[HJKL]=, =<SPC>w[xrR]=             |
-    | window-swap-states         |                 |                                           |
-    | other-window               | =<C-x>o=        | =<SPC>w[hjklw]=, =<C-w>[hjklw]=           |
-    | tear-window                |                 | =<SPC>wT=                                 |
-    | quit                       | =<C-c><C-x>=    | =<C-w><C-q>=, =<SPC>qf=                   |
+    | delete-other-window        | =<C-x>1=        | =<SPC>w<C-o>=, =<C-w><C-o>=           |
+    | scroll-window              | =<C-(M-)l>=     | =zz= ili =z.=, =zt= ili =z<RET>=, =zb=      |
+    | scroll-other-window        | =<M-PgUp/PgDn>= |                                   |
+    | info-other-window          | =<C-h>4i=       | =<SPC>h4i=                          |
+    | ibuffer-other-window       |               |                                   |
+    | window-enlargen            |               | =<SPC>w[o_<M-w>]=, =<SPC>wmm=         |
+    | balance-windows            | =<C-x>+=        | =<SPC>w==, =<C-w>==                   |
+    | split-window-below         | =<C-x>2=        | =<SPC>ws=, =<C-w>s=                   |
+    | split-window-right         | =<C-x>3=        | =<SPC>wv=, =<C-w>v=                   |
+    | shrink-window-horizontaly  | =<C-x>{=        |                                   |
+    | enlarge-window-horizontaly | =<C-x>}=        |                                   |
+    | shrink-window              |               |                                   |
+    | move-window                |               | =<SPC>w[HJKL]=, =<SPC>w[xrR]=         |
+    | window-swap-states         |               |                                   |
+    | other-window               | =<C-x>o=        | =<SPC>w[hjklw]=, =<C-w>[hjklw]=       |
+    | tear-window                |               | =<SPC>wT=                           |
+    | quit                       | =<C-c><C-x>=    | =<C-w><C-q>=, =<SPC>qf=               |
 
 + ~Cancel/quit~: =<C-g>= ili ponekad =ESC=
 + =<SPC>qr= je za ~restart~-anje Emacsa, ali meni ne radi jer pokrećem Emacs kroz =doom run=
@@ -226,7 +228,7 @@ Gotovo sve komande ovdje dolje se odnose na rad u ~-NORMAL-~ modu. U njega se ul
 + =<C-<>= i =<C->>= tj. =gg= i =G= za skakanje na početak ili kraj dokumenta
 + =<C-l>=, =zz= su za skrolnje prozora srdina-vrh-dno (još mi fali za Vim)
   - =<C-M-l>= pokušava optimizirati položaj ekrana za gledanje aktivnog bloka
-+ =<C-s>= (~I-search~) i =<C-r>= (? je u evilu za /undo/) tj. =/=, =f=, =t= i =s= pokreću pretragu za pojmom/znakom/dvoznakom, a ponavljanje =<C-s/r>= dok je search buffer otvoren tj. =n= i =N= te =;= i =,= u normalnom modu skaču do idućeg/prethodnog pretraživanog pojma/znaka/dvoznaka (u Doom-u je pretraga po znaku/dvoznaku poboljšana pluginom ~evil-snipe~)
++ =<C-s>= (~I-search~) i =<C-r>= (*?* ali ista komanda je u evilu za /undo/) tj. =/=, =f=, =t= i =s= pokreću pretragu za pojmom/znakom/dvoznakom (s time da =s= po defaultu u Evil mode-u služi za brisanje slova pod kursorom i ulazak u --INSERT-- mod), a ponavljanje =<C-s/r>= dok je search buffer otvoren tj. =n= i =N= te =;= i =,= u normalnom modu skaču do idućeg/prethodnog pretraživanog pojma/znaka/dvoznaka (u Doom-u je pretraga po znaku/dvoznaku poboljšana pluginom ~evil-snipe~)
   - /evil mode/ ima naravno i komandu =#= za pokretanje pretrage za riječ pod kursorom
 + Doom dolazi i s instaliranim ~Avi~ pluginom
   - =gs<SPC>= aktivira /Avi/, zacrnjuje tekst i daje nam mogućnost tipkanja niza slova za pretragu. Ako pretraaga daje samo jedan rezultat, automatski skaće do njega. Ako pretraga daje više rezultata /Avi/ će svakom rezultatu dodijeliti slovo stiskanjem kojeg automatski skačemo do njega
@@ -244,7 +246,7 @@ Gotovo sve komande ovdje dolje se odnose na rad u ~-NORMAL-~ modu. U njega se ul
     - =zM= je za zatvaranje svih /foldova/ odjednom
   - =<M-}>= i =<M-{>= (ili donekle =<M-n>= i =<M-p>=, npr u /Magitu/)  tj. =gj= i =gk= su za skakanje od naslova do naslova istog stupnja
     - =^= je za skakanje na najbliži naslov "roditeljske" sekcije
-
+      
 ** Uređivanje teksta
 
 Emacs ima svoj način uređivanja teksta. U načelu ne koristi modove kao Vim, ali daje mogućnost unosa komande nakon =<C-u>= ili prilikom držanja =<M->= tipke koja se ne istipkava na ekranu, npr. komanda =<C-u>8*= će ispisati slijed znakova /********/.
@@ -291,6 +293,8 @@ Emacs obrnuto od Vim-a i rezanje i kopiranje naziva ~kill~ (mjesto /yank/-anjem)
 *** Spremanje datoteka
 + Emacs nativno otvara datoteke sa komandom =<C-x><C-f>=, a sprema ih sa =<C-x><C-s>=.
 + =<C-x><C-b>= daje popis otvorenih buffera.
+
+
 
 ** Tablice
 + tablice rabe uobičajenu sintaksu (kao i markdown), ali momogućuju
