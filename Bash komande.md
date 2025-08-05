@@ -1,4 +1,4 @@
-# Biljeske za bash komande
+# Bilješke za Bash komande
 
 Uglavnom preuzeto iz [freecodecamp](https://www.freecodecamp.org/news/the-linux-commands-handbook).
 
@@ -100,15 +100,17 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
     - `-(1-9)` je za stupanj kompresije, gdje je je 1 najniži stupanj (najbrži, najmanje kompresije), a 9 najviši (najsporiji, najbolja kompresija)
     - može se, naravno, više datoteka odjednom komprimirati (`gzip file1 file2 file3 ...`) ili rekurzivno (`gzip -r dir/`)
     - oznaka `-d` je za dekompresiju
-  - ==gunzip== je obrnuto od gzip-a, jedino nema opciju `-d` :)
-  - ==tar== je za udruzivanje hrpe datoteka u jednu `tar -cf arhiva.tar file1 file2...`, ali nema kompresiju
+  - ==gunzip== je obrnuto od gzip-a, jedino se razlikuje po tome što nema nema opciju `-d` i ne može komprimirati :)
+  - ==tar== je za udruzivanje hrpe datoteka u jednu `tar -cf arhiva.tar file1 file2...`, ali defaultno bez kompresije, no također ima svoj način dodavanja kompresije
     - `-c` je za pakiranje u tar paket (*create*), 
     - `-x` je za raspakiravanje iz tar paketa (*extract*), dakle `tar -xf arhiva.tar -C dir/` je za otpakiravanje arhive u neki direktorij
-	- `-f` je za davanje imena arhivskoj datoteci koju se stvara ili iz koje se raspakirava (*write to file*)
+    - `-z` je za dodavanje kompresije (kada je upareno sa `-c` oznakom) ili pak odkomprimiravanje (kada je upareno sa `-x` oznakom), dakle `tar -czf arhiva.tar.gz dir/*` će sve datoteke iz direktorija *dir* zapakirati u komprimiranu tar arhivu *arhiva.tar.gz*, a `tar -xzf arhiva.tar.gz` će istu arhivu raspakirati u *dir/* direktorij (ako je tako originalno zapakirano gornjom komandom)
 	- `-v` se može dodati kako bi se dobio jasniji uvid u to što se događa tijekom zapakiravanja ili otpakiravanja tar ili gzip datoteka (*verbose*)
+	- `-f` je za davanje imena arhivskoj datoteci koju se stvara ili iz koje se raspakirava (*write to file*)
     - s oznakom `-tf` je kao `ls`, ali za .tar datoteke
-    - `-z` je za dodavanje kompresije, dakle `tar -czf arhiva.tar.gz dir/*` će sve datoteke iz direktorija *dir* zapakirati u komprimiranu tar arhivu
     - za dodatne informacije i funkcije za raspakiravanje različitih arhiva pogledati [xvoland/Extract](https://github.com/xvoland/Extract)
+### dd
+  - `dd` je komanda za kopiranje datoteka ili izrade backupa npr. `dd if=/dev/sda of=sda-backup.img bs=1M` će napraviti ==.img== backup kopiju cijelog prvog HDD-a.
 
 ## Za vratara
 
@@ -148,11 +150,44 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
   - ==chsh== je za mijenjanje defaultnog shella nekog korisnika: `chsh -s <url-do-shella> [<korisnik>]` (da bi se moglo primijeniti shell mora biti unesen i u popis pouzdanih shellova u /etc/shells datoteci), a oznaka `-s` je tu da da uputu kako se mijenja "login shell"
 
 ### alias
+	- `alias` je komanda za prenazivanje komandi ili grupiranje komandi s nizom oznaka u jednu novu (npr. `alias ll='ls -lahF'`). Kako bi imalo trajan učinak, `alias` naredbe se dodaju u ==.bashrc== datoteku ili na slično mjesto učitano pri boot-u
+	- `abbr` je specifična za ==fish== shell i služi kao `alias` ali koji ne skriva svoje stvarne naredbe u *history*-ju, već se niz komandi skrivenih unutar *kratice* raspišu same od sebe čim se doda razmak nakon kratice
+   
+### dpkg (+rpm) i make
+  - `dpkg` je komanda za instaliranje ==.deb== paketa na računalo (a `rpm` za ==.rpm== paketa u Red Hat distribucijama)
+	- `-i` je oznaka za instaliranje (`dpkg -i nekipaket.deb`) i ne instalira pakete o kojima dotični zavisi (*dependencies*)
+	- `-r` je za odinstaliravanje (*remove*) (na Red Hat-u je `-e` (*erase*)), npr. (`dpkg -r nekipaket.deb` - što znači da treba čuvati originalne .deb pakete)
+	- `-l` je oznaka za izlistavanje instaliranih paketa (`-qa` na Red Hat-u) - `dpkg -l`
+  - **Ručna instalacija programa**
+	- ==build-essential== je programski paket koji omogućava *ručno* instaliranje programa (preduvijet): `sudo apt install build-essential`
+	- prvi korak je preuzeti paket u ==.tar.gz== arhivi i raskpakirati ga na računalu: `tar -xzvf [package].tar.gz`
+	- drugi korak je pročitati README i/ili INSALL tekstualnu datoteku sa uputama: `less README`
+		- najčešće se tamo nađe ==configure== skripta za provjeru zadovoljenosti uvijeta za instalaciju programa i instalaciju zavisnosti: `./configure` 
+	- treći korak je instalacija programa (kada je prisutna MAKE datoteka): `sudo make install`
+	- i to je to! Četvrti opcionalan korak je deinstalacija programa: `sudo make uninstall` (što znači da se mora čuvati originalan repozitorij po kojem je program instaliran)
+	- ==!!!== koji put čak ni `uninstall` ne deinstalira sve što bi trebalo, stoga je naboji način za instalaciju upotrijebiti komandu Debianovu ugrađenu komandu `checkinstall` koja prema MAKE datoteci izgradi ==.deb== paket pa se sve može lako instalirati i deinstalirati (i po tome je potrebno sačuvati ==.deb== datoteku, a ne više cijeli repozitorij): `sudo checkinstall & sudo dpkg -i [paket].deb`
 
-
-### apk, apt, apt-get, brew, aur, dnf
-
+### apt, apt-get, nala, apk, brew, aur, dnf, yum, packman, yay
+	- `apt` i `apt-get` su defaultni *package manageri* u Debian distribucijama. (nisam siguran u čemu im je razlika) 
+		- `install` je `apt`-ova oznaka za instaliranje paketa sa svim njegovim zavisnostima (samo treba dodati ime paketa koji se želi instalirati)
+		- `remove` je oznaka za deinstaliranje paketa
+		- `show` je komanda za ispisivanje informacija o određenom paketu
+		- `search` je komanda za pretraživanje paketa u repozitoriju po nekoj kuljučnoj riječi (dobije se popis svih paketa relevantnih traženom izrazu)
+		- `update` je komanda za dohvaćanje najnovije liste paketa u ==apt== repozitoriju
+		- `upgrade` je komanda za ažuriranje nekog (ako se doda ime) ili svih paketa u sustavu (ako se ne naznače imena specifičnih paketa koje se želi ažurirati)
+		- `nala` je *wrapper* oko `apt` PM-a, pisan u Python-u, koji stvar čini jednostavnijom i čitkijom
+	- `yum` je *package manager* u Red Hat-ovim distribucijama
+	- `packman` je *package manager* u Arch Linux distribucijama
+		- `yay` je *wrapper* oko `packman` PM-a, pisan u Rust-u, koji stvar čini jednostavnijom i čitkijom
+	- `apk` je *package manager* u Alpine Linux distribucijama
+	- `brew` je *package manager* originalno napravljen za MacOs distribucije, ali za koji je izrađena i Linux distribucija
 
 ### jobs, fg, bg, ps, kill, top, atop, htop, btop
 
-
+### /dev, /sys, udev, lsusb, lspci, lsscsi
+	- `/dev` i `/sys` direktoriji su root direktoriji naminjeni za upravljanje uređajima (*devices*) na računalu, gdje je `/dev` stariji i izlistava sve uređaje (*drivere*) direktno, a `/sys` direktorij je prije namijenjen za upravljanje uređajima na jasniji i intuitivniji način - ==sysfs== je naziv tog sustava.
+		- inače je način nazivanja uređaja standardan, npr. za harddiskove, tj. tzv. SCSI uređaje, se rabe imena `/dev/sda` za prvi harddisk, `/dev/sdb` je za drugi, `/dev/sda2` za treću particiju na prvom harddisku, itd.
+	- ==udev== je sustav za automatsko upravljanje uređajima, njihovom uključivanju i isključivanju, te ažuriranju
+		- ==udevd== je deamon koji u pozadini osluškuje upite o uređajima
+		- `udevadm` je komanda za dobivanje informacija o uređajima, npr. `udevadm info --query=all --name=/dev/sda` će dohvatiti sve informacije o prvom harddisk uređaju na računalu
+		- komande `lsusb`, `lspci` i `lsscsi` ispisuju sve *USB*, *PCI* i *block* (disk) uređaje na računalu
