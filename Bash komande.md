@@ -102,8 +102,10 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
     - oznaka `-d` je za dekompresiju
   - ==gunzip== je obrnuto od gzip-a, jedino nema opciju `-d` :)
   - ==tar== je za udruzivanje hrpe datoteka u jednu `tar -cf arhiva.tar file1 file2...`, ali nema kompresiju
-    - `-c` je za stvaranje, `-f` je za *write to file*
-    - `-x` je za *extract*, dakle `tar -xf arhiva.tar -C dir/` je za otpakiravanje arhive u neki direktorij
+    - `-c` je za pakiranje u tar paket (*create*), 
+    - `-x` je za raspakiravanje iz tar paketa (*extract*), dakle `tar -xf arhiva.tar -C dir/` je za otpakiravanje arhive u neki direktorij
+	- `-f` je za davanje imena arhivskoj datoteci koju se stvara ili iz koje se raspakirava (*write to file*)
+	- `-v` se može dodati kako bi se dobio jasniji uvid u to što se događa tijekom zapakiravanja ili otpakiravanja tar ili gzip datoteka (*verbose*)
     - s oznakom `-tf` je kao `ls`, ali za .tar datoteke
     - `-z` je za dodavanje kompresije, dakle `tar -czf arhiva.tar.gz dir/*` će sve datoteke iz direktorija *dir* zapakirati u komprimiranu tar arhivu
     - za dodatne informacije i funkcije za raspakiravanje različitih arhiva pogledati [xvoland/Extract](https://github.com/xvoland/Extract)
