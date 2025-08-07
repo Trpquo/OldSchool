@@ -1,6 +1,8 @@
-# Bilješke za Bash komande
+# Bilješke za Bash komande i GNU/Linux sustav opčenito
 
-Uglavnom preuzeto iz [freecodecamp](https://www.freecodecamp.org/news/the-linux-commands-handbook).
+Reference:
+	- [freecodecamp](https://www.freecodecamp.org/news/the-linux-commands-handbook).
+	- [Linux Journey](https://linuxjourney.com)
 
 Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *readline* editor za uređivanje teksta komandi (v. [Readlinr Cheat Sheet](https://readline.kablamo.org/emacs.html):
   + `<C-r>` će pretraživati po povijesti prije unesenih komandi
@@ -14,7 +16,10 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
   + `<C-l>` "čisti" ekran starih komandi i izlaza 
   + `cd ~` ili samo `cd` su za skočiti u *home* direktorij
   + `cd -` je za skočiti na zadnju lokaciju gdje smo bili
-  + ==.inputrc== je datoteka za unošenje početnih postavki *readline*-a, npr. `set expand-tilde on`
+  + ==.profile== datoteka za osnovne postavke korisnik. Prva se automatski učitava od svih korisničkih postavki
+  + ==.inputrc== je datoteka za unošenje početnih postavki za sve programe koje rabe *GNU readline library* (uključujući i *bash* i sl. *shell*-ove, ali i ==vim== i ==emacs== i sl. urednici), npr. `set expand-tilde on`
+  + ==.bashrc== datoteka za osnovne postavke *bash* *shell*-a
+	- ostali *shell* programi rabe druge datoteke za svoje temeljne postavke (npr. *fish* postavke očekuje u `~/.config/fish/config.fish`) 
 
 ## Za istraživača
 
