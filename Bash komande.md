@@ -3,25 +3,26 @@
 Uglavnom preuzeto iz [freecodecamp](https://www.freecodecamp.org/news/the-linux-commands-handbook).
 
 Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *readline* editor za uređivanje teksta komandi (v. [Readlinr Cheat Sheet](https://readline.kablamo.org/emacs.html):
+  + `<C-r>` će pretraživati po povijesti prije unesenih komandi
   + `<up>` će započeti listanje po prethodno unesenim komandama
     + `<C-M-y>` će vratiti samo prvu riječ zadnje komande ili tako nešto (možda bez parametara ili štoveć)
-    + `!` bi trebalo ibiti kratica za ponovno izvršavanje zadnje komande (ali čini se da u *fish*-u nije)
-  + `<C-r>` će pretraživati po povijesti prije unesenih komandi
+    + `!!` bi trebalo ibiti kratica za ponovno izvršavanje zadnje komande (ali čini se da u *fish*-u nije)
   + `<C-a>` i `<C-e>` su za skakanje na početak ili kraj retka
   + `<C-w>` je za brisanje cijele riječi unazad
   + `<M-t>` je za zamjenu mjesta zadnje dvije riječi prije kursora, a `<C-t>` bi trebao biti za zamjenu zadnja dva slova (no obično je prečac preuzet od *fd*-a)
   + `<C-u>` i `<C-k>` su za brisanje teksta od kursora do početka ili kraja linije
   + `<C-l>` "čisti" ekran starih komandi i izlaza 
-  + `cd ~` ili `cd` su za skočiti u *home* direktorij
+  + `cd ~` ili samo `cd` su za skočiti u *home* direktorij
   + `cd -` je za skočiti na zadnju lokaciju gdje smo bili
   + ==.inputrc== je datoteka za unošenje početnih postavki *readline*-a, npr. `set expand-tilde on`
 
 ## Za istraživača
 
-### man, whatis, apropos, tldr
+### man, help, --help, whatis, apropos, tldr
   - pomoćne naredbe za dobivanje dodatnih informacija o dostupnim komandama
   - ==man== je skraćeno za ugrađeni *manual*
-  - ==whatis== ispisuje u nekoliko riječi osnovnu namjenu komande
+  - ==help== ili oznaka `--help` obično ispisuju ulomke iz *manpages*-a na ekranu (a ponekad to čini i ispisivanje same komande bez oznaka ili parametara)
+  - ==whatis== ispisuje u nekoliko riječi o osnovnoj namjeni komande
   - ==apropos== slično kao `whatis` daje kratak opis komande, ali i popis povezanih komandi uz njihove opise
   - ==tldr== ne dolazi predinstaliran, ali na vrlo zgodan način opisuje poantu komandi i nudi popise primjera uobičajenih primjena
 
@@ -33,7 +34,7 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
   - kako se ovdje radi gotovo isključivo o tekstovnim datotekama, linux dođe s (ili se mogu instalirati) brojnim tekst editorima: `vi`, `vim`, `nvim`, `nano`, `micro`, `kate`, `emacs`...
   - ==which== javlja adresu gdje je pohranjena datoteka komandi prisutnih u radnom okružju
 
-### ls, find
+### ls, find, (fzf, rg)
   - ==ls== je za izlistavanje popisa direktorija. Osnovna sintaksa je `ls <dir/dat>`, a dodatne oznake su: 
     - `-a` za prikaz skrivenih datoteka
     - `-l` za prikaz više podataka u obliku tablice, a tu onda se mogu dodati
@@ -46,7 +47,7 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
     - postoje još oznake `-size` (za max velicinu datoteke), `-mtime` (za filter po datumu izrade, npr. +3 za "barem 3 dana staro")
     - možda najpotentnije je `-exec` za primjenu komande po svakom rezultatu, npr. `find . -type f -exec cat {} \;` 
 
-### head, tail, more/less, cat, sort, uniq, grep, wc
+### head, tail, cat, more/less, sort, uniq, grep, cut, paste
   - ==head== i ==tail== ispisuju prvih i zadnjih *n* redaka iz datoteke ili stdout-a. Oznake koje rabe su
     - `-f` da im se kaže da će ulaz dobit iz datoteke
     - `-n` da im se kaže koliko redaka da učitaju (može se upisati konkretan broj redaka ili broj s prefiksom '+' što onda znači da se uputa odnosi na konkretni redak od kojeg želimo učitati raniji ili kasniji tekst)
@@ -59,20 +60,8 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
       - `/` i `?` (valjda onda i `n` i `N`) za tražilicu unutar sadržaja
       - `v` za otvaranje sadržaja u uredniku poput vim-a
       - `F` za uklučivanje moda za praćenje izmjena uživo (npr. ako još tko uređuje sadržaj ili ako je stream-an)
-      - <C-c> ili `:q`  je za izlaz, a `:n` i `:p` za otvaranje prethodnih, idućih datoteka, kada ih je otvoreno više odjednom
+      - `<C-c>` ili `:q`  je za izlaz, a `:n` i `:p` za otvaranje prethodnih, idućih datoteka, kada ih je otvoreno više odjednom
 
-### tmux
-  - ==tmux== je aplikacija koja treba posebnu instalaciju, ali je iznimno korisna za baratanje s terminalima i prozorima kada aplikacija terminala sama po sebi to ne rješava
-    - prva komanda je uvijek `tmux new` (skraćeno za`new-session`) 
-    - kada je sesija otvorena, rabe se tipkovničke komande. Prva je <C-b> jer je zadana kao defaultni okidač (prefiks) za sve tmux-ove komande
-    - nakon toga treba zpamtiti barem <C-?> jer ona daje popis svih 68 dostupnih komandi (v. [github/tmux](https://github.com/tmux/tmux/wiki/Getting-Started))
-    - ostale zgodne komande su:
-      - <C-b>'' ili <C-b>% za podjelu ekrana na područja
-      - <C-b>(←→↓↑) za ulazak/izlazak iz određenog područja, a pored toga u istu svrhu su <C-b>o i <C-b><M-o> za ulazak u iduće/prethodno područje, ili pak <C-b>q za prikaz broja svakog područja te 
-      - <C-b>z za zumiranje u i iz aktivnog  područja
-      - <C-b>x za zatvaranje aktivnog područja
-      - <C-b><space> ili <C-b><C-o> ili <C-b><M-(1-5)> za promjene rasporeda područja, a <C-b><C-(←→↓↑)> navodno za mijenjanje dimenzija podrčja (ali mi ne radi)
-      - <C-b>c za stvaranje novog prozora (desktopa) i onda <C-b>(0-9) za biranje aktivnog prozora, a <C-b>& za zatvaranje prozora
 
 ## Za domara
 
@@ -94,7 +83,7 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
     - tu je zanimljivo što je početna postavka stvranje *hard* poveznice koja je zapravo (kao i sve datoteke) samo pointer na mjesto u memoriji, pa tako isti podatci u memoriji mogu biti referencirani od proizvoljnog broja datoteka proizvoljnih naziva. Mjesto u memoriji ostaje sačuvano dokle god ima datoteka (tvrdih poveznica) na nj.
     - oznaka `-s` znači da želimo stvoriti *simboličku* ili *soft* poveznicu koja je nova datoteka i novo mjesto u memoriji koje sadrži samo podatke o referenci na datoteku koju želimo povezati. Ako se datoteka na koju želimo povezati izbriše, poveznica više ne upućuje ninašto.
 
-### gzipr, gunzip i tar
+### gzip, gunzip i tar
   - ==gzip== je za zipanje datoteka (po defaultu izbriše original i stvori datoteku s istim imenom i ekstenzijom .gz)
     - oznaka `-c` je za mijenjanje gornjeg ponašanja i preusmjeravanje izlaza u datoteku drugog naziva `gzip -c file1 > file2.gz`, a i `-k` je za tako nešto (?)
     - `-(1-9)` je za stupanj kompresije, gdje je je 1 najniži stupanj (najbrži, najmanje kompresije), a 9 najviši (najsporiji, najbolja kompresija)
@@ -104,13 +93,21 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
   - ==tar== je za udruzivanje hrpe datoteka u jednu `tar -cf arhiva.tar file1 file2...`, ali defaultno bez kompresije, no također ima svoj način dodavanja kompresije
     - `-c` je za pakiranje u tar paket (*create*), 
     - `-x` je za raspakiravanje iz tar paketa (*extract*), dakle `tar -xf arhiva.tar -C dir/` je za otpakiravanje arhive u neki direktorij
+	- `-v` je oznaka za detaljnije ispisivanje toga što se radi (*verbose*)
     - `-z` je za dodavanje kompresije (kada je upareno sa `-c` oznakom) ili pak odkomprimiravanje (kada je upareno sa `-x` oznakom), dakle `tar -czf arhiva.tar.gz dir/*` će sve datoteke iz direktorija *dir* zapakirati u komprimiranu tar arhivu *arhiva.tar.gz*, a `tar -xzf arhiva.tar.gz` će istu arhivu raspakirati u *dir/* direktorij (ako je tako originalno zapakirano gornjom komandom)
 	- `-v` se može dodati kako bi se dobio jasniji uvid u to što se događa tijekom zapakiravanja ili otpakiravanja tar ili gzip datoteka (*verbose*)
 	- `-f` je za davanje imena arhivskoj datoteci koju se stvara ili iz koje se raspakirava (*write to file*)
     - s oznakom `-tf` je kao `ls`, ali za .tar datoteke
     - za dodatne informacije i funkcije za raspakiravanje različitih arhiva pogledati [xvoland/Extract](https://github.com/xvoland/Extract)
+
 ### dd
   - `dd` je komanda za kopiranje datoteka ili izrade backupa npr. `dd if=/dev/sda of=sda-backup.img bs=1M` će napraviti ==.img== backup kopiju cijelog prvog HDD-a.
+
+### env
+	- ==env== je popis varijabli dostupnih programima u trenutnom radnom okružju 
+		- znak `$` ispred imena varijable znači da želimo dohvatiti njezinu vrijednost, a bez tog znaka predstavlja naziv varijable (odnosno njezinu "adresu", pa tako možemo mijenjati i vrijednosti varijabli, npr. komanda `PATH=/home/user/.local/bin:$PATH` znači da varijabli path želimo unijeti na prvo mjesto pretraživanja direktorij `~/.local/bin/` i nakon toga nanizati sve do sada spremljene lokacije u varijabli PATH. Ovo je pisanje privremeno, do trenutka idućeg boot-a, pa da bi neku lokaciju trajno učinili dostupnom sustavu, potrebno je komandu dodati u `.bashrc` ili sličnu datoteku
+		- `$HOME` je adresa `~` repozitorija ulogiranog korisnika, kao što je `$USER` njegovo ime, a `$PWD` njegova trenutna lokacija
+		- `$PATH` je jedna od najvažnijih varijabli jer sadrži popis (podijeljen dvotočkama) lokacija svih izvršnih datoteka koje želimo moći pozvati kao komande. Ako se datoteka neke komande ne nalazi u $PATH varijabli, možemo ju pozvati jedino izričitim navođenjem adrese te datoteke, a ako se nalazi, računalo će to automatski provesti
 
 ## Za vratara
 
@@ -191,3 +188,26 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 		- ==udevd== je deamon koji u pozadini osluškuje upite o uređajima
 		- `udevadm` je komanda za dobivanje informacija o uređajima, npr. `udevadm info --query=all --name=/dev/sda` će dohvatiti sve informacije o prvom harddisk uređaju na računalu
 		- komande `lsusb`, `lspci` i `lsscsi` ispisuju sve *USB*, *PCI* i *block* (disk) uređaje na računalu
+
+## Za urednika
+### wc, join, split
+	- `wc` je komanda za brojanje riječi u tekstu ili datoteci. 
+	- `join` je za spajanje više datoteka u jedno (npr. `join file1.txt file2.txt`), ali mogu i znatno više sa .tsv ili .csv datotekama (npr. `join -1 2 -2 1 file1.txt file2.txt) će uzeti prvo drugu kolumnju iz *file1.txt* i njoj pridodati prvu kolumnu iz *file2.txt*.
+	- `split` razlama jedno datoteku u njih više, po defaultu po svakih 1000 redaka...
+
+### tr, expand, unexpand, 
+	- `tr` je komanda za "prevođenje", odnosno transformaciju teksta iz jednog obilka u drugi (npr. `tr a-z A-Z 'neki tekst'` će transformirati sva mala slova u velika) 
+	- `expand` i `unexpand` su za ispisivanje datoteka, ali s time da se tabovi pretvore u četiri razmaka ili obrnuto
+
+### tmux
+  - ==tmux== je aplikacija koja treba posebnu instalaciju, ali je iznimno korisna za baratanje s terminalima i prozorima kada aplikacija terminala sama po sebi to ne rješava
+    - prva komanda je uvijek `tmux new` (skraćeno za`new-session`) 
+    - kada je sesija otvorena, rabe se tipkovničke komande. Prva je `<C-b>` jer je zadana kao defaultni okidač (prefiks) za sve tmux-ove komande
+    - nakon toga treba zpamtiti barem `<C-?>` jer ona daje popis svih 68 dostupnih komandi (v. [github/tmux](https://github.com/tmux/tmux/wiki/Getting-Started))
+    - ostale zgodne komande su:
+      - `<C-b>"` ili `<C-b>%` za podjelu ekrana na područja
+      - `<C-b>(←→↓↑)` za ulazak/izlazak iz određenog područja, a pored toga u istu svrhu su `<C-b>o` i `<C-b><M-o>` za ulazak u iduće/prethodno područje, ili pak <C-b>q za prikaz broja svakog područja te 
+      - `<C-b>z` za zumiranje u i iz aktivnog  područja
+      - `<C-b>x` za zatvaranje aktivnog područja
+      - `<C-b><space>` ili `<C-b><C-o>` ili `<C-b><M-(1-5)>` za promjene rasporeda područja, a `<C-b><C-(←→↓↑)>` navodno za mijenjanje dimenzija podrčja (ali mi ne radi)
+      - `<C-b>c` za stvaranje novog prozora (desktopa) i onda `<C-b>(0-9)` za biranje aktivnog prozora, a `<C-b>&` za zatvaranje prozora
