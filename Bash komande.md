@@ -34,12 +34,13 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
   - kako se ovdje radi gotovo isključivo o tekstovnim datotekama, linux dođe s (ili se mogu instalirati) brojnim tekst editorima: `vi`, `vim`, `nvim`, `nano`, `micro`, `kate`, `emacs`...
   - ==which== javlja adresu gdje je pohranjena datoteka komandi prisutnih u radnom okružju
 
-### ls, find, (fzf, rg)
+### ls, stat, find, (fzf, rg)
   - ==ls== je za izlistavanje popisa direktorija. Osnovna sintaksa je `ls <dir/dat>`, a dodatne oznake su: 
     - `-a` za prikaz skrivenih datoteka
     - `-l` za prikaz više podataka u obliku tablice, a tu onda se mogu dodati
       - `-h` za prikaz veličine datoteka na razumljiv način
-      - `-i` za prikaz identifikacijskog broja datoteka i direktorija
+      - `-i` za prikaz identifikacijskog (*inode UUID*) broja datoteka i direktorija
+  - ==stat== je komanda koja daje još više podataka o određenoj datoteci
   - ==find== je za pronalaženje datoteka u direktorijima
     - npr. `find . -name "*.md"` ili `find . -type d -iname src`, a moze se istovremeno traziti na vise lokacija `find loc1 loc2 -type l -iname banan*.md`
     - tu gore su onda tipovi stvari za traziti `d` (direktorij), `f` (file) i `l` (link), a oznaka `-iname` je za trazenje bez obzira na velika/mala slova
@@ -61,7 +62,15 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
       - `v` za otvaranje sadržaja u uredniku poput vim-a
       - `F` za uklučivanje moda za praćenje izmjena uživo (npr. ako još tko uređuje sadržaj ili ako je stream-an)
       - `<C-c>` ili `:q`  je za izlaz, a `:n` i `:p` za otvaranje prethodnih, idućih datoteka, kada ih je otvoreno više odjednom
-
+  - `sort` omogućuje promjenu redoslijeda redaka iznosa neke komande
+	- `-r` je oznaka za obrnut redoslijed
+	- `-n` je oznaka za poredavanje po "numeričkoj vrijednosti" (?)
+  - `uniq` je komanda za filtriranje ulaznih redaka i ispisivanje samo onih koji se u iznosu još nisu pojavili
+	- `-c` je oznaka za dodavanje izbroja ponavljanja pojedine jedinstvene vrijednosti u iznosu
+	- `-u` je oznaka za iznos samo onih koji se ne ponavljaju kroz retke unosa
+	- `-d` je oznaka za iznos samo onih koji se ponavljaju kroz retke unosa
+  - `grep` je vjerojatno najmočnija komanda za baratanje s tekstom, a omogućava pretraživanje i filtriranje teksta pomoću *regex* izraza, npr. `grep [0-9] file1.txt` će ispisati samo one retke u *file1.txt*-a koji sadrže brojčanu vrijednost
+	- `-i` je oznaka za ignoriranje razlike između velikih i malih slova
 
 ## Za domara
 
@@ -81,7 +90,7 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
     - ako se želi kopirati direktorije, treba se rabiti zastavica `-r` za rekurzivno kopiranje sadržaja (`cp -r <dir> <novi-dir>`)
   - ==ln== je za stvaranje poveznica na datoteke ili direktorije
     - tu je zanimljivo što je početna postavka stvranje *hard* poveznice koja je zapravo (kao i sve datoteke) samo pointer na mjesto u memoriji, pa tako isti podatci u memoriji mogu biti referencirani od proizvoljnog broja datoteka proizvoljnih naziva. Mjesto u memoriji ostaje sačuvano dokle god ima datoteka (tvrdih poveznica) na nj.
-    - oznaka `-s` znači da želimo stvoriti *simboličku* ili *soft* poveznicu koja je nova datoteka i novo mjesto u memoriji koje sadrži samo podatke o referenci na datoteku koju želimo povezati. Ako se datoteka na koju želimo povezati izbriše, poveznica više ne upućuje ninašto.
+    - oznaka `-s` znači da želimo stvoriti *simboličku* ili *soft* poveznicu koja je nova datoteka i novo mjesto u memoriji koje sadrži samo podatke o referenci na naziv datoteke koju želimo povezati. Ako se datoteka na koju želimo povezati izbriše, poveznica više ne upućuje ninašto
 
 ### gzip, gunzip i tar
   - ==gzip== je za zipanje datoteka (po defaultu izbriše original i stvori datoteku s istim imenom i ekstenzijom .gz)
@@ -109,6 +118,48 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 		- `$HOME` je adresa `~` repozitorija ulogiranog korisnika, kao što je `$USER` njegovo ime, a `$PWD` njegova trenutna lokacija
 		- `$PATH` je jedna od najvažnijih varijabli jer sadrži popis (podijeljen dvotočkama) lokacija svih izvršnih datoteka koje želimo moći pozvati kao komande. Ako se datoteka neke komande ne nalazi u $PATH varijabli, možemo ju pozvati jedino izričitim navođenjem adrese te datoteke, a ako se nalazi, računalo će to automatski provesti
 
+### upravljanje diskovima i filesystemi, mkfs, blkid, mount, umount, df, du
+  - diskovi se dijele u particije i svaka particija se dijeli na blokove. Osnovni blokovi svake particije su:
+	  - ==boot block== pohranjuje datoteke za podozanje oprativnog sustava, zbog čega su uglavnom neiskorišteni na nesistemskim particijama
+	  - ==super block== pohranjuje podatke o *filesystem*-u, poput veličina i lokacija ostalih blokova (u pravilu, uvijek slijedi *boot block*)
+	  - ==inode block== (*index node*) je blok s tablicama i popisima svih pohranjenih datoteka i njihovih lokacija
+	  - ==data block== je blok u kojem se nalazi ono što spremamo na diskove, tu se nalazi ono što se kolokvijalno naziva *filesystem*-om
+  - postoji nekoliko vrsta *filesystem*-a:
+	  - ==ext4== je standardni oblik trenutno defaultni sustav za pohranu datoteka u Linuxu 
+	  - ==btrfs== je navodno brži i fleksibilniji sustav od *ext4* koji omogućuje snimanje *snapshot*-ova cijelog sustava i oporavljanje nakon grješki, ali trenutno još nije stabilan (a što sam iskusio na svojoj CachyOS particiji)
+	  - ==fat== i ==ntfs== su Windows-ov sustavi za pohranu podataka
+	  - ==hfs'== je MacOS-ov sustav za pohranu podataka
+	  - ==xfs==, ==zfs==, ==jfs== itd. su dodatni sustavi za pohrane podataka sa naprednim opcijama za backupiranje i oporavljanje, najčešće rabljeni u kontekstu file servera ili cloud sustava
+	  - ==swap== je posebna vrst particije kakva se u Linux sustavu rabi kao dodatna radna memorija (==!== Po pravilu bi morala biti dvostruko veća od dostupne RAM memorije instalirane na računalo!).
+  - postoji nekoliko načina organizacije i praćenja podjele diskova na particije:
+	  - ==mbr== je stari način koji koristi *primarne particije*, *extended particije* i unutar njih *logične particije*
+		- upravlja se s njime pomoću `fdisk`, `parted` ili `gparted` programima
+	  - ==gpt== je noviji sustav koji pruža više fleksibilnosti u baratanju s particijama
+		- upravlja se s njime pomoću `gdisk`, `parted` ili `gparted` programima
+	- `mkfs` je komanda za kreiranje *filesystem*-a iz prazne particije, npr. `sudo mkfs -t ext4 /dev/sdb2` će napraviti *ext4* particiju iz block uređaja (particije) učitanog kao */dev/sdb2*
+	- `fsck` je komanda za pokušaj popravka korumpirane particije ili diska (bitno je da se to slučajno ne pokuša za aktivnu sistemsku particiju jer bi se postupak mogao na pola prekinuti i sve ostati zblokirano, tj. sistemske particije jednog sustava se popravljaju podižući neki drugi sustav sa neke druge particije)
+	- `mount` je komanda za podizanje (*mount*) *filesystem*-a neke particije (npr. `sudo mount -t ext4 /dev/sdb2 /mydrive`), a `umount` za "otkačivanje" te particije (npr. `sudo umount /dev/sdb2` ili `sudo umount /mydrive`)
+	- `blkid` je komanda za ispisivanje svih podignutih diskova popratno s njihovim **UUID** ovima - praktički ispisuje sadržaj datoteke ==/etc/fstab== (koju se može i direktno uređivati ako se zna što se radi)
+	- `du` i `df` su komande za dohvaćanje informacija o iskorištenosti, odnosno slobodnosti dostupnih memorijskih blokova
+		- `-h` je oznaka za ispis memorijskih veličina u ljudima razumljivom formatu
+  - *filesystem*-om se naziva organizacija direktorija, poddirektorija i datoteka u nekom računalnom sustavu. Linux distribucije se donekle drže standardne organizacije datoteka:
+	  - `/` je oznaka/naziv temeljnog (*root*) direktorija sustava. U njemu se sve nalazi kao poddirektorij
+	  - `/bin` je direktorij koji sadrži praktički sve instalirane izvršne datoteke (programe; *binaries*)
+		- `/usr` je direktorij za pohranu programa specifično instaliranih od strane ulogiranog korisnika (?)
+		- `~/bin`, odnosno radije `~/.local/bin` su uobičajena mjesta za pohranu korisničkih komandi u obliku datoteka
+	  - `/sbin` je direktorij koji sadrži sve sistemske izvršne datoteke
+	  - `/boot` je direktorij koji datoteke za *kernel*-ov *bootloader*
+	  - `/dev` i `/sys` direktoriji služe za pohranu datoteka o spojenim uređajima na računalo (što je ovdje opisano u komandama za strojara)
+	  - `/etc` direktorij je namijenjen za pohranu sistemskih postavki 
+	  - `/home` direktorij sadrži kao svoje poddirektorije direktorije svih korisnika
+	  - `/lib` je direktorij za pohranu knjižnica komandi (*library*-ja) koje rabe programi sustava
+	  - `/media` je direktorij gdje je predviđeno pričvršćivanje (*attach*) odstranjivih medija poput USB-a
+	  - `/mnt` je direktorij gdje je predviđeno pričvršćivanje podigunutih (*mount*) *filesystem*-a
+	  - `/proc` je direktorij za pohranjivanje informacija o aktivnim procesima
+	  - `/tmp` je direktorij za pohranjivanje privremenih datoteka koje aktivni programi rabe za praćenje svog rada
+	  - `/run` je direktorij za pohranu informacija o radu sustava od zadnjeg paljenja
+	  - `/var` je direktorij za pohranu podataka koji se stalno mijenjaju ili nadopunjuju poput *log*-ova sustava ili *cache*-a
+
 ## Za vratara
 
 ### useradd, userdel, usermod, groupadd, chsh, passwd, id
@@ -123,12 +174,12 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
       - `-d` iliti `--home` da bi se odredio $HOME direktorij usera, a slično tome je `-m` iliti `--move-home` ako user već ima $HOME direktorij i želi ga se preseliti sa svim sadržajima u novi direktorij (`usermod -d <new-home> <user>`)
       - `-s` iliti `--shell` za definiranje korisnikovog login shella
       - `-u` iliti `--uid` za dodjeljivanje novog id broja
-    - usermod makes use of the following files:
-    /etc/group    -  Group account information.
-    /etc/gshadow  - Secure group account information.
-    /etc/login.defs - Shadow password suite configuration.
-    /etc/passwd   - User account information.
-    /etc/shadow   - Secure user account information.
+	  - `usermod` za svoj rad iščitava i upisuje u slijedeće datoteke:
+		  - /etc/group    -  Group account information.
+		  - /etc/gshadow  - Secure group account information.
+		  - /etc/login.defs - Shadow password suite configuration.
+		  - /etc/passwd   - User account information.
+		  - /etc/shadow   - Secure user account information.
 
 ### sudo, chmod, chown
   - ==sudo== je skraćeno za 'super user do' ili tako nešto i slično je alternativnoj komandi `doas`, a služi za privremeno dopuštanje useru ovlasti root-a
@@ -144,11 +195,11 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 ## Za strojara
 
 ### chsh
-  - ==chsh== je za mijenjanje defaultnog shella nekog korisnika: `chsh -s <url-do-shella> [<korisnik>]` (da bi se moglo primijeniti shell mora biti unesen i u popis pouzdanih shellova u /etc/shells datoteci), a oznaka `-s` je tu da da uputu kako se mijenja "login shell"
+  - ==chsh== je za mijenjanje defaultnog shella nekog korisnika: `chsh -s <url-do-shella> [<korisnik>]` (da bi se moglo primijeniti shell mora biti unesen i u popis pouzdanih shellova u ==/etc/shells== datoteci i onda unesen sa korisnika kao njegov defaultni shell u ==/etc/passwd/== datoteku), a oznaka `-s` je tu da da uputu kako se mijenja "login shell"
 
 ### alias
 	- `alias` je komanda za prenazivanje komandi ili grupiranje komandi s nizom oznaka u jednu novu (npr. `alias ll='ls -lahF'`). Kako bi imalo trajan učinak, `alias` naredbe se dodaju u ==.bashrc== datoteku ili na slično mjesto učitano pri boot-u
-	- `abbr` je specifična za ==fish== shell i služi kao `alias` ali koji ne skriva svoje stvarne naredbe u *history*-ju, već se niz komandi skrivenih unutar *kratice* raspišu same od sebe čim se doda razmak nakon kratice
+	  - `abbr` je specifična za ==fish== shell i služi kao `alias` ali koji ne skriva svoje stvarne naredbe u *history*-ju, već se niz komandi skrivenih unutar *kratice* raspišu same od sebe čim se doda razmak nakon kratice
    
 ### dpkg (+rpm) i make
   - `dpkg` je komanda za instaliranje ==.deb== paketa na računalo (a `rpm` za ==.rpm== paketa u Red Hat distribucijama)
@@ -164,7 +215,7 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 	- i to je to! Četvrti opcionalan korak je deinstalacija programa: `sudo make uninstall` (što znači da se mora čuvati originalan repozitorij po kojem je program instaliran)
 	- ==!!!== koji put čak ni `uninstall` ne deinstalira sve što bi trebalo, stoga je naboji način za instalaciju upotrijebiti komandu Debianovu ugrađenu komandu `checkinstall` koja prema MAKE datoteci izgradi ==.deb== paket pa se sve može lako instalirati i deinstalirati (i po tome je potrebno sačuvati ==.deb== datoteku, a ne više cijeli repozitorij): `sudo checkinstall & sudo dpkg -i [paket].deb`
 
-### apt, apt-get, nala, apk, brew, aur, dnf, yum, packman, yay
+### apt, apt-get, nala, apk, brew, aur, dnf, yum, pacman, yay
 	- `apt` i `apt-get` su defaultni *package manageri* u Debian distribucijama. (nisam siguran u čemu im je razlika) 
 		- `install` je `apt`-ova oznaka za instaliranje paketa sa svim njegovim zavisnostima (samo treba dodati ime paketa koji se želi instalirati)
 		- `remove` je oznaka za deinstaliranje paketa
@@ -174,12 +225,28 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 		- `upgrade` je komanda za ažuriranje nekog (ako se doda ime) ili svih paketa u sustavu (ako se ne naznače imena specifičnih paketa koje se želi ažurirati)
 		- `nala` je *wrapper* oko `apt` PM-a, pisan u Python-u, koji stvar čini jednostavnijom i čitkijom
 	- `yum` je *package manager* u Red Hat-ovim distribucijama
-	- `packman` je *package manager* u Arch Linux distribucijama
-		- `yay` je *wrapper* oko `packman` PM-a, pisan u Rust-u, koji stvar čini jednostavnijom i čitkijom
+	- `pacman` je *package manager* u Arch Linux distribucijama
+		- `yay` je *wrapper* oko `pacman` PM-a, pisan u Rust-u, koji stvar čini jednostavnijom i čitkijom
 	- `apk` je *package manager* u Alpine Linux distribucijama
 	- `brew` je *package manager* originalno napravljen za MacOs distribucije, ali za koji je izrađena i Linux distribucija
 
-### jobs, fg, bg, ps, kill, top, atop, htop, btop
+### ps, kill, top, (atop, htop, btop,) jobs, fg, bg
+	- `ps` je komanda za ispis aktivnih procesa
+		- `a` je oznaka za ispis procesa svih korisnika
+		- `u` je oznaka za ispis ...
+		- `x` je oznaka za ispis ...
+	- `kill` je komanda za gašanje procesa prema njegovom ID-u
+	- `jobs` komanda je za ispis procesa koji se vrte u pozadini
+	- `fg` je komanda za podizanje procesa po njegovom ID-u iz pozadine u prvi plan
+	
+### |, tee i <, >, >>, 1>, 2> 
+  - `|` je komanda za proslijeđivanje iznosa (*stdout*) iz jedne komande u unos iduće (*stdin*); npr. `ls -lah / | less` će omogućiti lakši pregled iznosa `ls` komande
+  - `tee` je komanda za slanje iznosa na više izlaznih lokacija; npr. `echo "Ovo je novi tekst" | tee tekst.txt backup.txt`  će ispisati tekst i na ekranu (kako predviđeno), ali ga i spremiti u datoteke *tekst.txt* i *backup.txt*
+  - `<` je komanda za isčitavanje datoteke ili nekog iznosa komande i njegovu upotrebu kao unosa u drugu komandu; npr. `cat < file1 > file2` će iščitati sadržaj *file1* datoteke i upisati ga u *file2* datoteku. Još nisam siguran koja je poanta te komande jer se isto dogodi i bez `<`, ali eto postoji
+  - `>` je komanda za promjenu lokacije iznosa iz neke komande (npr. u datoteku: `ls -lah / > root.txt`), tako se stvara nova datoteka ili se gazi sadržaj postojeće. Ako se iznos želi pridodati sadržaju postojeće datoteke, tada se može upotrijebiti komanda `>>`, no tu treba uzeti u obzir da postoje dva moguća iznosa: ==stdout== i ==stderr== ovisno o tome je li prethodna komanda uspješno izvršena
+	- `1>` je komanda za proslijeđivanje *stdout* iznosa i istovjetna je `>` komandi
+	- `2>` je komanda za proslijeđivanje *stderr* iznosa u slučaju da komanda nije proizvela *stdout*
+	- `&>` je komanda za proslijeđivanje oba izlaza, bez obzira na to koji se ostvario
 
 ### /dev, /sys, udev, lsusb, lspci, lsscsi
 	- `/dev` i `/sys` direktoriji su root direktoriji naminjeni za upravljanje uređajima (*devices*) na računalu, gdje je `/dev` stariji i izlistava sve uređaje (*drivere*) direktno, a `/sys` direktorij je prije namijenjen za upravljanje uređajima na jasniji i intuitivniji način - ==sysfs== je naziv tog sustava.
@@ -190,14 +257,21 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 		- komande `lsusb`, `lspci` i `lsscsi` ispisuju sve *USB*, *PCI* i *block* (disk) uređaje na računalu
 
 ## Za urednika
-### wc, join, split
-	- `wc` je komanda za brojanje riječi u tekstu ili datoteci. 
-	- `join` je za spajanje više datoteka u jedno (npr. `join file1.txt file2.txt`), ali mogu i znatno više sa .tsv ili .csv datotekama (npr. `join -1 2 -2 1 file1.txt file2.txt) će uzeti prvo drugu kolumnju iz *file1.txt* i njoj pridodati prvu kolumnu iz *file2.txt*.
-	- `split` razlama jedno datoteku u njih više, po defaultu po svakih 1000 redaka...
 
-### tr, expand, unexpand, 
-	- `tr` je komanda za "prevođenje", odnosno transformaciju teksta iz jednog obilka u drugi (npr. `tr a-z A-Z 'neki tekst'` će transformirati sva mala slova u velika) 
-	- `expand` i `unexpand` su za ispisivanje datoteka, ali s time da se tabovi pretvore u četiri razmaka ili obrnuto
+### wc, cut, paste, join, split, tr, expand, unexpand 
+  - `wc` je komanda za brojanje riječi u tekstu ili datoteci
+  - `cut` je komanda za ispisivanje samo dijela svakog retka neke datoteke, npr. `cut -c 5 'neki tekst'` će ispisati prvih 5 slovnih znakova svakog retka, no prava snaga komande dolazi do izražaja pri baratanju sa .tsv ili .csv datotekama
+	- `-c` je oznaka za ispis po broju znakova po retku
+	- `-f` je oznaka za ispis vrijednosti u određenoj kolumni svakog retka
+	  - `-d` je oznaka koja čini `-f` oznaku upotrebljivom, a služi za određivanje razdjelinika kolumni, npr. `cut -f 2 -d ";" file1.csv` će ispisati drugu kolumnu u .csv datoteci kojoj je zadani razdjelink znak ";"
+    - ==!== sve vrijednosti za `-c` i `-f` se mogu davati kao broj, zatvoreni ili otvoreni raspon: `2` znači drugi, `2-4` znači od drugog do četvrtog (uključno), `-3` znači "do trećeg", a `2-` znači "od drugog"
+  - `join` je za spajanje više datoteka u jedno (npr. `join file1.txt file2.txt`), ali mogu i znatno više sa .tsv ili .csv datotekama (npr. `join -1 2 -2 1 file1.txt file2.txt`) će uzeti prvo drugu kolumnju iz *file1.txt* i njoj pridodati prvu kolumnu iz *file2.txt*.
+  - `paste` komanda omogućava spajanje redaka jednog ili više unosa (koji mogu biti tekstovne niske, pritoci ili datoteke). Po defaultu čita datoteke paralelno i spaja ih redak po redak, svaku u svoju kolumnu. 
+	- `-s` je oznaka za *serial*, a znači da želimo čitati jednu po jednu datoteku i tako ih pripajati jednu za drugom (tako će se svi retci prve datoteke spojiti u prvi redak, svi retci druge u drugi, itd.)
+	- `-d` je oznaka za određivanje razdjelnika pri spajanju
+  - `split` razlama jedno datoteku u njih više, po defaultu po svakih 1000 redaka...
+  - `tr` je komanda za "prevođenje", odnosno transformaciju teksta iz jednog obilka u drugi (npr. `tr a-z A-Z 'neki tekst'` će transformirati sva mala slova u velika) 
+  - `expand` i `unexpand` su za ispisivanje datoteka, ali s time da se tabovi pretvore u četiri razmaka ili obrnuto
 
 ### tmux
   - ==tmux== je aplikacija koja treba posebnu instalaciju, ali je iznimno korisna za baratanje s terminalima i prozorima kada aplikacija terminala sama po sebi to ne rješava
