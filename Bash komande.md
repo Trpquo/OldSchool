@@ -215,9 +215,23 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 	4) ==Init== je proces koji pokreće i postavlja oprativni sustav učitavajući u radnu memoriju sve potrebne upute za rad oprativnog sustava, paljenje i gašenje servisa...
 		- postoje tri glavne vrste *Init* procesa rabljenih u Linux distribucijama: 
 			1. ==sysv== (System V init) je tradicionalni *init* sustav koji se vrti po predodređenoj skripti
+				- najlakše ga je prepoznati po tome što ima `/etc/inittab` konfiguracijsku datoteku
+				- serivsi se pregledavaju sa `service --status-all` komandom, a pale i gase sa `sudo service [servis] start`, `sudo service [servis] stop` te `sudo service [servis] restart`
 			2. ==Upstart== je nešto noviji sustav koji pokreće *job*-ove prema *event*-ima
-			3. ==systemd== je najnoviji sustav opće-prisutan u svim suvremenim Linux distribucijama i usmjereno je na postizanje određenih ciljeva (pokretanje i učitavanje svih zavisnih programa i knjižnica potrebnih za zadatak) 
-			4. za više mogućnosti vidi [Gentoo wiki](https://wiki.gentoo.org/wiki/Comparison_of_init_systems)
+				- najlakše se prepoznaje po tome što ima `/usr/share/upstart` direktorij
+				- u `/etc/init` direktoriju pohranjue opise svih *job*-ova i *event*-ova koji ovi pokreću, a na to se pak pokreću novi *job*-ovi, itd. 
+			3. ==systemd== je najnoviji sustav opće-prisutan u svim suvremenim Linux distribucijama i usmjereno je na postizanje određenih ciljeva (pokretanje i učitavanje svih zavisnih programa i knjižnica potrebnih za određeni zadatak) 
+				- najlakše se prepoznaje po tome što ima `/usr/lib/sistemd` direktorij 
+				- konfiguracijske datoteke se najčešće nalaze u `/etc/systemd/system` ili `/usr/lib/systemd/system` direktoriju i izvršavanje zadataka se ravna, ovisno o vrsti zadatka, prema `[zadatak].service`, `[zadatak].mount` ili grupirajućim `[zadatak].target` datotekama. 
+				- komande za upravljanje procesima su:
+					- `systemctl list-units` za izlistavanje svih ciljeva (zadataka)
+					- `systemctl status [zadatak].service` za ispis informacija o stanju zadatka
+					- `sudo systemclt start [zadatak].service` za pokretanje servisa
+					- `sudo systemclt stop [zadatak].service` za gašenje servisa
+					- `sudo systemclt restarti [zadatak].service` za ponovno pokretanje servisa
+					- `sudo systemclt enable [zadatak].service` za omogućavanje (?) servisa
+					- `sudo systemclt disable [zadatak].service` za onemogućavanje (?) servisa
+			4. za više mogućnosti init sustava vidi [Gentoo wiki](https://wiki.gentoo.org/wiki/Comparison_of_init_systems)
 
 ### chsh
   - ==chsh== je za mijenjanje defaultnog shella nekog korisnika: `chsh -s <url-do-shella> [<korisnik>]` (da bi se moglo primijeniti shell mora biti unesen i u popis pouzdanih shellova u ==/etc/shells== datoteci i onda unesen sa korisnika kao njegov defaultni shell u ==/etc/passwd/== datoteku), a oznaka `-s` je tu da da uputu kako se mijenja "login shell"
@@ -281,6 +295,18 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 		- ==udevd== je deamon koji u pozadini osluškuje upite o uređajima
 		- `udevadm` je komanda za dobivanje informacija o uređajima, npr. `udevadm info --query=all --name=/dev/sda` će dohvatiti sve informacije o prvom harddisk uređaju na računalu
 		- komande `lsusb`, `lspci` i `lsscsi` ispisuju sve *USB*, *PCI* i *block* (disk) uređaje na računalu
+
+### shutdown i reboot
+	- `shutdown` komanda je za gašenje računala i prima oznake:
+		- `-P`, `--poweroff` ili `-h` je za gašenje
+		- `-H` je za *halt*, odnosno zamrzavanje sustava
+		- `-r` je za *reboot* sustava
+		- `-k` je za *kancel*, odnosno ne provođenje ičega 
+		- `now` je za provođenje komande odmah  
+		- `+[broj]` je za odgađanje provođenja komande (u satima (?) )
+		- `-c` je za ukidanje prethodne `shutdown` komande u čekanju
+	- `reboot` je za restartanje sustava i prima iste oznake kao i `shutdown` i `halt` jer su više-manje ista komanda
+	- `halt` je za smrzavanje sustava i prima iste oznake kao i `shutdown` i `reboot` jer su više-manje ista komanda
 
 ## Za urednika
 
