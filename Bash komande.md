@@ -1,4 +1,4 @@
-# Bilješke za Bash komande i GNU/Linux sustav opčenito
+# Bilješke za Bash komande i GNU/Linux sustav općenito
 
 Reference:
 	- [freecodecamp](https://www.freecodecamp.org/news/the-linux-commands-handbook).
@@ -16,6 +16,7 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
   + `<C-l>` "čisti" ekran starih komandi i izlaza 
   + `cd ~` ili samo `cd` su za skočiti u *home* direktorij
   + `cd -` je za skočiti na zadnju lokaciju gdje smo bili
+  + kao i za većinu tvorničkih postavki, početne korisničke postavke za *readline* ili *shell* programe nalaze se u `/etc` direktoriju (vidi npr. `less /etc/inputrc`)
   + ==.profile== datoteka za osnovne postavke korisnik. Prva se automatski učitava od svih korisničkih postavki
   + ==.inputrc== je datoteka za unošenje početnih postavki za sve programe koje rabe *GNU readline library* (uključujući i *bash* i sl. *shell*-ove, ali i ==vim== i ==emacs== i sl. urednici), npr. `set expand-tilde on`
   + ==.bashrc== datoteka za osnovne postavke *bash* *shell*-a
@@ -153,7 +154,7 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 		- `/usr` je direktorij za pohranu programa specifično instaliranih od strane ulogiranog korisnika (?)
 		- `~/bin`, odnosno radije `~/.local/bin` su uobičajena mjesta za pohranu korisničkih komandi u obliku datoteka
 	  - `/sbin` je direktorij koji sadrži sve sistemske izvršne datoteke
-	  - `/boot` je direktorij koji datoteke za *kernel*-ov *bootloader*
+	  - `/boot` je direktorij koji pohranjuje datoteke za *kernel*-ov *bootloader*
 	  - `/dev` i `/sys` direktoriji služe za pohranu datoteka o spojenim uređajima na računalo (što je ovdje opisano u komandama za strojara)
 	  - `/etc` direktorij je namijenjen za pohranu sistemskih postavki 
 	  - `/home` direktorij sadrži kao svoje poddirektorije direktorije svih korisnika
@@ -199,6 +200,25 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 
 ## Za strojara
 
+### boot
+  - pri paljenju stroja, stvari se pokreću ovim redom:
+	1) ==BIOS== se prvi pokreće sa posebne *boot* memorije matične ploče, provjerava integritet i pali sve *hardware*-ske komponente, provjerava `POST` test (*power-on self*) i, glavni zadatak, podiže pronalazi dostupan ispunjen *boot block* na diskovima i pokreće *bootloader*. Obično je opremljen grafičkim sučeljem za unošenje osnovnih postavki poput redoslijeda učitavanja diskova, postavke sistemskog vremena računala ili MAC adrese.
+		- novija alternativa *BIOS*-u je ==UEFI== prisutna u većini suvremenih računala i sve svoje postavke sprema u `.efi` datoteku pohranjenu na posebnoj *EFI* particiji na harddisku
+	2) ==Bootloader== je program koji podiže *kernel* željenog operativnog sustava zajedno sa željenim parametrima za podizanje *kernela*. Jedan od poznatijih *bootloader*-a je ==GRUB== i njegove su postavke (ono što će se proslijediti kao parametri kernelu) dostupne pritiskom tipke `e` tijekom prikaza *GRUB*-ova popisa dostupnih operativnih sustava/njihovih postavki.
+		- uobičajene postavke za proslijediti kao parametre *kernel*-u su: `initrd` - lokacija RAM diskova za privremeno podizanje sustava i drivera prije učitavanja pravog *root* direktorija (nije potrebno za suvremene `initramfs` sustave koji sadrže privremeni *root* u *BOOT_IMAGE*-u); `BOOT_IMAGE` - lokacija kernelovog *image*-a; `root` - lokacija root direktorija; `ro` - podizanje sustava u *read only* modu; `quiet` i `splash` - za isključivanje ispisa "boot podataka" na ekranu i prikaz "splash" ekrana pri bootanju. 
+	3) ==Kernel== je program koji priprema sve za podizanje operativnog sustava: inicijalizira (rezervira) uređaje i druge resurse, te pokreće *init* proces
+		- nakon podizanja operativnog sustava, *kernel* ostaje zadužen za upravljanje procesima i memorijom, komunikacijom između uređaja, baratanje sistemskim komandama (*syscall*), postavljanjem *filesystem*-a, itd.
+		- aktivni kernel sa informacijama o verziji i sl. se mogu dobiti komandom `uname -r` 
+		- novi (dodatni) kerneli se na računalo mogu instalirati komandama poput `sudo apt install linux-generic-lts-vivid` uz instalaciju paketa ==linux-headers==, ==linux-image-generic== i sl.
+		- aktivni kernel se može ažurirati komandom `sudo apt dist-upgrade`
+		- kernel koristi modulrni sustav učitavanja drivera i sl. zvanih modulima, oni se mogu pregledavati komandom `lsmod`, privremeno učitavati sa npr. `sudo modprobe bluetooth`, isključivati s `sudo modprobe -r bluetooth` ili pak "trajno" učiniti dostupnima (ili nedostupnima s `blacklist`) dodavanjem konfiguracijskih datoteka za podizanje u `/etc/modprobe.d/[uređaj].conf` direktorij 
+	4) ==Init== je proces koji pokreće i postavlja oprativni sustav učitavajući u radnu memoriju sve potrebne upute za rad oprativnog sustava, paljenje i gašenje servisa...
+		- postoje tri glavne vrste *Init* procesa rabljenih u Linux distribucijama: 
+			1. ==sysv== (System V init) je tradicionalni *init* sustav koji se vrti po predodređenoj skripti
+			2. ==Upstart== je nešto noviji sustav koji pokreće *job*-ove prema *event*-ima
+			3. ==systemd== je najnoviji sustav opće-prisutan u svim suvremenim Linux distribucijama i usmjereno je na postizanje određenih ciljeva (pokretanje i učitavanje svih zavisnih programa i knjižnica potrebnih za zadatak) 
+			4. za više mogućnosti vidi [Gentoo wiki](https://wiki.gentoo.org/wiki/Comparison_of_init_systems)
+
 ### chsh
   - ==chsh== je za mijenjanje defaultnog shella nekog korisnika: `chsh -s <url-do-shella> [<korisnik>]` (da bi se moglo primijeniti shell mora biti unesen i u popis pouzdanih shellova u ==/etc/shells== datoteci i onda unesen sa korisnika kao njegov defaultni shell u ==/etc/passwd/== datoteku), a oznaka `-s` je tu da da uputu kako se mijenja "login shell"
 
@@ -235,7 +255,7 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 	- `apk` je *package manager* u Alpine Linux distribucijama
 	- `brew` je *package manager* originalno napravljen za MacOs distribucije, ali za koji je izrađena i Linux distribucija
 
-### ps, kill, top, (atop, htop, btop,) jobs, fg, bg
+### ps, kill, top, (atop, htop, btop,) jobs, fg, bg, strace
 	- `ps` je komanda za ispis aktivnih procesa
 		- `a` je oznaka za ispis procesa svih korisnika
 		- `u` je oznaka za ispis ...
@@ -243,6 +263,7 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 	- `kill` je komanda za gašanje procesa prema njegovom ID-u
 	- `jobs` komanda je za ispis procesa koji se vrte u pozadini
 	- `fg` je komanda za podizanje procesa po njegovom ID-u iz pozadine u prvi plan
+	- `strace` je komanda za praćenje *syscall* poziva neke "korisničke" komande (poput svih onih nabrajanih u ovom dokumentu) - korisno možda pri *debug*-iranju programa (?)
 	
 ### |, tee i <, >, >>, 1>, 2> 
   - `|` je komanda za proslijeđivanje iznosa (*stdout*) iz jedne komande u unos iduće (*stdin*); npr. `ls -lah / | less` će omogućiti lakši pregled iznosa `ls` komande
