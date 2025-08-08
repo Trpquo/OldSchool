@@ -118,13 +118,16 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 ### dd
   - `dd` je komanda za kopiranje datoteka ili izrade backupa npr. `dd if=/dev/sda of=sda-backup.img bs=1M` će napraviti ==.img== backup kopiju cijelog prvog HDD-a.
 
+### Networking: scp
+	- `scp` komanda je kao `cp` komanda ali preko ==ssh== protokola. 
+
 ### env
 	- ==env== je popis varijabli dostupnih programima u trenutnom radnom okružju 
 		- znak `$` ispred imena varijable znači da želimo dohvatiti njezinu vrijednost, a bez tog znaka predstavlja naziv varijable (odnosno njezinu "adresu", pa tako možemo mijenjati i vrijednosti varijabli, npr. komanda `PATH=/home/user/.local/bin:$PATH` znači da varijabli path želimo unijeti na prvo mjesto pretraživanja direktorij `~/.local/bin/` i nakon toga nanizati sve do sada spremljene lokacije u varijabli PATH. Ovo je pisanje privremeno, do trenutka idućeg boot-a, pa da bi neku lokaciju trajno učinili dostupnom sustavu, potrebno je komandu dodati u `.bashrc` ili sličnu datoteku
 		- `$HOME` je adresa `~` repozitorija ulogiranog korisnika, kao što je `$USER` njegovo ime, a `$PWD` njegova trenutna lokacija
 		- `$PATH` je jedna od najvažnijih varijabli jer sadrži popis (podijeljen dvotočkama) lokacija svih izvršnih datoteka koje želimo moći pozvati kao komande. Ako se datoteka neke komande ne nalazi u $PATH varijabli, možemo ju pozvati jedino izričitim navođenjem adrese te datoteke, a ako se nalazi, računalo će to automatski provesti
 
-### upravljanje diskovima i filesystemi, mkfs, blkid, mount, umount, df, du
+### Upravljanje diskovima i filesystemi: mkfs, blkid, mount, umount, df, du
   - diskovi se dijele u particije i svaka particija se dijeli na blokove. Osnovni blokovi svake particije su:
 	  - ==boot block== pohranjuje datoteke za podozanje oprativnog sustava, zbog čega su uglavnom neiskorišteni na nesistemskim particijama
 	  - ==super block== pohranjuje podatke o *filesystem*-u, poput veličina i lokacija ostalih blokova (u pravilu, uvijek slijedi *boot block*)
@@ -297,6 +300,20 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 	- ==cron== je moćan alat u pridodan svim Linux distribucijama za tempiranje pokretanje i zatvaranje procesa (npr. ako se želi nekakva skripta automatski periodično izvrtiti). Za uređivanje rasporeda pokretanja zadataka može se uređivati `crontab` datoteka: komandom `crontab -e`
 		- npr. komanda `30 08 * * * /home/user/.local/bin/skripta.hs` će pokretati (s desna nalijevo) skriptu na zadanoj adresi svake godine, svaki mjesec, svaki dan u 8 sati i 30 minuta.
 	
+### Logiranje (bilježenje rada sustava)
+- logiranje se bilježi u `/var/log/syslog` datoteci (sve osim *auth* poruka); datoteka `/var/log/messages` sadrži razne druge nekritične poruke sustava (ispisuje se komandom `messages`); `/var/log/dmesg` sprema informacije o *bootup*-u (ispisuje se komandom `dmesg`); `/var/log/kern.log` bilježi te i još brojne druge poruke kernela; a bilješke u vezi autentifikacije korisnika spremaju se u `/var/log/auth.log`.
+- *Daemon* koji osigurava servis logiranja radnji zove se ==rsyslogd==, a to koje će se datoteke ažurirati *rsyslog* servisom određeno je postavkama u `/etc/rsyslog.d` direktoriju
+- poruke se mogu i ručno slati u `/var/log/syslog` datoteku pomoću `logger` komande, npr. `logger -s Hello`.
+- ==logrotate== služba se bavi upravljanjem pohrane sistemskih bilješki kako nam ne bi zatrpali računalo, a konfiguracijske datoteke joj se nalaze u `/etc/logrotate.d`. 
+	
+### /dev, /sys, udev, lsusb, lspci, lsscsi
+	- `/dev` i `/sys` direktoriji su root direktoriji naminjeni za upravljanje uređajima (*devices*) na računalu, gdje je `/dev` stariji i izlistava sve uređaje (*drivere*) direktno, a `/sys` direktorij je prije namijenjen za upravljanje uređajima na jasniji i intuitivniji način - ==sysfs== je naziv tog sustava.
+		- inače je način nazivanja uređaja standardan, npr. za harddiskove, tj. tzv. SCSI uređaje, se rabe imena `/dev/sda` za prvi harddisk, `/dev/sdb` je za drugi, `/dev/sda2` za treću particiju na prvom harddisku, itd.
+	- ==udev== je sustav za automatsko upravljanje uređajima, njihovom uključivanju i isključivanju, te ažuriranju
+		- ==udevd== je deamon koji u pozadini osluškuje upite o uređajima
+		- `udevadm` je komanda za dobivanje informacija o uređajima, npr. `udevadm info --query=all --name=/dev/sda` će dohvatiti sve informacije o prvom harddisk uređaju na računalu
+		- komande `lsusb`, `lspci` i `lsscsi` ispisuju sve *USB*, *PCI* i *block* (disk) uređaje na računalu
+
 ### I/O: |, tee i <, >, >>, 1>, 2> 
   - `|` je komanda za proslijeđivanje iznosa (*stdout*) iz jedne komande u unos iduće (*stdin*); npr. `ls -lah / | less` će omogućiti lakši pregled iznosa `ls` komande
   - `tee` je komanda za slanje iznosa na više izlaznih lokacija; npr. `echo "Ovo je novi tekst" | tee tekst.txt backup.txt`  će ispisati tekst i na ekranu (kako predviđeno), ali ga i spremiti u datoteke *tekst.txt* i *backup.txt*
@@ -305,14 +322,6 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 	- `1>` je komanda za proslijeđivanje *stdout* iznosa i istovjetna je `>` komandi
 	- `2>` je komanda za proslijeđivanje *stderr* iznosa u slučaju da komanda nije proizvela *stdout*
 	- `&>` je komanda za proslijeđivanje oba izlaza, bez obzira na to koji se ostvario
-
-### /dev, /sys, udev, lsusb, lspci, lsscsi
-	- `/dev` i `/sys` direktoriji su root direktoriji naminjeni za upravljanje uređajima (*devices*) na računalu, gdje je `/dev` stariji i izlistava sve uređaje (*drivere*) direktno, a `/sys` direktorij je prije namijenjen za upravljanje uređajima na jasniji i intuitivniji način - ==sysfs== je naziv tog sustava.
-		- inače je način nazivanja uređaja standardan, npr. za harddiskove, tj. tzv. SCSI uređaje, se rabe imena `/dev/sda` za prvi harddisk, `/dev/sdb` je za drugi, `/dev/sda2` za treću particiju na prvom harddisku, itd.
-	- ==udev== je sustav za automatsko upravljanje uređajima, njihovom uključivanju i isključivanju, te ažuriranju
-		- ==udevd== je deamon koji u pozadini osluškuje upite o uređajima
-		- `udevadm` je komanda za dobivanje informacija o uređajima, npr. `udevadm info --query=all --name=/dev/sda` će dohvatiti sve informacije o prvom harddisk uređaju na računalu
-		- komande `lsusb`, `lspci` i `lsscsi` ispisuju sve *USB*, *PCI* i *block* (disk) uređaje na računalu
 
 ### shutdown i reboot
 	- `shutdown` komanda je za gašenje računala i prima oznake:
