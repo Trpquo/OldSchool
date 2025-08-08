@@ -240,7 +240,7 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 	- `alias` je komanda za prenazivanje komandi ili grupiranje komandi s nizom oznaka u jednu novu (npr. `alias ll='ls -lahF'`). Kako bi imalo trajan učinak, `alias` naredbe se dodaju u ==.bashrc== datoteku ili na slično mjesto učitano pri boot-u
 	  - `abbr` je specifična za ==fish== shell i služi kao `alias` ali koji ne skriva svoje stvarne naredbe u *history*-ju, već se niz komandi skrivenih unutar *kratice* raspišu same od sebe čim se doda razmak nakon kratice
    
-### dpkg (+rpm) i make
+### Instalacija paketa: dpkg (+rpm) i make
   - `dpkg` je komanda za instaliranje ==.deb== paketa na računalo (a `rpm` za ==.rpm== paketa u Red Hat distribucijama)
 	- `-i` je oznaka za instaliranje (`dpkg -i nekipaket.deb`) i ne instalira pakete o kojima dotični zavisi (*dependencies*)
 	- `-r` je za odinstaliravanje (*remove*) (na Red Hat-u je `-e` (*erase*)), npr. (`dpkg -r nekipaket.deb` - što znači da treba čuvati originalne .deb pakete)
@@ -254,7 +254,7 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 	- i to je to! Četvrti opcionalan korak je deinstalacija programa: `sudo make uninstall` (što znači da se mora čuvati originalan repozitorij po kojem je program instaliran)
 	- ==!!!== koji put čak ni `uninstall` ne deinstalira sve što bi trebalo, stoga je naboji način za instalaciju upotrijebiti komandu Debianovu ugrađenu komandu `checkinstall` koja prema MAKE datoteci izgradi ==.deb== paket pa se sve može lako instalirati i deinstalirati (i po tome je potrebno sačuvati ==.deb== datoteku, a ne više cijeli repozitorij): `sudo checkinstall & sudo dpkg -i [paket].deb`
 
-### apt, apt-get, nala, apk, brew, aur, dnf, yum, pacman, yay
+### Upravljanje paketima: apt, apt-get, nala, apk, brew, aur, dnf, yum, pacman, yay
 	- `apt` i `apt-get` su defaultni *package manageri* u Debian distribucijama. (nisam siguran u čemu im je razlika) 
 		- `install` je `apt`-ova oznaka za instaliranje paketa sa svim njegovim zavisnostima (samo treba dodati ime paketa koji se želi instalirati)
 		- `remove` je oznaka za deinstaliranje paketa
@@ -269,17 +269,35 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 	- `apk` je *package manager* u Alpine Linux distribucijama
 	- `brew` je *package manager* originalno napravljen za MacOs distribucije, ali za koji je izrađena i Linux distribucija
 
-### ps, kill, top, (atop, htop, btop,) jobs, fg, bg, strace
-	- `ps` je komanda za ispis aktivnih procesa
-		- `a` je oznaka za ispis procesa svih korisnika
-		- `u` je oznaka za ispis ...
-		- `x` je oznaka za ispis ...
-	- `kill` je komanda za gašanje procesa prema njegovom ID-u
+### Nadgledanje procesa: ps, kill, top, (atop, htop, btop,) uptime, jobs, fg, bg, strace, lsof, fuser
+	- `ps` je komanda za ispis aktivnih procesa i zastavice joj koriste dvije sintakse (standardnu - s `-` prefiksom; i BSD bez crtice):
+		- `a` je oznaka za ispis procesa svih korisnika 
+		- `x` je oznaka za ispis svih procesa pokrenutih od strane korisnika neovisno o tome jesu li TTY
+		- `u` je oznaka za ispis u formatu prema korisnicima (ali i udvostučava broj ispisanih procesa?)
+		- `j` je oznaka za ispis u formatu prema poslovima (ali i udvostučava broj ispisanih procesa?)
+		- `r` je oznaka za prikaz samo aktivnih procesa (*running*)
+		- `f` (*forest*) ili `-H` je oznaka za ispis ASCII naznake granjanja procesa (odnos roditelj-dijete)
+		- `m` je oznaka za ispis *threadova* rabljenih od strane pojedinog procesa
+		- `e` je oznaka za prikaz punog okružja mjesto imena procesa
+		- ima još stotinu oznaka pa treba pogledati `man ps`
+	- `kill` je komanda za gašanje procesa prema njegovom PID-u
 	- `jobs` komanda je za ispis procesa koji se vrte u pozadini
 	- `fg` je komanda za podizanje procesa po njegovom ID-u iz pozadine u prvi plan
 	- `strace` je komanda za praćenje *syscall* poziva neke "korisničke" komande (poput svih onih nabrajanih u ovom dokumentu) - korisno možda pri *debug*-iranju programa (?)
+	- `uptime` je komanda za praćenje općenite iskorištenosti resursaprocesorskih resursa, informacije o dostupnim procesorskim resursima su uvijek vidljive u `/proc/cpuinfo`
+	- `iostat` (dio paketa *sysstat*) je još jedna komanda za nadgledanje opterećenja procesora i harddiska
+	- `vmstat` (dio paketa *sysstat*) je za nadgledanje iskorištenosti memorijskih resursa na svim relevantnim uređajima (v. [Journey](https://linuxjourney.com/lesson/memory-monitoring) )
+	- za stalno praćenje i loggiranje iskorištenosti resursa kroz cijeli dan može se koristiti komanda `sar` (dio paketa *sysstat*) a koja pohranjuje zapise u `/var/log/sysstat/saXX` (gdje se *XX* odnosi na dan koji se želi provjeriti)
+	- `top` je komanda za uvid u pokrenute procese i njihovo zauzimanje resursa
+		- prvi redak iznosa jednak je iznosu komande `uptime`, a iduća tri retka daju sažetak ukupne potrošnje resursa
+		- `-p` je zastavica za prikaz podataka o samo jednom procesu (po njegovom PID-ju)
+	- `lsof` (*list open files*) je komanda za ispis svih otvorenih datoteka kako bi se, npr., otkrila koja sprječava otkačivanje drive-a
+		  - `lsof .` za popis datoteka otvorenih od ulogiranog korisnika (?)
+	- `fuser -v .` (*file user*) je komanda za ispis procesa po kroisniku
+	- ==cron== je moćan alat u pridodan svim Linux distribucijama za tempiranje pokretanje i zatvaranje procesa (npr. ako se želi nekakva skripta automatski periodično izvrtiti). Za uređivanje rasporeda pokretanja zadataka može se uređivati `crontab` datoteka: komandom `crontab -e`
+		- npr. komanda `30 08 * * * /home/user/.local/bin/skripta.hs` će pokretati (s desna nalijevo) skriptu na zadanoj adresi svake godine, svaki mjesec, svaki dan u 8 sati i 30 minuta.
 	
-### |, tee i <, >, >>, 1>, 2> 
+### I/O: |, tee i <, >, >>, 1>, 2> 
   - `|` je komanda za proslijeđivanje iznosa (*stdout*) iz jedne komande u unos iduće (*stdin*); npr. `ls -lah / | less` će omogućiti lakši pregled iznosa `ls` komande
   - `tee` je komanda za slanje iznosa na više izlaznih lokacija; npr. `echo "Ovo je novi tekst" | tee tekst.txt backup.txt`  će ispisati tekst i na ekranu (kako predviđeno), ali ga i spremiti u datoteke *tekst.txt* i *backup.txt*
   - `<` je komanda za isčitavanje datoteke ili nekog iznosa komande i njegovu upotrebu kao unosa u drugu komandu; npr. `cat < file1 > file2` će iščitati sadržaj *file1* datoteke i upisati ga u *file2* datoteku. Još nisam siguran koja je poanta te komande jer se isto dogodi i bez `<`, ali eto postoji
