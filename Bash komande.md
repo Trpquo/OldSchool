@@ -118,16 +118,13 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 ### dd
   - `dd` je komanda za kopiranje datoteka ili izrade backupa npr. `dd if=/dev/sda of=sda-backup.img bs=1M` će napraviti ==.img== backup kopiju cijelog prvog HDD-a.
 
-### Networking: scp
-	- `scp` komanda je kao `cp` komanda ali preko ==ssh== protokola. 
-
 ### env
 	- ==env== je popis varijabli dostupnih programima u trenutnom radnom okružju 
 		- znak `$` ispred imena varijable znači da želimo dohvatiti njezinu vrijednost, a bez tog znaka predstavlja naziv varijable (odnosno njezinu "adresu", pa tako možemo mijenjati i vrijednosti varijabli, npr. komanda `PATH=/home/user/.local/bin:$PATH` znači da varijabli path želimo unijeti na prvo mjesto pretraživanja direktorij `~/.local/bin/` i nakon toga nanizati sve do sada spremljene lokacije u varijabli PATH. Ovo je pisanje privremeno, do trenutka idućeg boot-a, pa da bi neku lokaciju trajno učinili dostupnom sustavu, potrebno je komandu dodati u `.bashrc` ili sličnu datoteku
 		- `$HOME` je adresa `~` repozitorija ulogiranog korisnika, kao što je `$USER` njegovo ime, a `$PWD` njegova trenutna lokacija
 		- `$PATH` je jedna od najvažnijih varijabli jer sadrži popis (podijeljen dvotočkama) lokacija svih izvršnih datoteka koje želimo moći pozvati kao komande. Ako se datoteka neke komande ne nalazi u $PATH varijabli, možemo ju pozvati jedino izričitim navođenjem adrese te datoteke, a ako se nalazi, računalo će to automatski provesti
 
-### Upravljanje diskovima i filesystemi: mkfs, blkid, mount, umount, df, du
+### Upravljanje diskovima i filesystemi: mkfs, fsck 
   - diskovi se dijele u particije i svaka particija se dijeli na blokove. Osnovni blokovi svake particije su:
 	  - ==boot block== pohranjuje datoteke za podozanje oprativnog sustava, zbog čega su uglavnom neiskorišteni na nesistemskim particijama
 	  - ==super block== pohranjuje podatke o *filesystem*-u, poput veličina i lokacija ostalih blokova (u pravilu, uvijek slijedi *boot block*)
@@ -147,10 +144,6 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 		- upravlja se s njime pomoću `gdisk`, `parted` ili `gparted` programima
 	- `mkfs` je komanda za kreiranje *filesystem*-a iz prazne particije, npr. `sudo mkfs -t ext4 /dev/sdb2` će napraviti *ext4* particiju iz block uređaja (particije) učitanog kao */dev/sdb2*
 	- `fsck` je komanda za pokušaj popravka korumpirane particije ili diska (bitno je da se to slučajno ne pokuša za aktivnu sistemsku particiju jer bi se postupak mogao na pola prekinuti i sve ostati zblokirano, tj. sistemske particije jednog sustava se popravljaju podižući neki drugi sustav sa neke druge particije)
-	- `mount` je komanda za podizanje (*mount*) *filesystem*-a neke particije (npr. `sudo mount -t ext4 /dev/sdb2 /mydrive`), a `umount` za "otkačivanje" te particije (npr. `sudo umount /dev/sdb2` ili `sudo umount /mydrive`)
-	- `blkid` je komanda za ispisivanje svih podignutih diskova popratno s njihovim **UUID** ovima - praktički ispisuje sadržaj datoteke ==/etc/fstab== (koju se može i direktno uređivati ako se zna što se radi)
-	- `du` i `df` su komande za dohvaćanje informacija o iskorištenosti, odnosno slobodnosti dostupnih memorijskih blokova
-		- `-h` je oznaka za ispis memorijskih veličina u ljudima razumljivom formatu
   - *filesystem*-om se naziva organizacija direktorija, poddirektorija i datoteka u nekom računalnom sustavu. Linux distribucije se donekle drže standardne organizacije datoteka:
 	  - `/` je oznaka/naziv temeljnog (*root*) direktorija sustava. U njemu se sve nalazi kao poddirektorij
 	  - `/bin` je direktorij koji sadrži praktički sve instalirane izvršne datoteke (programe; *binaries*)
@@ -168,6 +161,18 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 	  - `/tmp` je direktorij za pohranjivanje privremenih datoteka koje aktivni programi rabe za praćenje svog rada
 	  - `/run` je direktorij za pohranu informacija o radu sustava od zadnjeg paljenja
 	  - `/var` je direktorij za pohranu podataka koji se stalno mijenjaju ili nadopunjuju poput *log*-ova sustava ili *cache*-a
+
+### /dev, /sys, mount, umount, blkid, df, du, udev, lsusb, lspci, lsscsi
+	- `/dev` i `/sys` direktoriji su root direktoriji naminjeni za upravljanje uređajima (*devices*) na računalu, gdje je `/dev` stariji i izlistava sve uređaje (*drivere*) direktno, a `/sys` direktorij je prije namijenjen za upravljanje uređajima na jasniji i intuitivniji način - ==sysfs== je naziv tog sustava.
+		- inače je način nazivanja uređaja standardan, npr. za harddiskove, tj. tzv. SCSI uređaje, se rabe imena `/dev/sda` za prvi harddisk, `/dev/sdb` je za drugi, `/dev/sda2` za treću particiju na prvom harddisku, itd.
+	- `mount` je komanda za podizanje (*mount*) *filesystem*-a neke particije (npr. `sudo mount -t ext4 /dev/sdb2 /mydrive`), a `umount` za "otkačivanje" te particije (npr. `sudo umount /dev/sdb2` ili `sudo umount /mydrive`)
+	- `blkid` je komanda za ispisivanje svih podignutih diskova popratno s njihovim **UUID** ovima - praktički ispisuje sadržaj datoteke ==/etc/fstab== (koju se može i direktno uređivati ako se zna što se radi)
+	- `du` i `df` su komande za dohvaćanje informacija o iskorištenosti, odnosno slobodnosti dostupnih memorijskih blokova
+		- `-h` je oznaka za ispis memorijskih veličina u ljudima razumljivom formatu
+	- ==udev== je sustav za automatsko upravljanje uređajima, njihovom uključivanju i isključivanju, te ažuriranju
+		- ==udevd== je deamon koji u pozadini osluškuje upite o uređajima
+		- `udevadm` je komanda za dobivanje informacija o uređajima, npr. `udevadm info --query=all --name=/dev/sda` će dohvatiti sve informacije o prvom harddisk uređaju na računalu
+		- komande `lsusb`, `lspci` i `lsscsi` ispisuju sve *USB*, *PCI* i *block* (disk) uređaje na računalu
 
 ## Za vratara
 
@@ -200,6 +205,37 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
     - `--from <trenutni korisnik>:<trenutna grupa>` je opcija za filtriranje na što će se naredba promijeniti
     - `--reference <datoteka>` je način unošenja uputa u što se vlasnik mijenja ("isti kao u onoj tamo datoteci")
     - `-v` iliti `--verbose`, `-c` iliti `-changes`, `-f` iliti `--silent` ili `--quiet` su upute o tome kako izvješćivati o rezultatu komande
+
+### Umrežavanje: IP, ssh, scp, rsync, http
+	- svaka mreža računala ima nekoliko osnovnih komponenti:
+		1. ==ISP== pružatelja usluge pristupa internetu
+		2. ==Modem== je uređaj za spajanje na internet
+		3. ==Router== je uređaj za proslijeđivanje zahtjeva između lokalnih klijenata i modema
+		4. ==WAN== je naziv za mrežu između routera i interneta (*Wide area network*)
+		5. ==LAN== je naziv za mrežu routera i preko njeg umreženih računala (*Local area network*)
+		6. ==WLAN== je naziv za bežžičnu lokalnu mrežu
+		7. ==Host==-ovi je naziv za sva lokalna računala spojena preko *LAN*-a
+		8. ==Paket==-ima se nazivaju blokovi podataka razmjenjivani između računala preko *WAN*-a ili *LAN*-a
+		9. ==TCP/IP== model je način umrežavanja računala preko interneta
+		
+	- `hostname -I` je komanda kojom se dobiva vlastita lokalna IP adresa
+	- `ip addr` je komanda kojom se dobiva popis svih IPv4 i IPv6 adresa računala
+	- `ifconfig` je stari paket koji se rabio u svrhu praćenja i otkrivanja umreženih računala
+	- `sudo arp-scan --localnet` je još jedna komanda dostupna kroz Debian repozitorij
+	- ==NFS== - najuobičajeniji način dijeljenja datoteka unutar lokalne mreže na Linux-u je uz ==NFS== (*network file share*). Nakon što se postavi NFS server na nekom umreženom računalu, npr. na adresi `server`, tada se na drugom računalu može pokrenuti NFS klijent (`sudo service nfsclient start`) i prikvačiti dijeljeni direktorij sa servera lokalno (`sudo mount server:/direktorij /lokalni_direktorij`).
+		- postoji i ==automount== servis koji bi osigurao da se udaljeni direktorij automatski prikvači
+	- ==Samba== - je stariji, ali još uvijek uobičajen način umreživanja računala (*Server Message Block* protokol) koji služi za umreživanje Linux i Windows računala.
+		- instalira se s `sudo apt install samba` i postavlja se u `/etc/samba/smb.conf` datoteci. (v. [Journey](https://linuxjourney.com/lesson/samba) )
+		- kasnije ga zamijenio ==CIFS== protokol (*Common Internet File System*)
+	- `ssh` je komanda i protokol za spajanje na druga računala
+	- `scp` komanda je kao `cp`, ali preko ==ssh== protokola; npr. za slanje datoteka na drugo računalo `scp ./dokumenti/datoteka.txt trpquo@drugoračunalo.com:/direktorij/na/drugom/računalu`
+		- `-r` je oznaka za slanje cijelog direktorija sa poddirektorijima
+	- `rsync` je komanda slična `scp`-u, ali provjerava što treba kopirati prije nego što pošalje datoteke kako ne bi obavljala više posla nego je potrebno. Može kopirati između računala sa ==ssh== protokolom, ali čak i lokalno (pa se preko ==cron==-a može tempirati backup direktorija)
+		- `-r` oznaka je za rekurzivno
+		- `-v` oznaka je za verbose
+		- `-z` oznaka je za komprimiranje datoteka prije slanja (kako bi se uštedjelo na *bandwidth*-u
+		- `-h` oznaka je za *human readable* iznos
+	- još jedna taktika dijeljenja datoteka je pomoću *Python3*-ovog ==http.server==-a: `python -m http.server 8000` će podijeliti PWD sa računalima na lokalnoj mreži (kasnije dostupne na `http://localhost:8000`, tj. na `http://172.X.X.X:8000` ako se želi pristupiti sa drugog računala)
 
 ## Za strojara
 
@@ -306,14 +342,6 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 - poruke se mogu i ručno slati u `/var/log/syslog` datoteku pomoću `logger` komande, npr. `logger -s Hello`.
 - ==logrotate== služba se bavi upravljanjem pohrane sistemskih bilješki kako nam ne bi zatrpali računalo, a konfiguracijske datoteke joj se nalaze u `/etc/logrotate.d`. 
 	
-### /dev, /sys, udev, lsusb, lspci, lsscsi
-	- `/dev` i `/sys` direktoriji su root direktoriji naminjeni za upravljanje uređajima (*devices*) na računalu, gdje je `/dev` stariji i izlistava sve uređaje (*drivere*) direktno, a `/sys` direktorij je prije namijenjen za upravljanje uređajima na jasniji i intuitivniji način - ==sysfs== je naziv tog sustava.
-		- inače je način nazivanja uređaja standardan, npr. za harddiskove, tj. tzv. SCSI uređaje, se rabe imena `/dev/sda` za prvi harddisk, `/dev/sdb` je za drugi, `/dev/sda2` za treću particiju na prvom harddisku, itd.
-	- ==udev== je sustav za automatsko upravljanje uređajima, njihovom uključivanju i isključivanju, te ažuriranju
-		- ==udevd== je deamon koji u pozadini osluškuje upite o uređajima
-		- `udevadm` je komanda za dobivanje informacija o uređajima, npr. `udevadm info --query=all --name=/dev/sda` će dohvatiti sve informacije o prvom harddisk uređaju na računalu
-		- komande `lsusb`, `lspci` i `lsscsi` ispisuju sve *USB*, *PCI* i *block* (disk) uređaje na računalu
-
 ### I/O: |, tee i <, >, >>, 1>, 2> 
   - `|` je komanda za proslijeđivanje iznosa (*stdout*) iz jedne komande u unos iduće (*stdin*); npr. `ls -lah / | less` će omogućiti lakši pregled iznosa `ls` komande
   - `tee` je komanda za slanje iznosa na više izlaznih lokacija; npr. `echo "Ovo je novi tekst" | tee tekst.txt backup.txt`  će ispisati tekst i na ekranu (kako predviđeno), ali ga i spremiti u datoteke *tekst.txt* i *backup.txt*
