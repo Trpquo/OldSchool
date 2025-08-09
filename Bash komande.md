@@ -218,7 +218,8 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 		7. ==Host==-ovi je naziv za sva lokalna računala spojena preko *LAN*-a
 		8. ==Paket==-ima se nazivaju blokovi podataka razmjenjivani između računala preko *WAN*-a ili *LAN*-a
 
-	#### Protokoli umrežavanja
+#### Protokoli umrežavanja
+
 	- ==OSI== (Open systems interconnection) je teorijski model umrežavanja računala po kojem se slažu ostali praktični modeli ([wikipedia](https://en.wikipedia.org/wiki/OSI_model))
 	- ==TCP/IP== model je način umrežavanja računala preko interneta. To je niz protokola (pravila) o tome kako bi se računala trebala spajati. A pravila su podijeljena u četiri proizvoljna stupnja po četiri proizvoljne kategorije interakcija:
 		1) **Aplikacijski sloj** je najviši sloj u kojem aplikacije komuniciraju sa *transportnim slojem*, a koristi dva protokola
@@ -234,24 +235,31 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 		4) **Vezni sloj** (*Link layer*) je zadužen za standardizaciju fizičkog prijenosa podataka s pojedinim komponentama opreme, npr. optički kablovi ili kroz Ethernet. On još jednom pakira mrežne pakete u okvire (*frame*-ove) i pridodaje frame headeru MAC adrese uređaja primatelja (saznaje preko *ARP* protokola (*Address resolution protocol*)) i pošiljatelja, *checksums*-ove i razdjelnike paketa tako da bi primatelj znao kada je primio cijeli paket.
 			- 
 
-	#### Načini adresiranja u mreži	
+#### Načini adresiranja u mreži	
 	- ==MAC== adrese (*Media access control*) su način kako se pojedini uređaji međusobno identificiraju na Ethernetu (nepromjenjive su, a što je osigurano ==NIC==-om (*network interface card*) koji je tvornički ugrađen kao mrežno sučelje. Čine ga šest heksadecimalnih bitova. Svaki proizvođač ima svoju šifru predstavljenu sa prva tri bita (broja) MAC adrese, a iduća tri su jedinstveni broj proizvedenog uređaja).
 	- ==IP== adrese kako bi se računala *software*-ski raspoznavala na mreži (svaki računalni sustav na istom uređaju može imati svoju, a mogu se i dinamično ažurirati). Na to, postoje dva protokola dodjeljivanja IP adresa:
 		a. ==IPv4== (četiri okteta bita)
 		b. ==IPv6== (osam četveroznamenkasta heksadecimalna broja)
 	- ==hostname== je treći način identificiranja računala. To omogućuje ==DNS== (*Dynamic name server*) tehnologija. 
 	- ==DHCP== (*Dynamic Host Configuration Protocol) je protokol određivanja (postavljanja) IP adresa, unet maski i *gateway*-a. Svaka fizička mreža treba imati svoj DHCP server! (taj posao obično obavlja kućni router). Protokol također predstavlja način sličan ARP-u ili *handshake*-u, gdje se broadcasta zahtjev, pa obostrano protvrdi primitak,
+	- ==NAT== je način spajanja računala gdje router služi kao ulaz-izlazna točka i internet ne vidi IP adrese lokalnih *host*-ova, već samo IP routera
 
-	#### Protokol slanja paketa
+#### Protokol slanja paketa
 	- ==paketi== (kako se nazivaju u aplikacijskom sloju, a *segment*-ima u transportnom, i *frame*-ima u veznom sloju) su sastavljeni od:
 		- ==header== sadržava podatke o paketu, npr. otkud dokud ide, te se ti podatci nadopunjavaju kako paket putuje iz sloja u sloj
 		- ==payload== sadržava podatke koje želimo prenijeti
 	- ==port==-ovi nadopunjuju funkcionalnost IP adresa. Dok ove određuju kojem računalu se paket treba dostaviti, portovi specificiraju kojoj aplikaciji ili servisu su ti podatci namijenjeni. 
 		
-
+#### Komande za upravljanje i nadzor mreže
 	- `hostname -I` je komanda kojom se dobiva vlastita lokalna IP adresa
-	- `ip addr` je komanda kojom se dobiva popis svih IPv4 i IPv6 adresa računala
-	- `ifconfig` je stari paket koji se rabio u svrhu praćenja i otkrivanja umreženih računala
+	- `ss` sa oznakama `-t` (za TCP sockete) ili `-l` (za *listening* sockete) i mnogim drugima je komanda koja je zamijenila staru `netstat` komandu, a služi za nadgledanje događaja na mreži (?)
+	- `ifconfig` je stara komanda koja se rabila u svrhu praćenja i otkrivanja umreženih računala (dio *net-tools* paketa)
+	- `ip` je nova komanda koja mijenja ==net-tools== paket korišten do nedavno
+		- `ip addr`, `ip address` iliti samo `ip a` je komanda kojom se dobiva popis svih IPv4 i IPv6 adresa računala
+		- `ip link` je zamjena za `nameif` komande i služi za dobivanje samo MAC adrese
+		- `ip route` iliti `ip r` je komanda za dobivanje informacija o ruti koju će paket prijeći (?)
+		- `ip tunnel` je zamjena za `iptunnel`
+		- `ip neigbour` iliti `ip n` je zamjena za staru `arp` komandu koja izlistava druga računala dostupna na lokalnoj mreži
 	- `sudo arp-scan --localnet` je još jedna komanda dostupna kroz Debian repozitorij
 	- ==NFS== - najuobičajeniji način dijeljenja datoteka unutar lokalne mreže na Linux-u je uz ==NFS== (*network file share*). Nakon što se postavi NFS server na nekom umreženom računalu, npr. na adresi `server`, tada se na drugom računalu može pokrenuti NFS klijent (`sudo service nfsclient start`) i prikvačiti dijeljeni direktorij sa servera lokalno (`sudo mount server:/direktorij /lokalni_direktorij`).
 		- postoji i ==automount== servis koji bi osigurao da se udaljeni direktorij automatski prikvači
@@ -259,8 +267,9 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 		- instalira se s `sudo apt install samba` i postavlja se u `/etc/samba/smb.conf` datoteci. (v. [Journey](https://linuxjourney.com/lesson/samba) )
 		- kasnije ga zamijenio ==CIFS== protokol (*Common Internet File System*)
 	- `ssh` je komanda i protokol za spajanje na druga računala
-	- `scp` komanda je kao `cp`, ali preko ==ssh== protokola; npr. za slanje datoteka na drugo računalo `scp ./dokumenti/datoteka.txt trpquo@drugoračunalo.com:/direktorij/na/drugom/računalu`, a može se slati i obrnuto, odnosno dohvaćati sa udaljenog računala
+	- `scp` komanda je kao `cp`, ali preko ==ssh== protokola i sada zastarjela i zamijenile su je iduće dvije; npr. za slanje datoteka na drugo računalo `scp ./dokumenti/datoteka.txt trpquo@drugoračunalo.com:/direktorij/na/drugom/računalu`, a može se slati i obrnuto, odnosno dohvaćati sa udaljenog računala
 		- `-r` je oznaka za slanje cijelog direktorija sa poddirektorijima
+	- `sftp` je komanda za spajanje preko ftp protokola sa ssh-om, npr. `sftp korisnik@server.com` i onda se ulazi u interaktivni mod za slanjep podataka tu-tamo
 	- `rsync` je komanda slična `scp`-u, ali provjerava što treba kopirati prije nego što pošalje datoteke kako ne bi obavljala više posla nego je potrebno. Može kopirati između računala sa ==ssh== protokolom, ali čak i lokalno (pa se preko ==cron==-a može tempirati backup direktorija)
 		- `-r` oznaka je za rekurzivno
 		- `-v` oznaka je za verbose
@@ -414,7 +423,7 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 ### tmux
   - ==tmux== je aplikacija koja treba posebnu instalaciju, ali je iznimno korisna za baratanje s terminalima i prozorima kada aplikacija terminala sama po sebi to ne rješava
     - prva komanda je uvijek `tmux new` (skraćeno za`new-session`) 
-    - kada je sesija otvorena, rabe se tipkovničke komande. Prva je `<C-b>` jer je zadana kao defaultni okidač (prefiks) za sve tmux-ove komande
+	- kada je sesija otvorena, rabe se tipkovničke komande. Prva je `<C-b>` jer je zadan kao defaultni okidač (prefiks) za sve tmux-ove komande
     - nakon toga treba zpamtiti barem `<C-?>` jer ona daje popis svih 68 dostupnih komandi (v. [github/tmux](https://github.com/tmux/tmux/wiki/Getting-Started))
     - ostale zgodne komande su:
       - `<C-b>"` ili `<C-b>%` za podjelu ekrana na područja
