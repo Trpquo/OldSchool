@@ -206,7 +206,8 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
     - `--reference <datoteka>` je način unošenja uputa u što se vlasnik mijenja ("isti kao u onoj tamo datoteci")
     - `-v` iliti `--verbose`, `-c` iliti `-changes`, `-f` iliti `--silent` ili `--quiet` su upute o tome kako izvješćivati o rezultatu komande
 
-### Umrežavanje: IP, ssh, scp, rsync, http
+### Umrežavanje
+	#### Osnovne komponente mreže
 	- svaka mreža računala ima nekoliko osnovnih komponenti:
 		1. ==ISP== pružatelja usluge pristupa internetu
 		2. ==Modem== je uređaj za spajanje na internet
@@ -216,8 +217,38 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 		6. ==WLAN== je naziv za bežžičnu lokalnu mrežu
 		7. ==Host==-ovi je naziv za sva lokalna računala spojena preko *LAN*-a
 		8. ==Paket==-ima se nazivaju blokovi podataka razmjenjivani između računala preko *WAN*-a ili *LAN*-a
-		9. ==TCP/IP== model je način umrežavanja računala preko interneta
+
+	#### Protokoli umrežavanja
+	- ==OSI== (Open systems interconnection) je teorijski model umrežavanja računala po kojem se slažu ostali praktični modeli ([wikipedia](https://en.wikipedia.org/wiki/OSI_model))
+	- ==TCP/IP== model je način umrežavanja računala preko interneta. To je niz protokola (pravila) o tome kako bi se računala trebala spajati. A pravila su podijeljena u četiri proizvoljna stupnja po četiri proizvoljne kategorije interakcija:
+		1) **Aplikacijski sloj** je najviši sloj u kojem aplikacije komuniciraju sa *transportnim slojem*, a koristi dva protokola
+			a) ==HTTP== (*Hypertext transfer protocol*) - za web stranice, koristi port 80
+			b) ==SMTP== (*Simple mail transfer protocol*) - koristi port 25
+		2) **Transportni sloj** je sloj koji osigurava transfer podataka (provjerava portove, osigurava integritet podataka, lomi poruku u dijelove (segmente), pridodaje im redne brojeve te polazne i ciljne portove te ih sastavlja na kraju i sl.). Također koristi dva protokola:
+			a) ==TCP== (*Transmission control protocol*) - za pouzdano slanje paketa i zbog toga najčešće korišten
+				- ==handshake== (ottud dolazi ta terminologija) je protokol uspostavljanja veze između dva računala: klijent šalje serveru *SYN* zahtjev za spajanje, server odgovara sa *SYN-ACK* signalom da potvrdi prijam zahtjeva, klijent vraća serveru *ACK* signal da potvrdi uspostavu veze...
+			b) ==UDP== (*User datagram protocol*) - za nepouzdan prijenos podataka, ima smisla kod streamanja
+		3) **Mrežni sloj** je sloj koji omogućava razmjenu podataka između računala (*host*-ova), proslijeđuje pakete između *subnet*-ova na internetu tako da segmente iz transportnog sloja zapakira u jedinstveni IP paket i doda u zaglavlje IP adrese primatelja i pošiljatelja. Također predstavlja dva protokola:
+			a) ==IP== (*Internet protocol*) - osigurava usmjeravanje podataka od polazne do krajnje točke kroz mrežu
+			b) ==ICMP== (*Internet control message protocol*) - zadužen za osiguranje slanja poruka o uspješnosti komunikacije ili o grješkama u sustavu
+		4) **Vezni sloj** (*Link layer*) je zadužen za standardizaciju fizičkog prijenosa podataka s pojedinim komponentama opreme, npr. optički kablovi ili kroz Ethernet. On još jednom pakira mrežne pakete u okvire (*frame*-ove) i pridodaje frame headeru MAC adrese uređaja primatelja (saznaje preko *ARP* protokola (*Address resolution protocol*)) i pošiljatelja, *checksums*-ove i razdjelnike paketa tako da bi primatelj znao kada je primio cijeli paket.
+			- 
+
+	#### Načini adresiranja u mreži	
+	- ==MAC== adrese (*Media access control*) su način kako se pojedini uređaji međusobno identificiraju na Ethernetu (nepromjenjive su, a što je osigurano ==NIC==-om (*network interface card*) koji je tvornički ugrađen kao mrežno sučelje. Čine ga šest heksadecimalnih bitova. Svaki proizvođač ima svoju šifru predstavljenu sa prva tri bita (broja) MAC adrese, a iduća tri su jedinstveni broj proizvedenog uređaja).
+	- ==IP== adrese kako bi se računala *software*-ski raspoznavala na mreži (svaki računalni sustav na istom uređaju može imati svoju, a mogu se i dinamično ažurirati). Na to, postoje dva protokola dodjeljivanja IP adresa:
+		a. ==IPv4== (četiri okteta bita)
+		b. ==IPv6== (osam četveroznamenkasta heksadecimalna broja)
+	- ==hostname== je treći način identificiranja računala. To omogućuje ==DNS== (*Dynamic name server*) tehnologija. 
+	- ==DHCP== (*Dynamic Host Configuration Protocol) je protokol određivanja (postavljanja) IP adresa, unet maski i *gateway*-a. Svaka fizička mreža treba imati svoj DHCP server! (taj posao obično obavlja kućni router). Protokol također predstavlja način sličan ARP-u ili *handshake*-u, gdje se broadcasta zahtjev, pa obostrano protvrdi primitak,
+
+	#### Protokol slanja paketa
+	- ==paketi== (kako se nazivaju u aplikacijskom sloju, a *segment*-ima u transportnom, i *frame*-ima u veznom sloju) su sastavljeni od:
+		- ==header== sadržava podatke o paketu, npr. otkud dokud ide, te se ti podatci nadopunjavaju kako paket putuje iz sloja u sloj
+		- ==payload== sadržava podatke koje želimo prenijeti
+	- ==port==-ovi nadopunjuju funkcionalnost IP adresa. Dok ove određuju kojem računalu se paket treba dostaviti, portovi specificiraju kojoj aplikaciji ili servisu su ti podatci namijenjeni. 
 		
+
 	- `hostname -I` je komanda kojom se dobiva vlastita lokalna IP adresa
 	- `ip addr` je komanda kojom se dobiva popis svih IPv4 i IPv6 adresa računala
 	- `ifconfig` je stari paket koji se rabio u svrhu praćenja i otkrivanja umreženih računala
@@ -228,7 +259,7 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 		- instalira se s `sudo apt install samba` i postavlja se u `/etc/samba/smb.conf` datoteci. (v. [Journey](https://linuxjourney.com/lesson/samba) )
 		- kasnije ga zamijenio ==CIFS== protokol (*Common Internet File System*)
 	- `ssh` je komanda i protokol za spajanje na druga računala
-	- `scp` komanda je kao `cp`, ali preko ==ssh== protokola; npr. za slanje datoteka na drugo računalo `scp ./dokumenti/datoteka.txt trpquo@drugoračunalo.com:/direktorij/na/drugom/računalu`
+	- `scp` komanda je kao `cp`, ali preko ==ssh== protokola; npr. za slanje datoteka na drugo računalo `scp ./dokumenti/datoteka.txt trpquo@drugoračunalo.com:/direktorij/na/drugom/računalu`, a može se slati i obrnuto, odnosno dohvaćati sa udaljenog računala
 		- `-r` je oznaka za slanje cijelog direktorija sa poddirektorijima
 	- `rsync` je komanda slična `scp`-u, ali provjerava što treba kopirati prije nego što pošalje datoteke kako ne bi obavljala više posla nego je potrebno. Može kopirati između računala sa ==ssh== protokolom, ali čak i lokalno (pa se preko ==cron==-a može tempirati backup direktorija)
 		- `-r` oznaka je za rekurzivno
