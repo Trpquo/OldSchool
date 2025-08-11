@@ -195,17 +195,25 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 		  - /etc/passwd   - User account information.
 		  - /etc/shadow   - Secure user account information.
 
-### sudo, chmod, chown
+### sudo, chmod, chown, chattr
   - ==sudo== je skraćeno za 'super user do' ili tako nešto i slično je alternativnoj komandi `doas`, a služi za privremeno dopuštanje useru ovlasti root-a
   - ==chmod== je za promjenu dozvola na datoteci: `sudo chmod <kako> <datoteka>` Zanimljiv je ovaj <kako> dio jer ima više načina kako se može unijeti:      | 4 2 1 |
     - svaka datoteka ima oznake pristupa | r w x | gdje je svakom stupnju dozvole dodjeljena određena vrijednost po tri puta (za korisnika, za grupu, za javnost). Tako da kada se brojevi zbroje, dobijemo npr. 644 (svi mogu čitati, ali samo korisnik može pisati) ili 755 (svi mogu čitati i izvršavati datoteke, ali samo korisnik može pisati)
-  - ==chown== je za promjenu vlasnika. Sintaksa je `sudo chown <user>:<groupa> <datoteka>`, iako se može izostaviti ili korisnik ili grupa. Paralelna naredba chown-u je `chgrp`.
+  - ==chown== je za promjenu vlasnika direktorija ili datoteke. Sintaksa je `sudo chown <user>:<groupa> <datoteka>`, iako se može izostaviti ili korisnik ili grupa. Paralelna naredba chown-u je `chgrp`.
     - `-R` iliti `--recursive` je ako se želi promijeniti vlasništvo nad cijelim direktorijem i podmapama
     - `-H` i `-L` imaju slične uloge kao i `-R`, ali se odnose na simbolične poveznice i kažu da se naredba treba proslijediti i na simbolički povezane sadržaje. Oznaka `-P` to poništava i početna je postavka.
     - `--from <trenutni korisnik>:<trenutna grupa>` je opcija za filtriranje na što će se naredba promijeniti
     - `--reference <datoteka>` je način unošenja uputa u što se vlasnik mijenja ("isti kao u onoj tamo datoteci")
     - `-v` iliti `--verbose`, `-c` iliti `-changes`, `-f` iliti `--silent` ili `--quiet` su upute o tome kako izvješćivati o rezultatu komande
-
+  - `chattr` je još jedna od silno bitnih komandi za mijenjanje pristupa direktorijima ili datotekama, omogućuje mijenjanje raznih dodatnih oznaka:
+	- `lsattr` je komanda za pregled zadanih dodatnih oznaka (atributa), atriubti se dodaju/uklanjaju sa komandama `chattr +[attr] [datoteka]`, odnosno `chattr -[attr] [datoteka]`
+	- `a` je oznaka za datoteke koje se mogu otvoriti samo u *append* modu
+	- `i` je oznaka za *immutable* datoteke
+	- `e` je oznaka za datoteke koje mogu mapirati prostore na disku (ne može se mijenjati sa `chattr`)
+	- `c` je oznaka za datoteke ili direktorije koji se automatski komprimiraju od strane kernela
+	- `u` je oznaka za datoteke koje brisanjem idu u *trash* tako da se mogu *undelete*-ati
+	- ...i mnoge druge (v. `man chattr`)
+	
 ### Umrežavanje
 	#### Osnovne komponente mreže
 	- svaka mreža računala ima nekoliko osnovnih komponenti:
@@ -219,7 +227,6 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 		8. ==Paket==-ima se nazivaju blokovi podataka razmjenjivani između računala preko *WAN*-a ili *LAN*-a
 
 #### Protokoli umrežavanja
-
 	- ==OSI== (Open systems interconnection) je teorijski model umrežavanja računala po kojem se slažu ostali praktični modeli ([wikipedia](https://en.wikipedia.org/wiki/OSI_model))
 	- ==TCP/IP== model je način umrežavanja računala preko interneta. To je niz protokola (pravila) o tome kako bi se računala trebala spajati. A pravila su podijeljena u četiri proizvoljna stupnja po četiri proizvoljne kategorije interakcija:
 		1) **Aplikacijski sloj** je najviši sloj u kojem aplikacije komuniciraju sa *transportnim slojem*, a koristi dva protokola
@@ -231,7 +238,8 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 			b) ==UDP== (*User datagram protocol*) - za nepouzdan prijenos podataka, ima smisla kod streamanja
 		3) **Mrežni sloj** je sloj koji omogućava razmjenu podataka između računala (*host*-ova), proslijeđuje pakete između *subnet*-ova na internetu tako da segmente iz transportnog sloja zapakira u jedinstveni IP paket i doda u zaglavlje IP adrese primatelja i pošiljatelja. Također predstavlja dva protokola:
 			a) ==IP== (*Internet protocol*) - osigurava usmjeravanje podataka od polazne do krajnje točke kroz mrežu
-			b) ==ICMP== (*Internet control message protocol*) - zadužen za osiguranje slanja poruka o uspješnosti komunikacije ili o grješkama u sustavu
+			b) ==ICMP== (*Internet control message protocol*) - dio je TCP/IP protokola, a zadužen je za osiguranje slanja poruka o uspješnosti komunikacije ili o grješkama u sustavu, što ga čini vrlo praktičnim u *debug*-iranju problema s mrežom
+		- on odgovore dijeli u tipove (njih barem 11, npr. tip **3** je za poruke o nedoežnosti oderedišta) i svaki tip ima svoje kodove (npr. u tipu **3** kod **0** znači da je mreža nedostupna, a kod **1** da je odredišno računalo nedostupno...)
 		4) **Vezni sloj** (*Link layer*) je zadužen za standardizaciju fizičkog prijenosa podataka s pojedinim komponentama opreme, npr. optički kablovi ili kroz Ethernet. On još jednom pakira mrežne pakete u okvire (*frame*-ove) i pridodaje frame headeru MAC adrese uređaja primatelja (saznaje preko *ARP* protokola (*Address resolution protocol*)) i pošiljatelja, *checksums*-ove i razdjelnike paketa tako da bi primatelj znao kada je primio cijeli paket.
 			- 
 
@@ -241,7 +249,11 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 		a. ==IPv4== (četiri okteta bita)
 		b. ==IPv6== (osam četveroznamenkasta heksadecimalna broja)
 	- ==hostname== je treći način identificiranja računala. To omogućuje ==DNS== (*Dynamic name server*) tehnologija. 
+		- `nslookup` je alat za otkrivanje IP adresa prema *hostname*-ima
+		- `dig` je još jedan odličan alat za otkrivanje problema sa DNS serverom koji nudi još više opcija od *nslookup*-a 
 	- ==DHCP== (*Dynamic Host Configuration Protocol) je protokol određivanja (postavljanja) IP adresa, unet maski i *gateway*-a. Svaka fizička mreža treba imati svoj DHCP server! (taj posao obično obavlja kućni router). Protokol također predstavlja način sličan ARP-u ili *handshake*-u, gdje se broadcasta zahtjev, pa obostrano protvrdi primitak,
+		- `dhclient` je proces i komanda za baratanje dinamičkim IP adresama. Pri podizanju računala, *dhclient* učitava mrežna sučelja iz `dhclient.conf` datoteke i postavlja ih po DHCP protokolu. U `dhclient.leases` datoteci, *dhclient* prati dodjele dozvola kroz *reboot*-anja sustava.
+		- za dobivanje nove IP adrese, može se izvrtiti komanda `sudo dhclient`
 	- ==NAT== je način spajanja računala gdje router služi kao ulaz-izlazna točka i internet ne vidi IP adrese lokalnih *host*-ova, već samo IP routera
 
 #### Protokol slanja paketa
@@ -253,14 +265,23 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
 #### Komande za upravljanje i nadzor mreže
 	- `hostname -I` je komanda kojom se dobiva vlastita lokalna IP adresa
 	- `ss` sa oznakama `-t` (za TCP sockete) ili `-l` (za *listening* sockete) i mnogim drugima je komanda koja je zamijenila staru `netstat` komandu, a služi za nadgledanje događaja na mreži (?)
+	- `ping` je jedan od najjednostavnijih alata za provjeru umreženosti: npr. `ping -c3 www.google.com` će tri puta pingati google i javiti statistiku odgovora. 
+	- `traceroute` je još jedan od alata koji nam javlja skokove (*hops*) koje paket obavlja na putu do odredišta. Po defaultu prati samo prva tri skoka.
+	- `tcpdump` i `wireshark` su dva napredna alata za analizu ponašanja paketa na mreži 
 	- `ifconfig` je stara komanda koja se rabila u svrhu praćenja i otkrivanja umreženih računala (dio *net-tools* paketa)
 	- `ip` je nova komanda koja mijenja ==net-tools== paket korišten do nedavno
+		- `ip link`, iliti `ip l`, je zamjena za `nameif` komande i služi za dobivanje samo MAC adrese
+			- s njome se mogu i mijenjati postavke veza, npr. `ip link set eth0 down` će ugasiti internetsku vezu na prvom Ethernet sučelju
 		- `ip addr`, `ip address` iliti samo `ip a` je komanda kojom se dobiva popis svih IPv4 i IPv6 adresa računala
-		- `ip link` je zamjena za `nameif` komande i služi za dobivanje samo MAC adrese
+			- snjome se mogu ili dodavati IP adrese za sučelja, npr. `ip address add 192.168.1.1/24 dev eth0`
 		- `ip route` iliti `ip r` je komanda za dobivanje informacija o ruti koju će paket prijeći (?)
+			- s njome se mogu dodavati ili micati rute u/iz *routing* tablica, npr. `ip route add 192.168.2.1/23 via 10.11.12.3` (a micati sa `ip route delete`) (v. `man ip-route`)
 		- `ip tunnel` je zamjena za `iptunnel`
 		- `ip neigbour` iliti `ip n` je zamjena za staru `arp` komandu koja izlistava druga računala dostupna na lokalnoj mreži
 	- `sudo arp-scan --localnet` je još jedna komanda dostupna kroz Debian repozitorij
+	- `nm-tool`, odnosno novije `nmcli` i `nmtui`, su komande za upravljanje *Network Managerom* u Linux sustavima, npr. `nm-tool` ili `nmcli dev show` će ispisati sve dostupne mrežne uređaje i njihova sučelja + razne druge informacije o njima (WSL to nema ili ne dopušta... v. [stackoverflow](https://superuser.com/questions/1731930/cant-open-network-manager-gui-on-wsl2-ubuntu))
+
+#### Upravljanje umreženim spremištima
 	- ==NFS== - najuobičajeniji način dijeljenja datoteka unutar lokalne mreže na Linux-u je uz ==NFS== (*network file share*). Nakon što se postavi NFS server na nekom umreženom računalu, npr. na adresi `server`, tada se na drugom računalu može pokrenuti NFS klijent (`sudo service nfsclient start`) i prikvačiti dijeljeni direktorij sa servera lokalno (`sudo mount server:/direktorij /lokalni_direktorij`).
 		- postoji i ==automount== servis koji bi osigurao da se udaljeni direktorij automatski prikvači
 	- ==Samba== - je stariji, ali još uvijek uobičajen način umreživanja računala (*Server Message Block* protokol) koji služi za umreživanje Linux i Windows računala.
@@ -427,7 +448,7 @@ Postoje neke uobičajene komande za sve shellove jer svi vjerojatno koriste *rea
     - nakon toga treba zpamtiti barem `<C-?>` jer ona daje popis svih 68 dostupnih komandi (v. [github/tmux](https://github.com/tmux/tmux/wiki/Getting-Started))
     - ostale zgodne komande su:
       - `<C-b>"` ili `<C-b>%` za podjelu ekrana na područja
-      - `<C-b>(←→↓↑)` za ulazak/izlazak iz određenog područja, a pored toga u istu svrhu su `<C-b>o` i `<C-b><M-o>` za ulazak u iduće/prethodno područje, ili pak <C-b>q za prikaz broja svakog područja te 
+      - `<C-b>(←→↓↑)` za ulazak/izlazak iz određenog područja, a pored toga u istu svrhu su `<C-b>o` i `<C-b><M-o>` za ulazak u iduće/prethodno područje, ili pak `<C-b>q` za prikaz broja svakog područja te 
       - `<C-b>z` za zumiranje u i iz aktivnog  područja
       - `<C-b>x` za zatvaranje aktivnog područja
       - `<C-b><space>` ili `<C-b><C-o>` ili `<C-b><M-(1-5)>` za promjene rasporeda područja, a `<C-b><C-(←→↓↑)>` navodno za mijenjanje dimenzija podrčja (ali mi ne radi)
