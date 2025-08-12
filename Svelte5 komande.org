@@ -1,0 +1,107 @@
+* Svelte 5 komande
+- primarni izvor je [svelte.dev/tutorial](https://svelte.dev/tutorial/svelte/default-values) za novu Svelte3 sintaksu i SvelteKit
+
+** Rune
+*** $state()
+  - koristi se kada god se želi varijabla dinamičkim mijenjati unutar komponente
+#+begin_src web
+      <script>
+      let varijabla = $state(["nekakva vrijednost"])
+      </script>
+      <p>{varijabla}</p>
+#+end_src
+*** $derived()
+  - koristi se za dinamične varijable čija vrijednost ovisi o vrijednostima drugih $state varijabli
+    #+begin_src web
+       <script>
+       let broj = $state(2)
+       let duplo = $derived(broj * 2)
+       </script>
+
+      <button onclick={()=>broj++}>+</button>
+      <p>Broj je {broj}, a dvostruko je {duplo}.</p>
+#+end_src
+*** $state.snapshot() i $inspect()[.with()]
+  - su rune za kontrolu vrijednosti varijabli tijekom rada aplikacije koje ispisuju u konzoli kada god dođe do promjene vrijednosti ~$state~ varijable
+    #+begin_src web
+      <script>
+      let varijabla = $state(42)
+      // conslole.log($state.snapshot(varijabla))
+      $inspect(varijabla)
+      </script>
+#+end_src
+*** $effect(()=>{})
+  - je runa za postavljanja vlastitih reaktivnih efekata (odnosno, ponovnog vrćenja ~$effect~ bloka čim se neka $state varijabla korištena unutar njega promijeni)
+    - preporuka je što manje koristiti ~$effect~ runu
+    #+begin_src web
+      <script>
+	      let elapsed = $state(0);
+	      let interval = $state(1000);
+	      $effect(()=>{
+		      const tempo = setInterval(()=>elapsed++, interval)
+		      return ()=>clearInterval(tempo)
+	      })
+      </script>
+      <button onclick={() => interval /= 2}>speed up</button>
+      <button onclick={() => interval *= 2}>slow down</button>
+      <p>elapsed: {elapsed}</p>
+#+end_src
+*** $props()
+  - je runa koja služi za dohvaćanje vrijednosti proslijeđenih iz roditeljskog elementa
+    #+begin_src web
+      <!-- u Parent.svelte -->
+      <script>
+      import Child from ./Child.svelte
+      </script>
+      <Child vrijednost={2} />
+#+end_src
+
+    #+begin_src web
+      <!-- u Child.svelte -->
+      <script>
+      export let { vrijednost = "defaultna vrijednost" } = $props()
+      </script> 
+      <p>{ vrijednost }</p>
+#+end_src
+
+** Blokovi
+*** {#if:else/if}
+  - su blokovi za uvjetno ubacivanje koda kada je neki proizvoljni kriterij zadovoljen
+    #+begin_src web
+      <script>
+      let count = $state(0)
+      </script>
+      <button onclick={()=>count++}>+</button>
+
+      {#if count > 10}
+      <p>{count} &gt; 10</p>
+      {:else if count < 5}
+      <p>{count} &lt; 5</p>
+      {:else}
+      <p>5 &le; {count} &le; 10</p>
+      {/if}
+#+end_src
+*** {#each/each}
+  - su blokovi za izbjegavanje repetitivnog koda
+    #+begin_src web
+      <ol>
+      {#each ['prvo', 'drugo', treće'] as stavka, i (stavka)}
+      <li>ovo je {i}. stavka ({stavka})</li>
+      {/each}
+      </ol>
+#+end_src
+*** {#await:then:catch/await}
+  - blokovi za nošenje sa asinhronim dohvaćanjem podataka (omogućuju čekanje da se /Promise/ ispuni i onda preiscrtavanja novog sadržaja)
+    #+begin_src web
+      <script>
+      import { getPromise } from './utils.js'
+      let promise = $state( getPromise() )
+      </script>
+      {#await promise}
+      <p>...downloading...</p>
+      {:then paket}
+      <p>Ovo je pristiglo {paket}</p>
+      {:catch error}
+      <p style="color: red">Grješka je u {error.message}!</p>
+      {/await}
+#+end_src
