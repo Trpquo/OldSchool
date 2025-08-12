@@ -97,11 +97,25 @@
       import { getPromise } from './utils.js'
       let promise = $state( getPromise() )
       </script>
-      {#await promise}
+      {#await promise
       <p>...downloading...</p>
       {:then paket}
       <p>Ovo je pristiglo {paket}</p>
       {:catch error}
       <p style="color: red">Grješka je u {error.message}!</p>
       {/await}
+#+end_src
+** DOM & events
+*** onclick
+  - ima već gore dovoljno primjera. Običan onclick eventListener.
+*** onpointermove
+#+begin_src web
+  <script>
+  let m = $state({x:0,y:0})
+  function onpointermove(event) {
+      m.x = event.clientX
+      m.y = event.clientY
+  }
+  </script>
+  <p>Miš se sada nalazi na koordinatama {Math.round(m.x)} × {Math.round(m.y)}.</p>
 #+end_src
