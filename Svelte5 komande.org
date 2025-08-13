@@ -47,21 +47,24 @@
       <p>elapsed: {elapsed}</p>
 #+end_src
 *** $props()
-  - je runa koja služi za dohvaćanje vrijednosti proslijeđenih iz roditeljskog elementa
+  - je runa koja služi za dohvaćanje vrijednosti proslijeđenih iz roditeljskog elementa, a proslijeđivati se mogu bilokakvi objekti, od primitivnih vrijednosti do funkcija koje zarobljavaju (*capture*) vari
     #+begin_src web
       <!-- u Parent.svelte -->
       <script>
       import Child from ./Child.svelte
+      let age = $state(0)
       </script>
-      <Child vrijednost={2} />
+      <p>Dijete je staro {age} godina.</p>
+      <Child ime="Borislav" growup={()=>{age++}}/>
 #+end_src
 
     #+begin_src web
       <!-- u Child.svelte -->
       <script>
-      export let { vrijednost = "defaultna vrijednost" } = $props()
+      export let { ime = "tvorničko ime", growup } = $props()
       </script> 
-      <p>{ vrijednost }</p>
+      <p>Dijete se zove { ime }</p>
+      <button onclick={growup}></button>
 #+end_src
 
 ** Blokovi
@@ -119,3 +122,26 @@
   </script>
   <p>Miš se sada nalazi na koordinatama {Math.round(m.x)} × {Math.round(m.y)}.</p>
 #+end_src
+*** (.)*capture
+- je dodatak na naziv eventa ako se želi uhvatiti događaj za vrijeme /capture/ faze, mjesto defaultne /bubble/ faze.
+** Vezanje (/binding/)
+- /tijek podataka/ se u Svelte-u provodi uglavnom provodi odozgo-nadole (roditelji proslijeđuju vrijednosti (/props/) komponentama, komponente proslijeđuju podatke svojim elementima). Tome uskaće u pomoć ~bind:~ prefiks atributima elemenata, tako da roditelji mogu odmah znati čim se djeci promijeni vrijednost bilo kojeg atributa, a ta veza može biti uspostavljena između svih elemenata nekog roditelja.
+*** bind:value
+  #+begin_src web
+    <script>
+    let value = $state(5)
+    </script>
+    <p>Trenutna vrijednost je <strong>{vrijednost}</strong>.</p>
+    <input bind:value type="number" /> <!-- mogu napisati samo bind:value, a ne bind:value={value} zato što je istoimena varijabla upotrijebljena za čuvanje vrijednosti -->
+    <input bind:value type="range" min=0 max=10 />
+#+end_src
+*** bind:group
+- se koristi kod vezanja vrijednosti višestukih inputa (npr. sa /radio/ i /checkbox/ inputima).
+  #+begin_src web
+    <script>let vrijednost = $state</script>
+    <input type="radio" name="vrijednost" value=1 bind:group={vrijednost}>
+    <input type="radio" name="vrijednost" value=2 bind:group={vrijednost}>
+    <input type="radio" name="vrijednost" value=3 bind:group={vrijednost}>
+    <p>Odabrana vrijednost je {vrijednost}.</p>
+#+end_src
+*** bind:this
