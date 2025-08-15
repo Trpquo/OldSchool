@@ -197,6 +197,29 @@
     }
     </style>
 #+end_src
+*** :global() i :global {}
+- je Svelte-ov dodatak CSS sintaksi koji osigurava da Svelte /compiler/ ne će scopati selektore sa komponenti jedinstvenim klasama. Komanda se može dodavati po volji i ima dva oblika: za selektore (dijelove selektora ili za blokove naredbi)
+  #+begin_src css
+    .roditelj :global(.dijete) {/* css naredbe */}
+    :global(.roditelj .dijete) {/* css naredbe */}
+    /* ili */
+    :global {
+      .roditelj .dijete {/* css naredbe */}
+      .roditelj_2 .dijete_2 {/* css naredbe */}
+    }
+#+end_src
 
 ** Akcije
 - Svelte akcije prate životni-ciklus elementa. Korisne su kod rada sa vanjskim resursima i knjižnicama, /lazy loading/-a, iskakanja /tooltip/-a i dodavanja vlastitih /EventHandler/-a.
+*** use:
+- je direktiva u Svelte-u za baratanje akcijama, a to su (valjda) funkcije koje se pokreću odmah kako se element koji ih koristi učita i primaju referencu na taj element odmah kao prvi (možda i jedini) argument. Te funkcije u sebi mogu rabiti sve Svelte-ove rune poput $effect-a i sl.
+- akcijama se dodatni argumenti proslijeđiju u sintaksi "vrijednosti" (?). (U primjeru dolje, kao drugi argument se proslijeđuje funkcija koja vraća objekt sa ključem =content= koji sadrži štogod je trenutna vrijednost =input= elementa iznad.)
+  #+begin_src web
+    <script>
+      import nekaFunkcija from "./actions.svelte.js"
+      let content = $state("")
+    </script>
+
+    <input bind:value={content} />
+    <div use:nekaFunkcija={()=>({ content })}></div>
+#+end_src
