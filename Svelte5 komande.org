@@ -145,3 +145,58 @@
     <p>Odabrana vrijednost je {vrijednost}.</p>
 #+end_src
 *** bind:this
+- je poseban binding koji omogućuje Svelte-u da dinamički pohrani referencu na neki element čim se ovaj učita
+ #+begin_src web
+   <script>
+   let h1 = $state()
+   $effect(()=>{
+     h1.textContent = "Novi naslov"
+   })
+   </script>
+   <h1 bind:this={h1}>Naslov</h1>
+ #+end_src
+** Stilovi i klase
+*** class
+- navodno uobičajen atribut za selektiranje preko CSS-a (?), pa onda Svelte nudi neke prečce za baratanje sa vrijednostima tog atributa
+ #+begin_src web
+   <!-- kod kondicionalnog zadavanja klasa -->
+   <div class="veliki {plavi ? 'plavi' : ''}" />
+   <!-- je isto kao i -->
+   <div class={[ 'veliki', {plavi} ]} />
+  #+end_src
+*** style:
+- ~style:~ direktiva je za unošenje vrijednosti za =style= atribut, ali na jednostavniji i čitkiji način, doduše dosta repetitatitetititiotitutivniji. Mogu se zadavati vrijednosti bilo kojeg CSS svojstva i/ili (re)definirati CSS varijable
+  #+begin_src web
+    <div
+      style:transform="rotateZ(20)" 
+      style:font-family="cursive" 
+      style:--text-size="14px"  
+    ></div>
+#+end_src
+- a još jednostavniji način definiranja CSS varijabli je njihovo proslijeđivanje pomalo kao atributa/prop-a (samo što se ne treba posebno učitavati u startu). To se temelji na Svelteovom dodavanju nekakvog novog /roditelj>svelte-css-wrapper>dijete/ elementa, pa treba biti oprezan pri oblikovanju selektora jer je narušen neposredan odnos /roditelj>dijete/.
+  #+begin_src web
+    <!-- u roditelju -->
+    <script>
+    import Semafor from "./Semafor.svelte"
+    </script>
+    <Semafor --background="red" />
+    <Semafor --background="yellow" />
+    <Semafor --background="green" />
+#+end_src
+
+  #+begin_src web
+    <!-- u djetetu -->
+    <div></div>
+
+    <style>
+      div {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: var(--background, #333);
+    }
+    </style>
+#+end_src
+
+** Akcije
+- Svelte akcije prate životni-ciklus elementa. Korisne su kod rada sa vanjskim resursima i knjižnicama, /lazy loading/-a, iskakanja /tooltip/-a i dodavanja vlastitih /EventHandler/-a.
