@@ -155,7 +155,7 @@
    </script>
    <h1 bind:this={h1}>Naslov</h1>
  #+end_src
-** Stilovi i klase
+** Stilovi, animacije i klase 
 *** class
 - navodno uobičajen atribut za selektiranje preko CSS-a (?), pa onda Svelte nudi neke prečce za baratanje sa vrijednostima tog atributa
  #+begin_src web
