@@ -37,6 +37,19 @@
 #+begin_qoute
 Branch early, branch often!
 #+end_quote
-- grananje je dodatan način grupiranja (kategorizacije) /commit/-a. Grane nisu novi repozitoriji (kao u /Mercurial/-u), već samo dodatak /pointer/-u na neki /commit/ pa zbog toga grane ne predstavljaju imalo znatno memorijsko ili procesorsko opterećenje Git sustavu
-- ~git branch~
+- grananje je dodatan način grupiranja (kategorizacije) /commit/-a. Grane nisu novi repozitoriji (kao u /Mercurial/-u), već samo dodatak /pointer/-u na neki /commit/ pa zbog toga grane ne predstavljaju imalo znatno memorijsko ili procesorsko opterećenje Git sustavu.
+- *!!!* svaka grana "pamti" napredak izmjena načinjenih na njoj i na svim joj roditeljskim granama (može se shvaćati kao kopija cijelog /worktree/-ja repozitorija sa dotadašnjim commit-ovima, samo pod novim imenom)
+- ~git branch~ je skup komandi za baratanje sa nizovima povijesti uređivanja datoteka u nekom repozitoriju
+  + bez nastavka komande, ispisati će popis otvorenih grana sa naznakom (***) pored one trenutno aktivne
+  + kao argument može primiti ime nove grane i kao takva će kreirati novu granu u /worktree/-ju sa /HEAD/-om postavljenim na trenutnoj poziciji /HEAD/-a
 *** checkout
+- ~git checkout~ je komanda za skakanje na određeno mjesto u /worktree/-ju (tj. vraćanja svih datoteka u stanje tada zabilježeno
+  + kada se kao argument da ime neke grane, skaće se na poziciju zadnjeg /commit/-a na toj grani
+  * ~-b~ je oznaka za skračivanje postupka kreiranja i aktiviranja grane, koja kao argument prima ime nove grane i u tom smislu komandu mijenja u ~git branch <novo-ime> && git checkout <novo-ime>~.
+*** switch
+- ~git switch~ je nova verzija komande ~git checkout~ koja se dinamički prilagođava kontekstu i prima znatno veći broj oznaka za dodatne funkcionalnosti
+*** merge
+- ~git merge~ je komanda koja uzima za argument ime grane koju se želi pripojiti na onu aktivnu (doslovno znači, želim dodati sve izmjene sa neke grane na onu aktivnu - osim, naravno, onih koje se ponavljaju u dvama /worktree/-ima)
+*** rebase
+- ~git rebase~ je komanda koja uzima za argument ime grane (ili /commit/-a) koji na koju se žele nadovezati jedinstveni /commit/-i sa aktivne grane (/commit/-i se kopiraju, ali ostaju negdje lebdjeti u zraku (?)).
+  - kada bi se provela komande sa grane1 ~git rebase grana0~, prvotni /commit/ (spremljena izmjena) na grani1 bi se smjestio kao da je izveden tek nakon zadnjeg /commit/-a na grani0. Kada bi se onda sa grane0 pokrenula komanda ~git rebase grana1~, glava grane0 bi se samo pomakla do zadnjeg /commit/-a na grani1, čineći povijeti obaju grana identičnima
