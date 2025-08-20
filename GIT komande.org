@@ -53,3 +53,7 @@ Branch early, branch often!
 *** rebase
 - ~git rebase~ je komanda koja uzima za argument ime grane (ili /commit/-a) koji na koju se žele nadovezati jedinstveni /commit/-i sa aktivne grane (/commit/-i se kopiraju, ali ostaju negdje lebdjeti u zraku (?)).
   - kada bi se provela komande sa grane1 ~git rebase grana0~, prvotni /commit/ (spremljena izmjena) na grani1 bi se smjestio kao da je izveden tek nakon zadnjeg /commit/-a na grani0. Kada bi se onda sa grane0 pokrenula komanda ~git rebase grana1~, glava grane0 bi se samo pomakla do zadnjeg /commit/-a na grani1, čineći povijeti obaju grana identičnima
+*** HEAD
+- je metaforički naziv za trenutnu lokaciju u /worktree/-ju, amože ju se pomicati po volji
+  + ~^~ je za jedan korak unazad (prema gore u /log/-u)
+  + ~~<broj>~ je za pomicanje /<broj>/ koraka unazad 
