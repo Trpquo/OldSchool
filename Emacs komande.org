@@ -54,7 +54,7 @@ Nakon toga se pažnja može posvetiti tutorialima. Većinu sam ih pronašao prek
      + Korisni shortcuti:
        + =<C-g>= je nativna Emacs komanda za ubiti process: ~keyboard-quit~, a =<ESC><ESC><ESC>= je univerzalna komanda za izlazak iz navodno bilo čega
        + =<SPC>hrr= je za reloadati setup nekon promjena u ~init.el~-u
-       + u Emacsu se sve =<M-{}>= komande mogu utipkati i bez /Alt/ tipke kao =<ESC>{}= komande.
+       + u Doom Emacsu se sve =<M-{}>= komande mogu utipkati i bez /Alt/ tipke kao =<ESC>{}= komande.
 * Postavke
 ==Emacs== koristi ~init.el~ datoteku pri podizanju sustava kako bi učitao pakete. Tvornički dolazi sa predinstaliranim ~package.el~ /package managerom/ i paketom ~use-package~ za postavke baratanja paketima unutar ~init.el~ datoteke.
 
@@ -139,20 +139,20 @@ Emacs u startu nudi nekoliko file explorera
      - =q= je za izlazak iz /ibuffera/
  + =<C-x><lijevo>= ili =<SPC>bp= prebacuje na prethodni buffer, a =<C-x><desno>= ili =<SPC>bn= prebacuje na idući buffer
  + =<SPC>bk= gasi aktivni buffer, =<SPC>bO= gasi sve osim aktivnog buffera
-     | Komanda                 | Emacs         | Doom            |
-     |-------------------------+---------------+-----------------|
-     | switch-workspace-buffer |               | =<SPC>bb=, =<SPC>,= |
-     | find-file               | =<C-x><C-f>=    | =<SPC>.=, =<SPC>ff= |
-     | projectile-find-file    |               | =<SPC><SPC>=      |
-     | save-buffer             | =<C-x><C-s>=    | =<SPC>fs=, =:w=     |
-     | save-some-buffers       | =<C-x>s=        |                 |
-     | switch-buffer           | =<C-x>b=        | =<SPC>bB=         |
-     | search-cwd              |               | =<SPC>sd=         |
-     | ibuffer                 | =<C-x><C-b>=    | =<SPC>bi=         |
-     | kill-current-buffer     |               | =<SPC>bk=, =zx=, =:q= |
-     | kill-other-buffers      |               | =<SPC>bO=         |
-     | previous-buffer         | =<C-x><lijevo>= | =<SPC>bp=         |
-     | next-buffer             | =<C-x><desno>=  | =<SPC>bn=         |
+     | Komanda                 | Emacs         | Doom            | moje |
+     | switch-workspace-buffer |               | =<SPC>bb=, =<SPC>,= |      |
+     |-------------------------+---------------+-----------------+------|
+     | find-file               | =<C-x><C-f>=    | =<SPC>.=, =<SPC>ff= |      |
+     | projectile-find-file    |               | =<SPC><SPC>=      |      |
+     | save-buffer             | =<C-x><C-s>=    | =<SPC>fs=, =:w=     |      |
+     | save-some-buffers       | =<C-x>s=        |                 |      |
+     | switch-buffer           | =<C-x>b=        | =<SPC>bB=         |      |
+     | search-cwd              |               | =<SPC>sd=         |      |
+     | ibuffer                 | =<C-x><C-b>=    | =<SPC>bi=         |      |
+     | kill-current-buffer     |               | =<SPC>bk=, =zx=, =:q= |      |
+     | kill-other-buffers      |               | =<SPC>bO=         |      |
+     | previous-buffer         | =<C-x><lijevo>= | =<SPC>bp=         |      |
+     | next-buffer             | =<C-x><desno>=  | =<SPC>bn=         |      |
 
 *** Prozori
 + =<SPC>w{}= je za panele (/panes/) - uglavnom su svi u Doom-u preslika Vimovih (=<C-w>{}= komandi)

@@ -1,0 +1,42 @@
+* Git komande
+
+- prvi prolaz bilježenja komandi je unesen tijekom prolaska kroz tečaj *Learn Git branching*, kojeg se može pronaći na adresi https://learngitbranching.js.org
+- službene Git stranice sa dokumentacijom se nalaze na https://git-scm.com/docs
+- službeni Git tutorijal se nalazi na https://git-scm.com/docs/gittutorial
+
+** Postavke /git/ repozitorija
+*** init
+- ~git init~ (vjerojatno za argument može primiti i adresu) čini direktorij Git repozitorijem za neki projekt
+*** config
+- ~git config~ komanda služi za unošenje postavki za Git općenito na računalu, po korisniku ili lokalno po repozitoriju, po /worktree/-ju ili po zasebnoj datoteci
+  + ~-s~, ~-g~, ~-l~, ~-w~ ili ~-f~ (odnosno, ~--system~, ~--global~, ~--local~, ~--worktree~ ili ~--file~) su zastavice za određivanje /scope/-a =config= komande
+  + 
+** Lokalne komande 
+*** stalne oznake
+  * ~-f~, odnosno ~--force~, je oznaka za iznimno dodavanje neke datoteke iako je izričito navedeno u /.gitignore/ datoteci da se promjene u takvim datotekama ne žele pratiti
+  + ~-n~, odnosno ~--dry-run~, je oznaka za probno izvršavanje komande kako bi se vidjele potencijalne posljedice, bez trajnog učinka na /worktree/
+  + ~-v~, odnosno ~--verbose~, je oznaka za detaljnjiji ispis opisa provedenih radinji
+  * ~-i~, odnosno ~--interactive~, je oznaka za omogućivanje donošenja odluka o provođenju komande za svaki zasebni korak tražene akcije
+  + ~--~ je univerzalna oznaka za naznačivanje toga kako ništo od teksta komande koji slijedi nakon nje više ne će biti nova oznaka, već samo argument
+*** worktree
+- je izraz koji se koristi za Git-ov model praćenja promjena/napretka u repozitoriju kroz njihovo modeliranje kroz oblik "debla" (kao glavne linije napretka koja će predstavljati gotov proizvod) i "grana" kao usputnih stranputica u zasebnom razvoju pojedinih svojstava konačnog proizvoda u izolaciji. 
+*** status
+- ~git status~ je komanda za dobivanja ispisa o zadnjem stanju direktorije u kontekstu praćenja njegovih izmjena prema njegovom /worktree/ modelu.
+*** add
+- ~git add~ je komanda za dodavanje datoteka (ili njihovih izmjena) u /staging/ fazu (tzv. /index/) za idući /commit/. Ona kao argument prima adresu (ili niz adresa odvojenih razmakom ili /regex/ uzorak za selekciju) datoteki čijih se izmjene žele dodati u idući commit. Ta mogućnost ne dodavanja svih izmijenjenih datoteki omogućava slaganje pregledne povijesti napretka repozitorija u konačni proizvod i otvara mogućnost retroaktivne intervencije u svakom koraku.
+  * ~-N~, odnosno ~--intent-to-add~, je oznaka koja samo dodaje datoteku u /worktree/ za praćenje, ali njene izmjene još ne dodaje u /index/ za idući /commit/. (Na taj način se omogućava kasnija primjena komandi za generalnije upravljanje izmjenama poput ~git diff~ ili ~git commit -a~
+  * ~-p~, odnosno ~--patch~, je oznaka za mogućnost izbora promjena unutar određene datoteke koje bi se pridodale idućem /commitu/, te izostavljanja nekih za neki budući /commit/
+  + ~-e~, odnosno ~--edit~, je oznaka za otvaranje datoteke za uređivanje, te po njenom spremanju i zatvaranju, automatsko je dodavanje u /index/ za idući /commit/ 
+  + ~-A~, odnosno ~--all~, tj. ~--no-ignore-removal~, je neobična oznaka koja dodaje u /index/ sve izmijenjene datoteke koje su se ikad našle u /indexu/ (?). Po tome bi bila slična komandi ~git add .~
+  + ~--refresh~ je oznaka za ažuriranje /stat()/ informacija o datoteci unutar indexa bez njena ponovna dodavanja (čini mi se da se to ionako provodi automatski (?))
+*** commit
+- ~git commit~ je naredba za spremanje trenutonog stanja datoteka odabranih za spremanje (/staged/), ali pritom ne sprema nego samo pamti promijene od zadnjeg stanja tih datoteki. Na taj se način pamti "korak" izmjena i omogućuje vraćanje natrag kroz povijest izmjena.  
+  * ~-a~, odnosno ~--add-all~ (?), je oznaka za automatsko provođenje komande ~git add -A~ prije provođenja komande ~git commit~ 
+  * ~-m~ (~--meassage~) je oznaka koja omogućava direktno dodavanje /commit message/-a bez potrebe za dodatnim otvaranjem nekog tektovnog urednika
+*** branch
+#+begin_qoute
+Branch early, branch often!
+#+end_quote
+- grananje je dodatan način grupiranja (kategorizacije) /commit/-a. Grane nisu novi repozitoriji (kao u /Mercurial/-u), već samo dodatak /pointer/-u na neki /commit/ pa zbog toga grane ne predstavljaju imalo znatno memorijsko ili procesorsko opterećenje Git sustavu
+- ~git branch~
+*** checkout
