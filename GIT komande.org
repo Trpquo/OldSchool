@@ -18,6 +18,8 @@
   + ~-v~, odnosno ~--verbose~, je oznaka za detaljnjiji ispis opisa provedenih radinji
   * ~-i~, odnosno ~--interactive~, je oznaka za omogućivanje donošenja odluka o provođenju komande za svaki zasebni korak tražene akcije
   + ~--~ je univerzalna oznaka za naznačivanje toga kako ništo od teksta komande koji slijedi nakon nje više ne će biti nova oznaka, već samo argument
+*** init
+- ~git init~ čini neki direktorij /git/ repozitorijem (može primiti adresu direktorija kao argument, ali po defaultu je ~.~)
 *** worktree
 - je izraz koji se koristi za Git-ov model praćenja promjena/napretka u repozitoriju kroz njihovo modeliranje kroz oblik "debla" (kao glavne linije napretka koja će predstavljati gotov proizvod) i "grana" kao usputnih stranputica u zasebnom razvoju pojedinih svojstava konačnog proizvoda u izolaciji. 
 *** status
@@ -52,27 +54,41 @@ Branch early, branch often!
   + kao argument može primiti ime nove grane i kao takva će kreirati novu granu u /worktree/-ju sa ishodištem na poziciji /HEAD/-a (~git branch <ime-nove-grane>~)
   + kao drugi argument može primiti poziciju (/commit/) iz koje se želi grana ishoditi (~git branch <ime-nove-grane> <commit/lokacija>~)
   * ~-f~ je oznaka koja omogućuje dodatak posebne komande (koja se ne može primijeniti na aktivnu granu), ali koja tjera "/HEAD/" neke druge grane na novu poziciju (~git branch -f <grana> ~<commit/pozicija>~), a može poslužiti kao akcija za "merge-forward" nakon /rebase/-a ili kao način reorganizacije /commit/-a po granama radi održavanja strukturiranosti povijesti /commit/-a
+  + ~-u~ je oznaka za reći grani koju /remote/ granu prati (npr. ~git branch -u origin/main~ će zadati aktivnoj grani da prati /main/ granu na /remote/-u; a ako se to želi zadati nekoj drugoj grani, može se njezino ime proslijediti kao drugi argument)
 *** checkout
 - ~git checkout~ je komanda za skakanje na određeno mjesto u /worktree/-ju (tj. vraćanja svih datoteka u stanje tada zabilježeno
   + kada se kao argument da ime neke grane, skaće se na poziciju zadnjeg /commit/-a na toj grani
-  * ~-b~ je oznaka za skračivanje postupka kreiranja i aktiviranja grane, koja kao argument prima ime nove grane i u tom smislu komandu mijenja u ~git branch <novo-ime> && git checkout <novo-ime>~.
+  * ~-b~ je oznaka za skračivanje postupka kreiranja i aktiviranja grane, koja kao argument prima ime nove grane i u tom smislu komandu mijenja u ~git branch <novo-ime> && git checkout <novo-ime>~. Oznaci se može dodati i drugi argument za lokaciju dovršetka nove grane (npr. ~git checkout -b <novo-ime> <commit/lokacija>~). Druga uloga istog drugog argumenta je da se njime kaže koju granu prati nova (npr. ako se nova grana stvori komandom ~git checkout -b <ime-grane> origin/main~, tada će ta grana postati nova lokalna grana zadužena za praćenje stanje /main/ grane na remoteu (pa će /push/ i /pull/ se prilagoditi tome)).
 *** switch
 - ~git switch~ je nova verzija komande ~git checkout~ koja se dinamički prilagođava kontekstu i prima znatno veći broj oznaka za dodatne funkcionalnosti
 *** merge
-- ~git merge~ je komanda koja uzima za argument ime grane koju se želi pripojiti na onu aktivnu (doslovno znači, želim dodati sve izmjene sa neke grane na onu aktivnu - osim, naravno, onih koje se ponavljaju u dvama /worktree/-ima)
+- ~git merge~ je komanda koja uzima samo jedan argument: ime grane koju se želi pripojiti na onu aktivnu (doslovno znači, želim dodati sve izmjene sa neke grane na ovu aktivnu - osim, naravno, onih koje se ponavljaju u dvama /worktree/-ima). Komanda stvara /merge commit/ koji predstavlja sve razlikovne izmjene na drugoj grani odjednom i koji po definiciji ima dva roditelja: prvog - aktivnu granu; i drugog - pripojenu joj granu.
 *** rebase
 - ~git rebase~ je komanda koja uzima za argument ime grane (ili /commit/-a) na koju se žele nadovezati razlikovni /commit/-i sa aktivne grane (/commit/-i se kopiraju, ali ostaju negdje lebdjeti u zraku (?)). Najčešće ~git rebase master~.
   - kada bi se provela komande sa grane1 ~git rebase grana0~, prvotni /commit/ (spremljena izmjena) na grani1 bi se smjestio kao da je izveden tek nakon zadnjeg /commit/-a na grani0. Kada bi se onda sa grane0 pokrenula komanda ~git rebase grana1~, glava grane0 bi se samo pomakla do zadnjeg /commit/-a na grani1, čineći povijeti obaju grana identičnima
-  + ~--onto~ je oznaka koja otključava mogućnost ručnog unosa svih argumenata za funkciju /rebase/ (u suprotnom Git sam od sebe zaključi što bi ti argumenti trebali biti). Ukratko, puna /rebase/ komanda glasi: ~git rebase [--onto <target>] [<upstream-start> <upstream-end>]~, gdje /[]/ zagrade predstavljaju opcionalne argumente i zastavice, a riječi unutar /<>/ zagrada se trebaju unijeti kao argumenti. Automatsko popunjavanje tih argumenata bi za ~git rebase master~ glasilo: ~git rebase --onto master master HEAD~. (v. [[https://stackoverflow.com/questions/68630552/what-is-the-difference-between-git-rebase-master-and-git-rebase-onto-master][stack overflow]])
+  + ~--onto~ je oznaka koja otključava mogućnost ručnog unosa svih argumenata za funkciju /rebase/ (u suprotnom Git sam od sebe zaključi što bi ti argumenti trebali biti). Ukratko, puna /rebase/ komanda glasi: ~git rebase [--onto <target>] [<upstream-start> <upstream-end>]~, gdje /[]/ zagrade predstavljaju opcionalne argumente i zastavice, a riječi unutar /<>/ zagrada se trebaju unijeti kao argumenti. Automatsko popunjavanje tih argumenata bi za ~git rebase master~ glasilo: ~git rebase --onto master master HEAD~, odnosno, prekopiraj na master sve /commit/-e koje se nalaze između master grane i završetka trenutne grane. (v. [[https://stackoverflow.com/questions/68630552/what-is-the-difference-between-git-rebase-master-and-git-rebase-onto-master][stack overflow]])
   * ~-i~, odnosno ~--interactive~, je najjača opcija /rebase/-anja i omogućuje lagano ručno uređivanje popisa /commit/-a koje se želi prenijeti, ujedno sa posebnim postavkama o tome želi li se pritom spajati više commita u jedan, 
 *** cherry-pick
 - ~git cherry-pick~ je komanda pomoću koje možemo "pobrati" (zapravo, kopirati) razne /commit/-e s drugih grana i pripojiti ih aktivnoj grani (redom kako su nabrojani - zato je potrebno unaprijed znati /hash/-eve svih /commit/-a koje želimo prekopirati). /Cherry-pick/ jedino ne može pobrati /commit/-e iz vlastite povijesti (odnosno, predak /HEAD/-a). To valjda ne bi imalo smisla.
   + pritom, pri nabrajanju /commit/-a koje želimo /cherry-pick/-ati možemo suptilno provesti i /interaktivno rebase/-anje slažući redoslijed commita kakav god želimo
 *** HEAD
-- je metaforički naziv za trenutnu lokaciju u /worktree/-ju, amože ju se pomicati po volji
+- je metaforički naziv za trenutnu lokaciju u /worktree/-ju, a može ju se pomicati po volji sa komandom ~git checkout~
   + ~<ime-grane>^~ je za jedan korak unazad (prema gore u /log/-u) od zadnjeg /commit/-a na imenovanoj grani
+    + osim za korak u nazad, ~^~ se može koristiti i sa brojem (~^<broj>~) da promijeni defaultnog roditelja na kojeg se želi prijeći (/merge commit/-i po definiciji uvijek imaju dva roditelja). 
     + ~HEAD^~ je valjda jednostavniji način za pomicanje glave jedan korak unazad na aktivnoj grani
   + ~<ime-grane>~<broj>~ je za pomicanje /<broj>/ koraka unazad 
     + ~HEAD~<broj>~ je valjda jednostavniji način za pomicanje glave broj koraka unazad na aktivnoj grani
-  + 
+  + ~^~ i ~~~ se mogu kombinirati po volji (npr. ~HEAD~2^2~3~ će otići 2 koraka unazad, selektirati drugog roditelja i onda još 3 koraka u nazad)
 ** Remote komande
+- /remote/ je samo još jedna kopija repozitorija (i /worktree/-a) na nekom drugom, mrežom dostupnom, računalu. Ona služi kao /backup/ lokalnih repozitorija, ali, vjerojatno još bitnije, omogućuju udruživanje u projektima jer hrpa lokalnih repozitorija može dijeliti isti zajednički /remote/ repozitorij. Tu su onda uvedeni alati za sinhronizaciju lokalnih repozitorija sa onim /remote/.
+  + lokalna grana koja prati stanje odmaknutog repozitorija obično se nazva /origin/, a služi za koordinaciju toga što je obaljeno lokalno, a što pohranjeno odmaknuto. Ona se isključivo automatski ažurira sa komandama ~git fetch~ (~git pull~) i ~git push~. (Ako ju se ikako pokuša /checkout/-ati ili išto drugo, dobije se /detached/ /HEAD/)
+*** clone
+- ~git clone~ prima za argument adresu repozitorija, a i premješta ga na neko drugo mjesto (drugi argument, a po samo po sebi: ~.~)
+*** fetch
+- ~git fetch~ je komanda za ažuriranje /origin/<ime-grane> grana, ali na nikoji način ne utjeće na lokalne grane ili /commit/-e. Ona samo ažurira na /remote/ grani predstavu /remote/ repozitorija.  
+*** pull
+- ~git pull~ je kraći način za zadati ~git fetch; git merge <origin/grana>~ 
+  * ~--rebase~ je oznaka za vrćenje dviju komandi (~git fetch; git rebase origin/<ime-grane>~).
+    - U slučaju razilaženja povijesti lokalnog i udaljenog repozitorija, najjednostavnija je metoda vrćenje triju komandi za redom: ~git fetch~ za ažuriranje /origin/ grana, ~git rebase origin/<grana>~ kako bi se kopirali novi /commit/-i sa aktivne lokalne grane navrh preuzetih /commit/-a na /origin/ grani i pomakla glava lokalne grane, te ~git push~ kako bi se ažuriralo stanje na /remote/ repozitoriju (nakon što su se riješili možebitno iskrsli konflikti).
+*** push
+- ~git pull~ je komanda za "objavljivanje" lokalnih izmjena na /remote/ repozitorij. Ona automatski ažurira i izgled /origin/ grana.
