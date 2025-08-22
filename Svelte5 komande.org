@@ -208,7 +208,31 @@
       .roditelj_2 .dijete_2 {/* css naredbe */}
     }
 #+end_src
-
+*** transition:, in:, out:
+- tranzicije su u Svelte-u gotove /JavaScript lifecycle/ funkcije koje animiraju ulazak i izlazak elemenata kako se dinamički ubacuju ili brišu iz dokumenta. Nalaze se kao objekt na kodiranoj lokaciji ~svelte/transitions~.
+- ~transition~ direktive su same po sebi dvosmjerne, ali po potrebi, mogu se zamijeniti sa ~in:~ i ~out:~ direktivama
+#+begin_src web
+  <script>
+    import { fade, fly } from 'svelte/transitions'
+    let sklopka = $state(false)
+  </script>
+  <input type checkbox bind:value={sklopka} /> Pokaži odlomak
+  {#if sklopka}
+    <p transition:fade>Neki odlomak....</p>
+    <p in:fly={{ y: -50, duration: 500}} out:fade>Neki odlomak....</p>
+  {/if}
+#+end_src
+- no ne moraju se koristiti gotovi /svelte/transitions/ moduli, kada se lako mogu načiniti vlastiti
+  #+begin_src js
+    function mojaTranzicija(node, { delay = 0, duration = 500 }) {
+      const = getComputedStyle(node).opacity
+      return {
+	  delay,
+	  duration,
+	  css: (t) => 'opacity: $(t*o)'
+      }
+    } 
+  #+end_src
 ** Akcije
 - Svelte akcije prate životni-ciklus elementa. Korisne su kod rada sa vanjskim resursima i knjižnicama, /lazy loading/-a, iskakanja /tooltip/-a i dodavanja vlastitih /EventHandler/-a.
 *** use:
