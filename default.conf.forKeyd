@@ -1,0 +1,12 @@
+[ids]
+*
+
+[main]
+#maps capslock to escape when pressed and control when held.
+capslock = overload(control, esc)
+
+# remaps the escape key to capslock
+# esc = capslock
+
+[alt]
+esc = capslock
